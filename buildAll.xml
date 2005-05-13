@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="commonAll" default="dist.src" basedir=".">
+	<property name="buildFile.version" value="buildAll.1.0" description="Build file version."/>
+	<!--projects-->
+	<property name="dir.arch" value="../.arch/new"/>
+
+	<property name="dir.common" value="../common"/>
+	<property name="dir.mp3renamer" value="../mp3renamer"/>
+	<property name="dir.mytunnel" value="../mytunnel"/>
+	<property name="dir.resub" value="../raiser.tools.transform.resub"/>
+	<property name="dir.videochat" value="../videochat"/>
+	<property name="dir.templateWizard" value="../templateWizard"/>
+	<target name="clean">
+		<property name="target" value="clean"/>
+		<antcall target="run"/>
+	</target>
+	<target name="dist.src">
+		<property name="target" value="dist.src"/>
+		<antcall target="run"/>
+		<mkdir dir="${dir.arch}"/>
+		<copy todir="${dir.arch}">
+			<fileset dir="${dir.common}/dist"/>
+			<fileset dir="${dir.mp3renamer}/dist"/>
+			<fileset dir="${dir.resub}/dist"/>
+			<fileset dir="${dir.videochat}/dist"/>
+			<fileset dir="${dir.templateWizard}/dist"/>
+			<!--fileset dir="${dir.mytunnel}/dist"/-->
+		</copy>		
+	</target>
+
+	<target name="run" 
+		description="Compile Common sources.">
+		<!--*****************************************************************-->
+		<echo message="${dir.common}/build.xml/${target}"/>
+		<ant dir="${dir.common}" antfile="build.xml" target="${target}" inheritall="false"/>
+
+		<!--*****************************************************************-->
+		<echo message="${dir.mp3renamer}/build.xml/${target}"/>
+		<ant dir="${dir.mp3renamer}" antfile="build.xml" target="${target}" inheritall="false"/>
+
+		<!--*****************************************************************-->
+		<echo message="${dir.resub}/build.xml/${target}"/>
+		<ant dir="${dir.resub}" antfile="build.xml" target="${target}" inheritall="false"/>
+
+		<!--*****************************************************************-->
+		<echo message="${dir.videochat}/build.xml/${target}"/>
+		<ant dir="${dir.videochat}" antfile="build.xml" target="${target}" inheritall="false"/>
+
+		<!--*****************************************************************-->
+		<echo message="${dir.templateWizard}/build.xml/${target}"/>
+		<ant dir="${dir.templateWizard}" antfile="build.xml" target="${target}" inheritall="false"/>
+
+		<!--*****************************************************************-->
+		<echo message="${dir.mytunnel}/build.xml/${target}"/>
+		<!--ant dir="${dir.mytunnel}" antfile="build.xml" target="${target}" inheritall="false"/-->
+
+		<!--*****************************************************************-->
+	</target>
+</project>

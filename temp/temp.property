@@ -1,0 +1,5 @@
+#Mon May 31 18:47:21 EEST 2004
+name.dist.src=raiser.common-v.0.1-b.0003-d.20040315132407-t.release.src.zip
+app.shortName=${app.shortName}
+name.dist.jar=raiser.common-v.0.1-b.0003-d.20040315132407-t.release.orig.jar
+app.longName=raiser.common-v.0.1-b.0003-d.20040315132407-t.release

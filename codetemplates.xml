@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates><codetemplate name="newtype" description="Newly created files" context="newtype_context" enabled="true">/*
+ ******************************************************************************
+ *    $$Logfile: $$
+ *   $$Revision: 1.2 $$
+ *     $$Author: raisercostin $$
+ *       $$Date: 2004/03/15 10:24:42 $$
+ * $$NoKeywords: $$
+ *****************************************************************************/
+${package_declaration}
+
+${typecomment}
+${type_declaration}</codetemplate></templates>

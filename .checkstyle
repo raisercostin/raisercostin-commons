@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fileset-config file-format-version="1.0.0">
+    <fileset check-config-name="eclipse.checkstyle.20040224.checkstyle"
+        enabled="false" name="java">
+        <file-match-pattern include-pattern="true" match-pattern=".java$"/>
+    </fileset>
+    <fileset check-config-name="raiser (modified Sun Checks)"
+        enabled="false" name="java.raiser">
+        <file-match-pattern include-pattern="true" match-pattern=".java$"/>
+    </fileset>
+    <fileset check-config-name="eclipse.checkstyle.20040224.checkstyle"
+        enabled="false" name="raiser2">
+        <file-match-pattern include-pattern="true" match-pattern=".java$"/>
+    </fileset>
+</fileset-config>

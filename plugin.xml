@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+	id="raiser"
+	name="utils"
+	version="1.0.1"
+	provider-name="raiser.utils">
+	<runtime>
+	</runtime>
+	<!-- 
+	extension points for NAVIGATOR
+	-->
+	<extension point="org.eclipse.ui.resourceFilters">
+		<filter
+        	selected="true"
+			pattern="CVS">
+		</filter>
+	</extension>
+	<!-- 
+	extension points for C&C++ Projects
+	-->
+	<extension point="org.eclipse.cdt.ui.CElementFilters">
+		<filter
+        	selected="true"
+			pattern="CVS">
+		</filter>
+	</extension>
+	
+	<!-- 
+	extension points for Documents Help
+	-->
+	<extension point="org.eclipse.help.toc">
+	    <toc file="doc/raiser.docs.xml" primary="true" />
+	</extension>
+	<extension point="org.eclipse.help.toc">
+	    <toc file="doc/api references.xml" />
+	    <toc file="doc/toc_Tasks.xml" />
+	    <toc file="doc/toc_Ref.xml" />
+	</extension>
+</plugin>

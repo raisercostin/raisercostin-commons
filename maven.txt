@@ -1,0 +1,673 @@
+ __  __
+|  \/  |__ _Apache__ ___
+| |\/| / _` \ V / -_) ' \  ~ intelligent projects ~
+|_|  |_\__,_|\_/\___|_||_|  v. 1.0-rc3
+
+Available [Plugins] / Goals
+===========================
+  genapp  ......................... Generate Application based on a template
+  html2xdoc  ...................... Generates XDoc documentation from normal 
+                                    HTML files
+  jdiff  .......................... generate an api difference report between 
+                                    versions
+  junitdoclet  .................... Generate unit tests
+
+[announcement]                      Generate release announcement
+  generate  ....................... Generate release announcement
+
+[ant]                               Generate an Ant build file
+  generate-build  ................. Generate an Ant build file
+
+[antlr]                             ( NO DEFAULT GOAL )
+  generate  ....................... Generate source from antlr grammars
+  prepare-filesystem  ............. Make any necessary directories for antlr 
+                                    processing
+
+[appserver]                         ( NO DEFAULT GOAL )
+  clean  .......................... Safely delete an installed appserver 
+                                    instance
+  cycle  .......................... Forced install and start of a appserver 
+                                    instance
+  init  ........................... Initialize resources needed for the plugin
+  install  ........................ Install a appserver instance
+  reinstall  ...................... Reinstall a appserver instance
+  restart  ........................ Restart a appserver instance
+  start  .......................... Start a appserver instance
+  stop  ........................... Stop a appserver instance
+
+[artifact]                          ( NO DEFAULT GOAL )
+
+[ashkelon]                          ( NO DEFAULT GOAL )
+
+[aspectj]                           Weave with AspectJ
+  compile  ........................ Weave with AspectJ
+
+[aspectwerkz]                       ( NO DEFAULT GOAL )
+  attributec  ..................... Compile AspectWerkz javadoc attributes (
+                                    xml-defined aspects)
+  compile  ........................ Compile AspectWerkz java sources
+  weave  .......................... Weave aspects (offline mode)
+
+[castor]                            ( NO DEFAULT GOAL )
+  prepare-filesystem  ............. Make any necessary directories for castor 
+                                    processing
+
+[changelog]                         ( NO DEFAULT GOAL )
+
+[changes]                           ( NO DEFAULT GOAL )
+  report  ......................... Generate a changes report
+
+[checkstyle]                        Perform checkstyle checks
+  report  ......................... Perform checkstyle checks
+
+[clean]                             Remove all project artifacts
+  clean  .......................... Remove all project artifacts
+
+[clover]                            Generate test coverage reports with Clover
+  html-report  .................... Generate HTML test coverage reports with 
+                                    Clover
+  swing-report  ................... Generate Swing test coverage reports with 
+                                    Clover
+  xml-report  ..................... Generate XML test coverage reports with 
+                                    Clover
+
+[console]                           Run the Maven console
+  help  ........................... Print the help message.
+  listGoals  ...................... List all available goals
+
+[cruisecontrol]                     ( NO DEFAULT GOAL )
+  configure  ...................... Update a Cruise Control configuration file 
+                                    with this project
+  run  ............................ Run Cruise Control
+
+[dashboard]                         Generate a dashboard report
+  report  ......................... Generate a dashboard report
+
+[dist]                              Build a complete distribution.
+  build  .......................... Build a complete distribution.
+  build-bin  ...................... Build the binary distribution.
+  build-setup  .................... Set up directories for a distribution build
+  build-src  ...................... Build the source distribution.
+  deploy  ......................... Deploy a distribution
+  deploy-bin  ..................... Deploy a binary distribution
+  deploy-snapshot  ................ Deploy a snapshot distribution
+  deploy-src  ..................... Deploy a source distribution
+  prepare-bin-filesystem  ......... Builds the binary distribution file system.
+  prepare-src-filesystem  ......... Builds the source distribution file system.
+
+[docbook]                           ( NO DEFAULT GOAL )
+  transform  ...................... Transform any docbook-simple source into 
+                                    xdocs for later use
+
+[ear]                               Build an ear file
+  deploy  ......................... Deploys the ear to the remote repository
+  deploy-snapshot  ................ Deploys the snapshot version of  the ear to
+                                    remote repository
+  ear  ............................ Build an ear file
+  generate-ear-descriptor  ........ Generates the ear descriptor
+  init  ........................... Initialise filesystem and other resources 
+                                    for an ear
+  install  ........................ Install the ear in the local repository
+  install-snapshot  ............... Install the snapshot version of the ear in 
+                                    the local repository
+
+[eclipse]                           Generate Eclipse project files
+  add-maven-repo  ................. Ensure that the classpath variable 
+                                    MAVEN_REPO is available
+  external-tools  ................. Generate an Eclipse external tool for each 
+                                    goal
+  external-tools-21  .............. Generate an Eclipse 2.1 external tool for 
+                                    each goal
+  generate-classpath  ............. Generate Eclipse .classpath file
+  generate-project  ............... Generate Eclipse .project file
+
+[ejb]                               Build an ejb file
+  deploy  ......................... Deploys the ejb to the remote repository
+  deploy-snapshot  ................ Deploys the snapshot version of the ejb to 
+                                    remote repository
+  ejb  ............................ Build an ejb file
+  ejb-client  ..................... Build a client ejb file
+  init  ........................... Initialize filesystem and other resources 
+                                    for an ejb build
+  install  ........................ Install the ejb in the local repository
+  install-snapshot  ............... Install the snapshot version of the ejb in 
+                                    the local repository
+
+[faq]                               Generates FAQ xdoc files from FAQ XML 
+                                    documents
+
+[fo]                                This simply pre-requisites the fo:fo goal.
+  fo  ............................. Generates an fo xml document from the ${
+                                    maven.pdf.navigationFile} file supplied as 
+                                    part of the documentation. Please note that
+                                    as yet, no sanity check is done to make 
+                                    sure this file exists.
+
+[gump]                              Generate Gump descriptor from Maven 
+                                    descriptor
+  generate-descriptor  ............ Generate Gump descriptor from Maven 
+                                    descriptor
+
+[hibernate]                         ( NO DEFAULT GOAL )
+
+[idea]                              Generate IDEA project files
+  idea  ........................... Generate IDEA .ipr, .iml and .iws project 
+                                    files
+  module  ......................... Generate IDEA .iml project files
+  project  ........................ Generate IDEA .ipr project files
+  workspace  ...................... Generate IDEA .iws project files
+
+[j2ee]                              Check that a war file is valid
+  validate-war  ................... Check that a war file is valid
+
+[jalopy]                            Format all sources with code convention 
+                                    conformance
+  format  ......................... Format all sources with code convention 
+                                    conformance
+  taskdef  ........................ Define the jalopy task to Ant and Jelly
+
+[jar]                               Create the deliverable jar file.
+  deploy  ......................... Deploy a jar to the remote repository
+  deploy-snapshot  ................ Deploy a snapshot jar to the remote 
+                                    repository
+  install  ........................ Install the jar in the local repository
+  install-snapshot  ............... Install a snapshot jar in the local 
+                                    repository
+  jar  ............................ Create the deliverable jar file.
+  snapshot  ....................... Create a snapshot jar, ie '
+                                    id-YYYYMMDD.hhmmss.jar'
+
+[java]                              ( NO DEFAULT GOAL )
+  compile  ........................ Compile the project
+  jar  ............................ Create the deliverable jar file.
+  jar-resources  .................. Copy any resources that must be present in 
+                                    the deployed JAR file
+  prepare-filesystem  ............. Create the directory structure needed to 
+                                    compile
+
+[javacc]                            ( NO DEFAULT GOAL )
+  javacc-generate  ................ Generate source from javacc grammar
+
+[javadoc]                           ( NO DEFAULT GOAL )
+  deploy  ......................... Deploys the jar containing javadoc to the 
+                                    remote repository
+  deploy-snapshot  ................ Deploys the snapshot version of jar 
+                                    containing javadoc to remote repository
+  install  ........................ Install the jar containing javadoc in the 
+                                    local repository
+  install-snapshot  ............... Install the snapshot version of the jar 
+                                    containing javadoc in the local repository
+
+[jboss]                             Creates a specific JBoss server 
+                                    configuration
+  configure  ...................... Creates a specific JBoss server 
+                                    configuration
+  deploy-ear  ..................... Deploy ${maven.final.name}.ear
+  deploy-ejb  ..................... Deploy ${maven.final.name}.jar
+  deploy-exploded-warfile  ........ Invoke the 'war:webapp' goal and deploy the
+                                    result. Note that 'maven.war.webapp.dir' *
+                                    must* end with '.war' for this to work 
+                                    correctly.
+  deploy-warfile  ................. Invoke the 'war' goal and deploy the result
+  dist  ........................... Generate zipped JBoss configuration
+  install  ........................ Install the zip into the local repository
+  package  ........................ Creates a specific JBoss server 
+                                    configuration
+  start  .......................... Starts JBoss with our specific server 
+                                    configuration
+  stop  ........................... Stops JBoss
+  undeploy-ear  ................... Undeploy ${maven.final.name}.ear
+  undeploy-ejb  ................... Undeploy ${maven.final.name}.jar
+  undeploy-exploded-warfile  ...... Undeploy the result of the 'war:webapp' 
+                                    goal. Note that 'maven.war.webapp.dir' *
+                                    must* end with '.war' for this to work 
+                                    correctly.
+  undeploy-warfile  ............... Undeploy the result of the 'war' goal
+
+[jbuilder]                          Generate JBuilder project files
+  generate-library  ............... Generate JBuilder [id_project].library file
+  generate-project  ............... Generate JBuilder [id_project].jpx file
+
+[jcoverage]                         Generate HTML test coverage reports with 
+                                    JCoverage
+  html-report  .................... Generate HTML test coverage reports with 
+                                    JCoverage
+  merge  .......................... Merge two or more instrumentation files 
+                                    into one
+  on  ............................. perform the coverage analysis
+
+[jdee]                              Generate JDEE project file
+  generate-project  ............... Generate project file in basedir
+
+[jdeveloper]                        Generate JDeveloper project files
+  generate-project  ............... Generate jdeveloper .jpr
+  scanSources  .................... Scans the source in order to integrate them
+                                    into JDeveloper files
+
+[jellydoc]                          Generates the tag documentation
+  doclet  ......................... A doclet which outputs all the Jelly tag 
+                                    related metadata as XML
+  xml-doclet  ..................... Creates an XML representation of the doclet
+                                    information
+
+[jetty]                             Run Jetty
+  config  ......................... Generate a Jetty configuration file
+  run  ............................ Run Jetty
+  run-war  ........................ Run Jetty on the current war project
+
+[jnlp]                              Generate JNLP file and sign all jars
+  generate-jnlp  .................. Generate the .jnlp file and sign all jars
+  generate-keystore  .............. Generate a keystore file
+
+[junit-report]                      ( NO DEFAULT GOAL )
+  report  ......................... Generate a report from the test results
+
+[latex]                             ( NO DEFAULT GOAL )
+  generate  ....................... Generate documentation from latex source
+  prepare-filesystem  ............. Prepare the filesystem for latex processing
+
+[latka]                             Run the project's latka tests
+  jmeter-convert  ................. Convert a jmeter jmx file to a latka suite
+  single  ......................... Execute a single test defined using the '
+                                    testcase' variable
+  test  ........................... Run the project's latka tests
+
+[license]                           Generate an XML file from the license file
+  transfer  ....................... Generate a xml file from your license file
+
+[maven-ashkelon-plugin]             ( NO DEFAULT GOAL )
+
+[maven-changelog-plugin]            ( NO DEFAULT GOAL )
+  report  ......................... Generate a changelog report
+
+[maven-changes-plugin]              ( NO DEFAULT GOAL )
+
+[maven-checkstyle-plugin]           ( NO DEFAULT GOAL )
+
+[maven-clover-plugin]               ( NO DEFAULT GOAL )
+
+[maven-dashboard-plugin]            ( NO DEFAULT GOAL )
+
+[maven-developer-activity-plugin]   ( NO DEFAULT GOAL )
+  report  ......................... Generate developer and file activity reports
+
+[maven-faq-plugin]                  ( NO DEFAULT GOAL )
+  report  ......................... Generate FAQs
+
+[maven-file-activity-plugin]        ( NO DEFAULT GOAL )
+  report  ......................... Generate developer and file activity reports
+
+[maven-javadoc-plugin]              ( NO DEFAULT GOAL )
+  report  ......................... Generate API documentation
+
+[maven-jcoverage-plugin]            ( NO DEFAULT GOAL )
+  deregister  ..................... Deregister the jcoverage plugin
+  register  ....................... Register the maven-jcoverage-plugin.
+  report  ......................... Run the default report (html).
+
+[maven-jdepend-plugin]              ( NO DEFAULT GOAL )
+  report  ......................... Generate a dependency report with JDepend
+
+[maven-jellydoc-plugin]             ( NO DEFAULT GOAL )
+  report  ......................... Generates the tag documentation
+
+[maven-jira-plugin]                 ( NO DEFAULT GOAL )
+  report  ......................... Generate report with all entries defined in
+                                    Jira
+
+[maven-junit-report-plugin]         ( NO DEFAULT GOAL )
+
+[maven-jxr-plugin]                  ( NO DEFAULT GOAL )
+  report  ......................... Generate HTML cross reference sources
+
+[maven-license-plugin]              ( NO DEFAULT GOAL )
+  report  ......................... Generate an XML file from the license.txt
+
+[maven-linkcheck-plugin]            ( NO DEFAULT GOAL )
+  clearcache  ..................... Removes the cache file
+  report-real  .................... Generate link check results and then 
+                                    transform to HTML
+
+[maven-multichanges-plugin]         ( NO DEFAULT GOAL )
+
+[maven-multiproject-plugin]         ( NO DEFAULT GOAL )
+
+[maven-pmd-plugin]                  ( NO DEFAULT GOAL )
+
+[maven-simian-plugin]               Generate Simian (Code Similarity Analyzer) 
+                                    report.
+
+[maven-tasklist-plugin]             ( NO DEFAULT GOAL )
+  report  ......................... Generate a list of tasks from @todo tags in
+                                    your code
+
+[multichanges]                      ( NO DEFAULT GOAL )
+
+[multiproject]                      Run the site goal of all subprojects and 
+                                    generate overview page
+  artifact  ....................... Builds all artifacts for all subproject
+  clean  .......................... Clean all subprojects
+  dependency-convergence-report  .. Generate report which shows how consistent 
+                                    are the versions of artitfacts between 
+                                    projects
+  deploy  ......................... Run 'artifact':deploy for all subprojects
+  deploy-snapshot  ................ Run 'artifact':deploy-snapshot for all 
+                                    subprojects
+  goal  ........................... Run a given goal on all projects
+  install  ........................ Run 'artifact':install for all subprojects
+  install-snapshot  ............... Run 'artifact':install-snapshot for all 
+                                    subprojects
+  site  ........................... Run the site goal of all subprojects and 
+                                    generate overview page
+
+[native]                            Native compiler
+  compile  ........................ Compile the native compiler
+  install  ........................ Install the lib in the local repository
+  jniheader  ...................... make jniheaders for classes
+
+[nsis]                              Generate NSIS Installer .exe
+  generate-project  ............... Generate NSIS project.nsh file
+  generate-setup  ................. Generate NSIS .nsi file
+  installer  ...................... Generate NSIS .exe file
+
+[pdf]                               This is the default goal of the plugin and 
+                                    simply pre-requisites the pdf:pdf goal.
+  pdf  ............................ Generates a PDF document containing all 
+                                    project documentation. The PDF is generated
+                                    from the .fo file generated in the fo:fo 
+                                    goal.
+  prepare  ........................ Stages all files needed to generate the PDF
+
+[plugin]                            Build a plugin jar and install to the 
+                                    maven.repo.local
+  deploy  ......................... Install a specific unpacked plugin but no 
+                                    new jar
+  download  ....................... download and install a plugin from a remote
+                                    repo
+  download-artifact  .............. download a plugin from a remote repo
+  generate-docs  .................. Generate navigation, goals and properties 
+                                    docs
+  generate-goals  ................. Generate goals.xml for the plugin
+  generate-navigation  ............ Generate navigation.xml for the plugin
+  generate-properties  ............ Generate properties.xml for the plugin
+  install  ........................ Install the plugin jar, prepare Maven to 
+                                    expand it locally and clear caches
+  uninstall  ...................... Uninstall all versions of the plugin
+
+[pmd]                               Static Code Analyzer
+  cpd-report  ..................... Generate duplicate source code report with 
+                                    CPD
+  report  ......................... Generate source code report with PMD
+
+[pom]                               Validate the Maven XML project descriptor
+  contentvalidate  ................ Validate the content of the Maven POM
+  deploy  ......................... Deploy POM to the central repository.
+  deploy-snapshot  ................ Deploys the snapshot version of the POM to 
+                                    remote repository
+  install  ........................ Install POM in the local repository.
+  install-snapshot  ............... Install the snapshot version of the POM in 
+                                    the local repository
+  validate  ....................... Validate the Maven XML project descriptor
+
+[release]                           ( NO DEFAULT GOAL )
+
+[repository]                        ( NO DEFAULT GOAL )
+  audit-copy-license  ............. copy the license for the specified groupId 
+                                    to the repository
+  audit-copy-licenses  ............ copy all licenses in the audit file to the 
+                                    repository
+  audit-create-directory  ......... create the directory, specified by 
+                                    directoryName, for all groups in the audit 
+                                    file
+  audit-create-licenses  .......... create the license directories, for all 
+                                    groups in the audit file, in the repository
+  audit-generate-pom  ............. generate a pom for the groupId provided, 
+                                    based on the audit file
+  audit-generate-poms  ............ generate a pom for all the groupId's in the
+                                    audit file
+  audit-rename-licenses  .......... rename/link all licenses from their 
+                                    original name to ${groupId}.license
+  copy-artifact  .................. copy an artifact, specified by groupId, 
+                                    artifact and type, to the repository
+  copy-jar  ....................... copy a jar, specified by groupId and 
+                                    artifact, to the repository
+  copy-snapshot-jar  .............. copy a snapshot jar, specified by groupId 
+                                    and artifact, to the repository
+  create-project  ................. create a project, specified by groupId, in 
+                                    the repository
+  delete-project  ................. delete a project, specified by groupId, in 
+                                    the repository
+
+[scm]                               ( NO DEFAULT GOAL )
+  bootstrap-project  .............. Bootstrap a project from SCM
+  checkout-project  ............... Checkout a project
+  perform-release  ................ Perform a release from SCM
+  prepare-release  ................ Prepare for a release in SCM
+  update-project  ................. Update a project from SCM
+
+[shell]                             Generate Zsh files
+  zsh  ............................ Generate Zsh files
+
+[site]                              Generate the web site
+  deploy  ......................... deploy the generated site docs
+  ear  ............................ Create an EAR File from the generated site
+  fsdeploy  ....................... Deploy the generated site by copying to the
+                                    site directory
+  ftpdeploy  ...................... Deploy the generated site docs using ftp
+  sshdeploy  ...................... Deploy the generated site docs using ssh
+  war  ............................ Create a WAR File from the generated site
+
+[struts]                            Ensure a war file containing a Struts 
+                                    application is valid
+  validate-war  ................... Ensure a war file containing a Struts 
+                                    application is valid
+
+[test]                              Test the application
+  compile  ........................ Compile the TestCases and TestSuites
+  match  .......................... Execute all the tests matching the given '
+                                    testmatch' variable
+  match-test  ..................... [deprecated] please use the test:match goal
+                                    instead
+  prepare-filesystem  ............. Create the needed directory structure
+  single  ......................... Execute a single test defined using the '
+                                    testcase' variable
+  single-test  .................... [deprecated] please use the test:single 
+                                    goal instead
+  test  ........................... Test the application
+  test-resources  ................. Copy any resources that must be present for
+                                    run tests
+  ui  ............................. Starts the Swing TestRunner front end
+
+[tjdo]                              Enhance classes for use with Triactive JDO
+  drop-tables  .................... Drops the tables managed by Triactive JDO.
+  enhance  ........................ Provides the enhancement of classes to use 
+                                    TJDO for persistence
+
+[uberjar]                           Build a uberjar file
+  classworlds-conf  ............... Generates a classworlds conf
+  deploy  ......................... Deploys the uberjar to the remote repository
+  deploy-snapshot  ................ Deploys the snapshot version of  the 
+                                    uberjar to remote repository
+  install  ........................ Install the uberjar in the local repository
+  install-snapshot  ............... Install the snapshot version of the uberjar
+                                    in the local repository
+  uberjar  ........................ Build an uberjar
+
+[war]                               Build a war file
+  clean  .......................... Remove all artifacts created by war plugin
+  deploy  ......................... Deploys the war to the remote repository
+  deploy-snapshot  ................ Deploys the snapshot version of  the war to
+                                    remote repository
+  init  ........................... Initialize the file system and attain any 
+                                    necessary goals
+  inplace  ........................ Deploy a webapp into maven.war.src - in 
+                                    particular setting up WEB-INF/lib and 
+                                    WEB-INF/classes
+  install  ........................ Install the war in the local repository
+  install-snapshot  ............... Install the snapshot version of the war in 
+                                    the local repository
+  war  ............................ Build a war file
+  webapp  ......................... Build a webapp directory
+
+[webserver]                         ( NO DEFAULT GOAL )
+  clean  .......................... Safely delete an installed webserver 
+                                    instance
+  cycle  .......................... Forced install and start of a webserver 
+                                    instance
+  init  ........................... Initialize resources needed for the plugin
+  install  ........................ Install a webserver instance
+  reinstall  ...................... Reinstall a webserver instance
+  restart  ........................ Restart a webserver instance
+  start  .......................... Start a webserver instance
+  stop  ........................... Stop a webserver instance
+
+[wizard]                            ( NO DEFAULT GOAL )
+  ui  ............................. Run the Maven Swing Wizard
+
+[xdoc]                              Generate html project documentation xdoc 
+                                    sources
+  copy-resources  ................. copy static resources for use in xdocs 
+                                    generated html
+  copy-user-resources  ............ Copy user provided resources to docs 
+                                    destination
+  generate-from-pom  .............. Generates xdocs for site based on project 
+                                    descriptor
+  init  ........................... Generates the directory structure required 
+                                    for xdocs
+  jelly-init  ..................... Set up jelly xdoc requirements
+  jelly-transform  ................ transform xdocs using jelly/jsl rather than
+                                    dvsl
+  performJSL  ..................... Allows the LinkCheck plugin to xdoc a 
+                                    single directory
+  transform  ...................... Generate html project documentation xdoc 
+                                    sources
+  validate  ....................... Validate xdocs match the schema
+
+Undocumented goals : 
+
+  convert-snapshots
+  convert-snapshots-auto
+  create-upload-bundle
+  increment-snapshot-version
+  tasklist
+  validate-pom-for-release
+  artifact:load
+  ashkelon:generate-xml
+  aspectj:init
+  aspectwerkz:aspectc
+  aspectwerkz:init
+  changelog:create-cvspass
+  checkstyle:init
+  checkstyle:run
+  clover:html-report-internal
+  clover:init
+  clover:off
+  clover:on
+  clover:report
+  clover:swing-report-internal
+  clover:test
+  clover:xml-report-internal
+  cruisecontrol:validate
+  dashboard:aggregate
+  dashboard:report-single
+  dashboard:run-goals
+  dashboard:xdoc
+  ear:load
+  faq:init
+  hibernate:init
+  hibernate:schema-export
+  idea:init
+  idea:multiproject
+  javacc:jjtree-generate
+  javadoc:generate
+  javadoc:jar
+  jboss:init
+  jellydoc:init
+  jetty:prepare-filesystem
+  maven-ashkelon-plugin:deregister
+  maven-ashkelon-plugin:register
+  maven-ashkelon-plugin:report
+  maven-changelog-plugin:deregister
+  maven-changelog-plugin:register
+  maven-changes-plugin:deregister
+  maven-changes-plugin:register
+  maven-checkstyle-plugin:deregister
+  maven-checkstyle-plugin:register
+  maven-clover-plugin:deregister
+  maven-clover-plugin:register
+  maven-clover-plugin:report
+  maven-dashboard-plugin:deregister
+  maven-dashboard-plugin:register
+  maven-developer-activity-plugin:deregister
+  maven-developer-activity-plugin:register
+  maven-faq-plugin:deregister
+  maven-faq-plugin:register
+  maven-file-activity-plugin:deregister
+  maven-file-activity-plugin:register
+  maven-javadoc-plugin:deregister
+  maven-javadoc-plugin:register
+  maven-jdepend-plugin:deregister
+  maven-jdepend-plugin:register
+  maven-jellydoc-plugin:deregister
+  maven-jellydoc-plugin:register
+  maven-jira-plugin:deregister
+  maven-jira-plugin:register
+  maven-junit-report-plugin:deregister
+  maven-junit-report-plugin:register
+  maven-junit-report-plugin:report
+  maven-jxr-plugin:deregister
+  maven-jxr-plugin:register
+  maven-license-plugin:deregister
+  maven-license-plugin:register
+  maven-linkcheck-plugin:deregister
+  maven-linkcheck-plugin:register
+  maven-linkcheck-plugin:report
+  maven-multichanges-plugin:deregister
+  maven-multichanges-plugin:register
+  maven-multiproject-plugin:deregister
+  maven-multiproject-plugin:register
+  maven-multiproject-plugin:report
+  maven-pmd-plugin:deregister
+  maven-pmd-plugin:register
+  maven-simian-plugin:analyze
+  maven-simian-plugin:deregister
+  maven-simian-plugin:register
+  maven-simian-plugin:report
+  maven-tasklist-plugin:deregister
+  maven-tasklist-plugin:register
+  multichanges:report
+  multiproject:artifact-callback
+  multiproject:create-nav
+  multiproject:create-overview-page
+  multiproject:deploy-callback
+  multiproject:deploy-snapshot-callback
+  multiproject:install-callback
+  multiproject:install-snapshot-callback
+  multiproject:projects-init
+  multiproject:site-init
+  pdf:init
+  plugin:repository-deploy
+  plugin:test
+  pom:verify-version
+  release:build-distribution-bin
+  release:build-distribution-src
+  release:deploy-distribution-bin
+  release:deploy-distribution-src
+  release:init
+  release:setup-distribution-bin
+  release:update-pom
+  scm:cvs-checkout-project
+  scm:cvs-prepare-release
+  scm:cvs-update-project
+  scm:parse-connection
+  scm:validate
+  site:generate
+  site:init
+  site:run-reports
+  test:eclipse
+  tjdo:init
+  uberjar:init
+  war:load
+  xdoc:dump-report-settings
+  xdoc:register-reports
+
