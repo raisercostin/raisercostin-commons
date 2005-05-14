@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="common" default="dist" basedir=".">
-	<property 
-		name="buildFile.version" 
-		value="1.6" 
+	<property
+		name="buildFile.version"
+		value="1.6"
 		description="Build file version."/>
 	<taskdef name="if" classname="ise.antelope.tasks.IfTask" description="This is an antelope task."/>
 
 	<!--Don't change the order.-->
-	<property file="build.version.properties"   description="Load project version properties."/>
-	<property file="build.properties" 			description="Load project properties place."/>
-	<property file="${build.local.properties}"  description="Load local properties."/>
+	<property file="${user.home}/build.properties" description="Load local properties."/>
+	<property file="project.properties" 			description="Load project properties place."/>
+	<property file="version.properties"   		description="Load version properties."/>
 
 	<!--names-->
-	<property name="app.version" 	
+	<property name="app.version"
 		value="${app.version.major}.${app.version.minor}"
 		description="Aplication version."/>
 
-	<property name="app.longName" 	
+	<property name="app.longName"
 		value="${app.uniqueName}-v.${app.version}-b.${app.build}-d.${app.date}-t.${app.type}"
 		description="Application long name. Unique name in time also."/>
 
@@ -26,7 +26,7 @@
 	<property name="name.dist.jar" 	value="${app.longName}.orig.jar"
 		description="Distribute binary jar archive."/>
 
-	<property name="name.dist.obfuscated.jar" 	
+	<property name="name.dist.obfuscated.jar"
 									value="${app.longName}.jar"
 		description="Distribute obfuscated binary jar archive."/>
 
@@ -95,7 +95,7 @@
 	<!--targets-->
 	<target name="clean"
 		description="Clean generated files and directories.">
-			
+
 		<delete dir="${dir.bin}" failonerror="no"/>
 		<delete dir="${dir.build}" failonerror="no"/>
 		<delete dir="${dir.dist}" failonerror="no"/>
@@ -112,11 +112,11 @@
 		<propertyfile
 		    file="build.version.properties"
 		    comment="${app.name} properties">
-			<entry  
-				key="app.build" 
-				type="int" 
-				default="0000" 
-				operation="+" 
+			<entry
+				key="app.build"
+				type="int"
+				default="0000"
+				operation="+"
 				pattern="0000"/>
 			<entry
 				key="app.date"
@@ -139,7 +139,7 @@
 	    \2 String appType          =&quot;${app.type}&quot;;&#xD;&#xA;
 	    //ant.version.end"/>
 		<property name="match" value="//ant[.]version[.]begin (\s*[(]((\s|\d|\w)*)[)]\s*)?(.*)//ant[.]version[.]end"/>
-		<replaceregexp 
+		<replaceregexp
 			match="${match}"
 			replace="${replace}"
 			flags="msgi">
@@ -153,10 +153,10 @@
 		description="Compile Java sources.">
 		<echo message="The classpath is '${compile.classpath}'."/>
 		<mkdir dir="${dir.bin}"/>
-		<javac 
+		<javac
 			destdir="${dir.bin}"
-			debug="on" 
-			optimize="off" 
+			debug="on"
+			optimize="off"
 			deprecation="off"
 			compiler="javac1.4"
 			source="1.4"
@@ -176,18 +176,18 @@
 	<target name="doc.api.always" depends="compile"
 		description="Create Javadoc API documentation.">
 		<mkdir dir="${dir.doc.api}"/>
-		<javadoc 
-			destdir="${dir.doc.api}" 
-			access="private" 
+		<javadoc
+			destdir="${dir.doc.api}"
+			access="private"
 			source="1.4"
 		    use="true"
-		    notree="false" 
-		    nonavbar="false" 
+		    notree="false"
+		    nonavbar="false"
 		    noindex="false"
-		    splitindex="true" 
-		    author="true" 
+		    splitindex="true"
+		    author="true"
 		    version="true"
-		    nodeprecatedlist="false" 
+		    nodeprecatedlist="false"
 		    nodeprecated="false"
 		    packagenames="*"
 		    sourcepath="${dir.src.all}"
@@ -195,7 +195,7 @@
 		    doctitle="${app.name} API">
 		</javadoc>
 	</target>
-	<target name="build" depends="compile" 
+	<target name="build" depends="compile"
 		description="Make build directory.">
 		<mkdir dir="${dir.build}"/>
 		<copy todir="${dir.build}" failonerror="false">
@@ -219,11 +219,11 @@
 		</if>
 	</target>
 	<target name="dist" depends="dist.src,dist.src&amp;docs,dist.web,archive" description="Distribute all."/>
-	<target name="dist.src" 
+	<target name="dist.src"
 		description="Distribute sources.">
 		<mkdir dir="${dir.dist}"/>
-		<zip 
-			zipfile="${dir.dist}/${name.dist.src}" 
+		<zip
+			zipfile="${dir.dist}/${name.dist.src}"
 			basedir="${basedir}"
 			excludes="**/CVS/*,
 				${dir.doc.api}/**,
@@ -238,12 +238,12 @@
 				${dir.old}/**,
 				${dir.var}/**"/>
 	</target>
-	<target name="dist.src&amp;docs" depends="doc.api" 
+	<target name="dist.src&amp;docs" depends="doc.api"
 		description="Distribute sources and generated documentation.">
 		<mkdir dir="${dir.dist}"/>
-		<zip 
-			zipfile="${dir.dist}/${name.dist.srcdoc}" 
-			basedir="${basedir}" 
+		<zip
+			zipfile="${dir.dist}/${name.dist.srcdoc}"
+			basedir="${basedir}"
 			excludes="**/CVS/*,
 				${dir.doc.api}/**,
 				${dir.bin}/**,
@@ -269,17 +269,17 @@
 		<mkdir dir="${dir.dist}"/>
 		<available property="available" file="${dir.etc}/MANIFEST.MF" type="file"/>
 		<if name="available">
-		<jar 
+		<jar
 			jarfile="${dir.dist}/${name.dist.jar}"
 			manifest="${dir.etc}/MANIFEST.MF"
 			basedir="${dir.build}"/>
 		</if>
 		<if name="available" exists="false">
-			<jar 
+			<jar
 				jarfile="${dir.dist}/${name.dist.jar}"
 				basedir="${dir.build}"/>
 		</if>
-	</target>	
+	</target>
 	<target name="shrink" depends="dist.orig.jar"
 		description="Shrink and obfuscate jar file.">
 		<delete dir="temp/jshrink" failonerror="no"/>
@@ -303,7 +303,7 @@
 			<arg line="-classpath"/>
 			<arg line="${classpath}"/>
 		</exec>
-	</target>	
+	</target>
 	<target name="sign.generate">
 		<exec executable="keytool">
 			<arg line="-genkey"/>
@@ -380,7 +380,7 @@
 			<arg line="${dir.common.lib}/jdbc/jars/mssqlserver.jar"/>
 			<arg line="${sign.alias}"/>
 		</exec>
-	</target>	
+	</target>
 	<target name="dist.web.update"
 		description="Web update.">
 		<mkdir dir="${dir.temp}"/>
@@ -398,22 +398,22 @@
 			dir="${dir.temp.web}"
 			propertyFile="${dir.temp}/temp.property">
 			<include name="**/*.html"/>
-			<replacefilter 
-			    token="$${name.dist.src}" 
+			<replacefilter
+			    token="$${name.dist.src}"
 			    property="name.dist.src"/>
-			<replacefilter 
-			    token="$${name.dist.jar}" 
+			<replacefilter
+			    token="$${name.dist.jar}"
 			    property="name.dist.jar"/>
-			<replacefilter 
-			    token="$${app.shortName}" 
+			<replacefilter
+			    token="$${app.shortName}"
 			    property="app.shortName"/>
-			<replacefilter 
-			    token="$${app.longName}" 
+			<replacefilter
+			    token="$${app.longName}"
 			    property="app.longName"/>
 		</replace>
 		<delete file="${dir.temp}/temp.property" failonerror="false"/>
 	</target>
-	<target name="dist.web" depends="dist.src,dist.jar" 
+	<target name="dist.web" depends="dist.src,dist.jar"
 		description="Distribute for a web location.">
 		<mkdir dir="${dir.temp.web}"/>
 		<copy todir="${dir.temp.web}" file="${dir.dist}/${name.dist.jar}"/>
@@ -426,8 +426,8 @@
 		<antcall target="dist.web.update"/>
 		</if>
 		<mkdir dir="${dir.dist}"/>
-		<zip 
-			zipfile="${dir.dist}/${name.dist.web}" 
+		<zip
+			zipfile="${dir.dist}/${name.dist.web}"
 			basedir="${dir.temp.web}"/>
 		<delete dir="${dir.temp}" failonerror="false"/>
 	</target>
@@ -441,7 +441,7 @@
 		</move>
 		</if>
 	</target>
-	<target 
+	<target
 		name="archive.project"
 		depends="clean,dist.src"
 		description="Move all project files to an archive in arch directory.">
@@ -457,42 +457,42 @@
 		depends="dist,archive"
 		description="Create distribution files to arch directory.">
 	</target>
-	<target name="site.clean" depends="" 
+	<target name="site.clean" depends=""
 		description="Delete project from local site.">
 		<delete dir="${dir.deploy.site}"/>
 	</target>
-	<target name="app.clean" depends="" 
+	<target name="app.clean" depends=""
 		description="Delete project from local path.">
 		<delete dir="${dir.deploy.app}"/>
 	</target>
-	<target name="site.deploy" depends="dist" 
+	<target name="site.deploy" depends="dist"
 		description="Deploys project to local site.">
 		<mkdir dir="${dir.deploy.site}"/>
 		<copy todir="${dir.deploy.site}">
 			<fileset dir="${dir.dist}"/>
 		</copy>
 	</target>
-	<target 
+	<target
 		name="deploy.site"
 		depends="dist.web"
 		description="Deploys the web archive to a site using copy.">
 		<mkdir dir="${dir.site.local}/${app.name}"/>
 		<unzip src="${dir.dist}/${name.dist.web}" dest="${dir.site.local}/${app.name}"/>
 	</target>
-	<target name="all.deploy" depends="all.clean,app.deploy,site.deploy" 
+	<target name="all.deploy" depends="all.clean,app.deploy,site.deploy"
 		description="Deploys project to local site.">
 	</target>
-	<target name="all.clean" depends="clean,app.clean,site.clean" 
+	<target name="all.clean" depends="clean,app.clean,site.clean"
 		description="Deploys project to local site.">
 	</target>
-	<target name="app.deploy" depends="dist" 
+	<target name="app.deploy" depends="dist"
 		description="Deploys project to local path.">
 		<mkdir dir="${dir.deploy.app}"/>
 		<copy todir="${dir.deploy.app}">
 			<fileset dir="${dir.dist}"/>
 		</copy>
 	</target>
-	<target name="applet.deploy" depends="sign,htmlconvertor" 
+	<target name="applet.deploy" depends="sign,htmlconvertor"
 		description="Deploys applet to ${dir.build.web} path.">
 		<delete>
 			<fileset dir="${dir.build.web}/applets" includes="*.jar"/>
@@ -505,10 +505,10 @@
 		<copy todir="${dir.build.web}/applets" file="${dir.dist}/mssqlserver-signed.jar"/>
 		<copy tofile="${dir.build.web}/applets/factory.jsp" file="${dir.temp.web}/factory.html"/>
 	</target>
-	<target name="app.redeploy" depends="app.clean,clean,app.deploy" 
+	<target name="app.redeploy" depends="app.clean,clean,app.deploy"
 		description="Deploys project to local path.">
 	</target>
-	<target name="htmlconvertor" depends="" 
+	<target name="htmlconvertor" depends=""
 		description="Deploys project to local site.">
 		<mkdir dir="${dir.temp.web}"/>
 		<copy tofile="${dir.temp.web}/factory.html" file="${dir.src.web}/applets/factory.jsp"/>
