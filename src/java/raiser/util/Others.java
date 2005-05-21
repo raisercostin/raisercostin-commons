@@ -25,7 +25,7 @@ public class Others
                 return name.endsWith(fileExtension);
             }
         });
-        fd.show();
+        fd.setVisible(true);
         return fd.getDirectory() + fd.getFile();
     }
 }

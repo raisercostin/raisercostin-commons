@@ -10,7 +10,6 @@ package raiser.util;
 
 import java.util.*;
 import java.util.Map.Entry;
-import com.sun.org.apache.xerces.internal.dom.DeepNodeListImpl;
 
 /**
  * @author: Costin Emilian GRIGORE
