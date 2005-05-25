@@ -44,8 +44,8 @@ public class FileUtils {
         copy(sourceFileName, destinationFileName, true);
     }
 
-    public static void copy(String sourceFileName, String destinationFileName, boolean createDirectoriesIfNecessary)
-            throws IOException {
+    public static void copy(String sourceFileName, String destinationFileName,
+            boolean createDirectoriesIfNecessary) throws IOException {
         subfile(sourceFileName, destinationFileName, createDirectoriesIfNecessary, 0, -1);
     }
 
@@ -59,11 +59,9 @@ public class FileUtils {
         String separator = null;
         if (url.indexOf(getFileSeparator()) != -1) {
             separator = getFileSeparator();
-        }
-        else if (url.indexOf('/') != -1) {
+        } else if (url.indexOf('/') != -1) {
             separator = "/";
-        }
-        else if (url.indexOf('\\') != -1) {
+        } else if (url.indexOf('\\') != -1) {
             separator = "\\";
         }
         return url.substring(0, url.indexOf(separator));
@@ -112,12 +110,12 @@ public class FileUtils {
             }
             System.err.println("After some hacks the file "
                     + file.getAbsolutePath()
-                    + (result ? " was deleted." : " was NOT deleted. I tried " + tries + " times x " + +pause
-                            + " miliseconds."));
+                    + (result ? " was deleted." : " was NOT deleted. I tried " + tries
+                            + " times x " + +pause + " miliseconds."));
             return result;
-        }
-        catch (InterruptedException e) {
-            throw new IOException("The process of deleting file " + file.getAbsolutePath() + " was interrupted.");
+        } catch (InterruptedException e) {
+            throw new IOException("The process of deleting file " + file.getAbsolutePath()
+                    + " was interrupted.");
         }
     }
 
@@ -128,8 +126,7 @@ public class FileUtils {
         java.io.File test = new java.io.File(dir);
         if (test.isDirectory() && test.canWrite()) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -166,8 +163,7 @@ public class FileUtils {
         if (near != null) {
             if (near.isDirectory()) {
                 temp_loc = near.getAbsolutePath();
-            }
-            else {
+            } else {
                 java.io.File tmp = new java.io.File(near.getAbsolutePath());
                 temp_loc = tmp.getParent();
             }
@@ -177,23 +173,17 @@ public class FileUtils {
             String fileSep = System.getProperty("file.separator");
             if (checkTempLocation(fileSep + "tmp") == true) {
                 temp_loc = fileSep + "tmp";
-            }
-            else if (checkTempLocation(fileSep + "var" + fileSep + "tmp") == true) {
+            } else if (checkTempLocation(fileSep + "var" + fileSep + "tmp") == true) {
                 temp_loc = fileSep + "var" + fileSep + "tmp";
-            }
-            else if (checkTempLocation("c" + pathSep + fileSep + "temp") == true) {
+            } else if (checkTempLocation("c" + pathSep + fileSep + "temp") == true) {
                 temp_loc = "c" + pathSep + fileSep + "temp";
-            }
-            else if (checkTempLocation("c" + pathSep + fileSep + "windows" + fileSep + "temp") == true) {
+            } else if (checkTempLocation("c" + pathSep + fileSep + "windows" + fileSep + "temp") == true) {
                 temp_loc = "c" + pathSep + fileSep + "windows" + fileSep + "temp";
-            }
-            else if (checkTempLocation(fileSep) == true) {
+            } else if (checkTempLocation(fileSep) == true) {
                 temp_loc = fileSep;
-            }
-            else if (checkTempLocation(".") == true) {
+            } else if (checkTempLocation(".") == true) {
                 temp_loc = ".";
-            }
-            else {
+            } else {
                 // give up
                 throw new java.io.IOException("Could not find directory for temporary file");
             }
@@ -205,14 +195,48 @@ public class FileUtils {
             // generate random a number 10,000 .. 99,999
             int unique = ((wheel.nextInt() & Integer.MAX_VALUE) % 90000) + 10000;
             tempFile = new java.io.File(temp_loc, prepend + Integer.toString(unique) + ".tmp");
-        }
-        while (tempFile.exists());
+        } while (tempFile.exists());
         new java.io.FileOutputStream(tempFile).close();
         // debugging peek at the name generated.
         if (false) {
             System.out.println(tempFile.getCanonicalPath());
         }
         return tempFile;
+    }
+
+    public static void rename(File srcFile, File dstFile, boolean checkDestination,
+            boolean deleteDestination) throws IOException {
+        if (checkDestination) {
+            if (dstFile.exists()) {
+                if (deleteDestination) {
+                    dstFile.delete();
+                } else {
+                    throw new IOException("Can't rename. Destination exists [" + dstFile + "].");
+                }
+            }
+        }
+        renameFixed(srcFile, dstFile);
+        if (!srcFile.renameTo(dstFile)) {
+            copy(srcFile.getAbsolutePath(), dstFile.getAbsolutePath());
+            if (!delete(srcFile)) {
+                throw new IOException("Can't delete source file[" + srcFile.getAbsolutePath()
+                        + "].");
+            }
+        }
+    }
+
+    private static void renameFixed(File srcFile, File dstFile) {
+        //windows case sensitive rename
+        if(SystemUtils.isWindows()&&srcFile.getAbsolutePath().equalsIgnoreCase(dstFile.getAbsolutePath()))
+        {
+            File dstFile2 = new File(dstFile.getAbsolutePath()+"tempdfwaetw2134213rwefsda");
+            srcFile.renameTo(dstFile2);
+            dstFile2.renameTo(dstFile);
+        }
+        else
+        {
+            srcFile.renameTo(dstFile);
+        }
     }
 
     /**
@@ -224,12 +248,7 @@ public class FileUtils {
      * @throws IOException
      */
     public static void rename(File srcFile, File dstFile) throws IOException {
-        if (!srcFile.renameTo(dstFile)) {
-            copy(srcFile.getAbsolutePath(), dstFile.getAbsolutePath());
-            if (!delete(srcFile)) {
-                throw new IOException("Can't delete source file[" + srcFile.getAbsolutePath() + "].");
-            }
-        }
+        rename(srcFile, dstFile, false, false);
     }
 
     public static byte[] readFile(File file) throws IOException {
@@ -245,8 +264,8 @@ public class FileUtils {
         return result.substring(0, result.length() - 1);
     }
 
-    public static void subfile(String sourceFileName, String destinationFileName, boolean createDirectoriesIfNecessary,
-            long from, long to) throws IOException {
+    public static void subfile(String sourceFileName, String destinationFileName,
+            boolean createDirectoriesIfNecessary, long from, long to) throws IOException {
         if (createDirectoriesIfNecessary) {
             makedir(parsePath(destinationFileName));
         }
@@ -263,8 +282,7 @@ public class FileUtils {
             while ((nb = in.read(str)) >= 0) {
                 if (to == -1) {
                     max = nb;
-                }
-                else {
+                } else {
                     max = (int) (to - index);
                 }
                 out.write(str, 0, max);
@@ -272,19 +290,22 @@ public class FileUtils {
             }
             out.close();
             in.close();
-        }
-        finally {
+        } finally {
             try {
                 if (in != null) {
                     in.close();
                 }
-            }
-            finally {
+            } finally {
                 if (out != null) {
                     out.close();
                 }
             }
         }
+    }
+
+    public static void rename(String temp, String fileName, boolean checkDestination,
+            boolean deleteDestination) throws IOException {
+        rename(new File(temp), new File(fileName), checkDestination, deleteDestination);
     }
 
     public static void rename(String temp, String fileName) throws IOException {
