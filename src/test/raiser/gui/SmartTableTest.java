@@ -48,13 +48,13 @@ public class SmartTableTest extends TestCase
         table.addData(new Task(false,"Task new","eu",0));
         Console.run(table);
     }
-    public void _testGui2() throws InterruptedException
+    public void testGui2() throws InterruptedException
     {
-        Console.run(table2).join();
+        Console.run(table2);
     }
-    public void _testGui3() throws InterruptedException
+    public void testGui3() throws InterruptedException
     {
-        Console.run(table3).join();
+        Console.run(table3);
     }
 
     public void testRows()
