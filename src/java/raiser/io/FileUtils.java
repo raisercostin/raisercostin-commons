@@ -4,6 +4,9 @@
 package raiser.io;
 
 import java.io.*;
+import java.util.*;
+import java.util.ArrayList;
+import raiser.util.ArraysUtil;
 
 /**
  * @author raiser
@@ -64,7 +67,7 @@ public class FileUtils {
         } else if (url.indexOf('\\') != -1) {
             separator = "\\";
         }
-        return url.substring(0, url.indexOf(separator));
+        return url.substring(0, url.lastIndexOf(separator));
     }
 
     /**
@@ -78,24 +81,33 @@ public class FileUtils {
      * On some JVMs there is a bug in delete method.
      */
     public static boolean delete(File file) throws IOException {
-        return delete(file, 1000, 10);
+        return delete(file, 1000, 10,true);
     }
 
     /**
      * On some JVMs there is a bug in delete method.
      */
     public static boolean delete(String fileName) throws IOException {
-        return delete(new File(fileName), 1000, 10);
+        return delete(new File(fileName), 1000, 10,true);
+    }
+    public static boolean delete(String fileName, boolean errorIfNotExists) throws IOException
+    {
+        return delete(new File(fileName),100,10,errorIfNotExists);
     }
 
     /**
      * On some JVMs there is a bug in delete method.
      */
-    static boolean delete(File file, int timeout, int tries) throws IOException {
+    static boolean delete(File file, int timeout, int tries, boolean errorIfNotExists) throws IOException {
         try {
             if (!file.exists()) {
-                throw new IOException("File " + file.getAbsolutePath()
-                        + " doesn't exist. Can't delete non existent files.");
+                if(errorIfNotExists)
+                    throw new IOException("File " + file.getAbsolutePath()
+                            + " doesn't exist. Can't delete non existent files.");
+                else
+                {
+                    return true;
+                }
             }
             if (file.delete()) {
                 return true;
@@ -215,8 +227,8 @@ public class FileUtils {
                 }
             }
         }
-        renameFixed(srcFile, dstFile);
-        if (!srcFile.renameTo(dstFile)) {
+        ;
+        if (!renameFixed(srcFile, dstFile)) {
             copy(srcFile.getAbsolutePath(), dstFile.getAbsolutePath());
             if (!delete(srcFile)) {
                 throw new IOException("Can't delete source file[" + srcFile.getAbsolutePath()
@@ -225,18 +237,20 @@ public class FileUtils {
         }
     }
 
-    private static void renameFixed(File srcFile, File dstFile) {
+    private static boolean renameFixed(File srcFile, File dstFile) {
+        boolean result = true;
         //windows case sensitive rename
         if(SystemUtils.isWindows()&&srcFile.getAbsolutePath().equalsIgnoreCase(dstFile.getAbsolutePath()))
         {
             File dstFile2 = new File(dstFile.getAbsolutePath()+"tempdfwaetw2134213rwefsda");
-            srcFile.renameTo(dstFile2);
-            dstFile2.renameTo(dstFile);
+            result &= srcFile.renameTo(dstFile2);
+            result &= dstFile2.renameTo(dstFile);
         }
         else
         {
-            srcFile.renameTo(dstFile);
+            result = srcFile.renameTo(dstFile);
         }
+        return result;
     }
 
     /**
@@ -317,4 +331,67 @@ public class FileUtils {
         f.write(data);
         f.close();
     }
+
+    public static String getRealPath(final String fileName) throws IOException
+    {
+        final String name = parseFileName(fileName);
+        final String dir2 = parsePath(new File(fileName).getAbsolutePath())+"\\";
+        File dir = parseDirectory(new File(fileName));
+        String[] result = dir.list(new FilenameFilter() {
+            public boolean accept(File dir, String fileName2)
+            {
+                return name.equalsIgnoreCase(fileName2);
+            }
+        });
+        if(result.length == 0)
+        {
+            throw new IOException("File ["+fileName+"] doesn't exists.");
+        }
+        if(result.length == 1)
+        {
+            return dir2+result[0];
+        }
+        //the system is case sensitive
+        for (int i = 0; i < result.length; i++)
+        {
+            if(result[i].equals(name))
+            {
+                return dir2+fileName;
+            }
+        }
+        throw new IOException("File ["+fileName+"] doesn't exists. But some file with other case exists: ["+Arrays.asList(result)+"]");
+    }
+
+    private static String parseFileName(String url)
+    {
+        String separator = null;
+        if (url.indexOf(getFileSeparator()) != -1) {
+            separator = getFileSeparator();
+        } else if (url.indexOf('/') != -1) {
+            separator = "/";
+        } else if (url.indexOf('\\') != -1) {
+            separator = "\\";
+        }
+        return url.substring(url.indexOf(separator)+1);
+    }
+
+    private static String parseDirectory(String fileName)
+    {
+        return parseDirectory(new File(fileName)).getAbsolutePath();
+    }
+
+    private static File parseDirectory(File file)
+    {
+        if(file.isDirectory())
+        {
+            return file;
+        }
+        return file.getParentFile();
+    }
+
+    public static boolean create(String fileName) throws IOException
+    {
+        return new File(fileName).createNewFile();
+    }
+
 }
