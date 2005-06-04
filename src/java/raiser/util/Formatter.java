@@ -3,10 +3,9 @@
  */
 package raiser.util;
 
-import org.apache.log4j.Logger;
 import java.text.*;
 import java.util.*;
-import javax.swing.text.DateFormatter;
+import org.apache.log4j.Logger;
 
 /**
  * @author raiser
@@ -192,7 +191,7 @@ public class Formatter {
     public static Calendar parseDate(String date) {
         for ( Map.Entry<String,Formatter.FormatterEntry> entry : parsers.entrySet()) {
             try {
-                Date d = entry.getValue().getFormatter().parse(date);
+                Date d = entry.getValue().getDateFormatter().parse(date);
                 if (d != null) {
                     Calendar result = Calendar.getInstance();
                     result.setTimeInMillis(d.getTime());
@@ -209,7 +208,7 @@ public class Formatter {
     {
         String name;
         String value;
-        DateFormat formatter;
+        DateFormat dateFormatter;
         public FormatterEntry(String name, String value) {
             this.name = name;
             this.value = value;
@@ -220,12 +219,12 @@ public class Formatter {
         public String getName() {
             return name;
         }
-        public DateFormat getFormatter() {
-            if(formatter == null)
+        public DateFormat getDateFormatter() {
+            if(dateFormatter == null)
             {
-                formatter = new SimpleDateFormat(value);
+                dateFormatter = new SimpleDateFormat(value);
             }
-            return formatter;
+            return dateFormatter;
         }
     }
     private static Map<String,FormatterEntry> parsers;
@@ -239,6 +238,6 @@ public class Formatter {
         parsers.put(name,new FormatterEntry(name,formatter));
     }
     public static DateFormat getParser(String parserName){
-        return parsers.get(parserName).getFormatter();
+        return parsers.get(parserName).getDateFormatter();
     }
 }

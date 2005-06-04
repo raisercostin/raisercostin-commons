@@ -4,9 +4,7 @@
 package raiser.io;
 
 import java.io.*;
-import java.util.*;
-import java.util.ArrayList;
-import raiser.util.ArraysUtil;
+import java.util.Arrays;
 
 /**
  * @author raiser
@@ -219,7 +217,7 @@ public class FileUtils {
     public static void rename(File srcFile, File dstFile, boolean checkDestination,
             boolean deleteDestination) throws IOException {
         if (checkDestination) {
-            if (dstFile.exists()) {
+            if (exists(dstFile,true)) {
                 if (deleteDestination) {
                     dstFile.delete();
                 } else {
@@ -227,7 +225,6 @@ public class FileUtils {
                 }
             }
         }
-        ;
         if (!renameFixed(srcFile, dstFile)) {
             copy(srcFile.getAbsolutePath(), dstFile.getAbsolutePath());
             if (!delete(srcFile)) {
@@ -235,6 +232,15 @@ public class FileUtils {
                         + "].");
             }
         }
+    }
+
+    private static boolean exists(File dstFile, boolean caseSensitive) throws IOException {
+        boolean result = dstFile.exists();
+        if(caseSensitive && result)
+        {
+            result = dstFile.getCanonicalPath().equals(dstFile.getAbsolutePath());
+        }
+        return result;
     }
 
     private static boolean renameFixed(File srcFile, File dstFile) {
@@ -375,12 +381,12 @@ public class FileUtils {
         return url.substring(url.indexOf(separator)+1);
     }
 
-    private static String parseDirectory(String fileName)
+    public static String parseDirectory(String fileName)
     {
         return parseDirectory(new File(fileName)).getAbsolutePath();
     }
 
-    private static File parseDirectory(File file)
+    public static File parseDirectory(File file)
     {
         if(file.isDirectory())
         {
