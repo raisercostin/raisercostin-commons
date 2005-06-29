@@ -10,20 +10,27 @@
 
 package jsync;
 
+import org.apache.log4j.Logger;
+
 /**
  * Class initiating parallel execution of several threads and collecting their
  * results. Two models of execution are supported - wait completion of all
  * activities or wait until some thread is terminated and stop all other
  * threads.
- * 
+ *
  * @see jsync.Activity
  */
 public class Concurrent
 {
+	/**
+	 * Logger for this class
+	 */
+	private static final Logger logger = Logger.getLogger(Concurrent.class);
+
     /**
      * Constructor of <code>Concurrent</code> class. This constructor creates
      * a thread object for each activity.
-     * 
+     *
      * @param activities
      *            array of activities to be done.
      */
@@ -53,7 +60,7 @@ public class Concurrent
     /**
      * Wait until one of the started threads finish it's execution. After it all
      * other threads are stopped and result of finished thread is returned.
-     * 
+     *
      * @return result returned by thread first finished it's execution.
      */
     public final synchronized Object waitOne()
@@ -89,7 +96,7 @@ public class Concurrent
      * Wait during specified period of time until one of started threads finish
      * it's execution. After it all other threads are stopped and result of
      * finished thread is returned.
-     * 
+     *
      * @param timeout
      *            the maximum time to wait in milliseconds.
      * @return result returned by thread first finished it's execution or
@@ -127,7 +134,7 @@ public class Concurrent
 
     /**
      * Wait until all started threads finish their execution.
-     * 
+     *
      * @return array containing results returned by each of the threads.
      */
     public final synchronized Object[] waitAll()
@@ -149,7 +156,7 @@ public class Concurrent
     /**
      * Wait at most <code>timeout</code> miliseconds until all started threads
      * finish their execution.
-     * 
+     *
      * @param timeout
      *            the maximum time to wait in milliseconds.
      * @return array containing results returned by each of the threads or
@@ -201,6 +208,11 @@ public class Concurrent
 
 class Task extends Thread
 {
+	/**
+	 * Logger for this class
+	 */
+	private static final Logger logger = Logger.getLogger(Task.class);
+
     Activity activity;
 
     Concurrent referee;
@@ -216,6 +228,7 @@ class Task extends Thread
         }
         catch (Exception ex)
         {
+        	logger.error(ex);
             result = null;
         }
         referee.setResult(id, result);

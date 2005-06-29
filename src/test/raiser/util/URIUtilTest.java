@@ -39,16 +39,17 @@ public class URIUtilTest extends TestCase
         String sep = FileUtils.getFileSeparator();
 
         //absoluta
-        assertEquals("c:"+sep       ,URIUtil.uriToAbsoluteFile("file:///c:"));
+        // file:///c: is current directory on drive c:
+        //assertEquals("c:"+sep       ,URIUtil.uriToAbsoluteFile("file:///c:"));
         assertEquals("c:"+sep       ,URIUtil.uriToAbsoluteFile("file:///c:/"));
         assertEquals("c:"+sep+"ceva",URIUtil.uriToAbsoluteFile("file:///c:/ceva"));
 
         //absoluta cu diskul curent
         assertEquals(disk+":"+sep+"c"   ,URIUtil.uriToAbsoluteFile("file:///c"));
-        
+
         //relativa la calea curenta
         assertEquals(disk+":"+path  ,URIUtil.uriToAbsoluteFile("file:///:/"));
         assertEquals(disk+":"+path+sep+"ceva",URIUtil.uriToAbsoluteFile("file:///:/ceva"));
     }
-        
+
 }

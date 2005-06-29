@@ -3,28 +3,32 @@
  */
 package raiser.io;
 
+import org.apache.log4j.Logger;
 import java.io.*;
 import java.util.Arrays;
+import java.util.regex.Pattern;
 
 /**
  * @author raiser
  */
 public class FileUtils {
+    /**
+     * Logger for this class
+     */
+    private static final Logger logger = Logger.getLogger(FileUtils.class);
+
     /** File separator ("/" on Unix). */
     public static String getFileSeparator() {
         return System.getProperty("file.separator");
     }
-
     /** Path separator (":" on Unix). */
     public static String getPathSeparator() {
         return System.getProperty("path.separator");
     }
-
     /** Line separator ("\n" on Unix). */
     public static String getLineSeparator() {
         return System.getProperty("line.separator");
     }
-
     /**
      * @param path
      * @return
@@ -32,7 +36,6 @@ public class FileUtils {
     public static String getPath(String path) {
         return path.endsWith(getFileSeparator()) ? path : path + getFileSeparator();
     }
-
     /**
      * Copy from <tt>source</tt> to <tt>destination</tt>
      *
@@ -44,12 +47,10 @@ public class FileUtils {
     public static void copy(String sourceFileName, String destinationFileName) throws IOException {
         copy(sourceFileName, destinationFileName, true);
     }
-
     public static void copy(String sourceFileName, String destinationFileName,
             boolean createDirectoriesIfNecessary) throws IOException {
         subfile(sourceFileName, destinationFileName, createDirectoriesIfNecessary, 0, -1);
     }
-
     /**
      * An url is < <protocol>>:// < <path with / separators>>/ <<file>>
      *
@@ -67,43 +68,67 @@ public class FileUtils {
         }
         return url.substring(0, url.lastIndexOf(separator));
     }
-
     /**
      * @param destinationFileName
      */
-    public static void makedir(String destinationFileName) {
-        new File(destinationFileName).mkdirs();
+    public static boolean makedir(String path) {
+        File file = new File(path);
+        if (file.exists()) {
+            if (file.isDirectory()) {
+                logger.debug("Path [" + extractCanonicalName(file) + "] is already created.");
+                return true;
+            }
+            if (file.isDirectory()) {
+                logger.debug("Path [" + extractCanonicalName(file)
+                        + "] can't be created, a file with the same name already exists.");
+                return false;
+            }
+        }
+        String pathString = extractCanonicalName(file);
+        if (logger.isDebugEnabled()) {
+            logger.debug("makedir(" + pathString + ")");
+        }
+        boolean result = file.mkdirs();
+        if (logger.isDebugEnabled()) {
+            logger.debug("makedir(" + pathString + ")=>" + result);
+        }
+        return result;
     }
-
+    private static String extractCanonicalName(File file) {
+        String pathString = null;
+        try {
+            pathString = file.getCanonicalPath();
+        } catch (IOException e) {
+            pathString = file.getAbsolutePath();
+        }
+        return pathString;
+    }
     /**
      * On some JVMs there is a bug in delete method.
      */
     public static boolean delete(File file) throws IOException {
-        return delete(file, 1000, 10,true);
+        return delete(file, 1000, 10, true);
     }
-
     /**
      * On some JVMs there is a bug in delete method.
      */
     public static boolean delete(String fileName) throws IOException {
-        return delete(new File(fileName), 1000, 10,true);
+        return delete(new File(fileName), 1000, 10, true);
     }
-    public static boolean delete(String fileName, boolean errorIfNotExists) throws IOException
-    {
-        return delete(new File(fileName),100,10,errorIfNotExists);
+    public static boolean delete(String fileName, boolean errorIfNotExists) throws IOException {
+        return delete(new File(fileName), 100, 10, errorIfNotExists);
     }
-
     /**
      * On some JVMs there is a bug in delete method.
      */
-    static boolean delete(File file, int timeout, int tries, boolean errorIfNotExists) throws IOException {
+    static boolean delete(File file, int timeout, int tries, boolean errorIfNotExists)
+            throws IOException {
         try {
             if (!file.exists()) {
-                if(errorIfNotExists)
+                if (errorIfNotExists)
                     throw new IOException("File " + file.getAbsolutePath()
                             + " doesn't exist. Can't delete non existent files.");
-                else
-                {
+                else {
                     return true;
                 }
             }
@@ -128,7 +153,6 @@ public class FileUtils {
                     + " was interrupted.");
         }
     }
-
     /**
      * Checks if directory chosen exists and is writable
      */
@@ -140,7 +164,6 @@ public class FileUtils {
             return false;
         }
     }
-
     /**
      * @param string
      * @param file2
@@ -150,7 +173,6 @@ public class FileUtils {
     public static String getTempFile(String id, String near) throws IOException {
         return getTempFile(id, new File(near)).getCanonicalPath();
     }
-
     /**
      * Create a uniquely named temporary file of the form XXXnnnnn.tmp.
      *
@@ -213,11 +235,10 @@ public class FileUtils {
         }
         return tempFile;
     }
-
     public static void rename(File srcFile, File dstFile, boolean checkDestination,
             boolean deleteDestination) throws IOException {
         if (checkDestination) {
-            if (exists(dstFile,true)) {
+            if (exists(dstFile, true)) {
                 if (deleteDestination) {
                     dstFile.delete();
                 } else {
@@ -233,32 +254,26 @@ public class FileUtils {
             }
         }
     }
-
     private static boolean exists(File dstFile, boolean caseSensitive) throws IOException {
         boolean result = dstFile.exists();
-        if(caseSensitive && result)
-        {
+        if (caseSensitive && result) {
             result = dstFile.getCanonicalPath().equals(dstFile.getAbsolutePath());
         }
         return result;
     }
-
     private static boolean renameFixed(File srcFile, File dstFile) {
         boolean result = true;
         //windows case sensitive rename
-        if(SystemUtils.isWindows()&&srcFile.getAbsolutePath().equalsIgnoreCase(dstFile.getAbsolutePath()))
-        {
-            File dstFile2 = new File(dstFile.getAbsolutePath()+"tempdfwaetw2134213rwefsda");
+        if (SystemUtils.isWindows()
+                && srcFile.getAbsolutePath().equalsIgnoreCase(dstFile.getAbsolutePath())) {
+            File dstFile2 = new File(dstFile.getAbsolutePath() + "tempdfwaetw2134213rwefsda");
             result &= srcFile.renameTo(dstFile2);
             result &= dstFile2.renameTo(dstFile);
-        }
-        else
-        {
+        } else {
             result = srcFile.renameTo(dstFile);
         }
         return result;
     }
-
     /**
      * Rename srcFile to dstFile. If can't rename because srcFile must be moved
      * copies srcFile to dstFile and then deletes srcFile.
@@ -270,7 +285,6 @@ public class FileUtils {
     public static void rename(File srcFile, File dstFile) throws IOException {
         rename(srcFile, dstFile, false, false);
     }
-
     public static byte[] readFile(File file) throws IOException {
         InputStream in = new FileInputStream(file);
         byte[] buffer = new byte[(int) file.length()];
@@ -278,12 +292,13 @@ public class FileUtils {
         in.close();
         return buffer;
     }
-
+    public static byte[] readFile(String htmlFile) throws IOException {
+        return readFile(new File(htmlFile));
+    }
     public static String getCurrentDirectory() {
         String result = new File(".").getAbsolutePath();
         return result.substring(0, result.length() - 1);
     }
-
     public static void subfile(String sourceFileName, String destinationFileName,
             boolean createDirectoriesIfNecessary, long from, long to) throws IOException {
         if (createDirectoriesIfNecessary) {
@@ -322,54 +337,44 @@ public class FileUtils {
             }
         }
     }
-
     public static void rename(String temp, String fileName, boolean checkDestination,
             boolean deleteDestination) throws IOException {
         rename(new File(temp), new File(fileName), checkDestination, deleteDestination);
     }
-
     public static void rename(String temp, String fileName) throws IOException {
         rename(new File(temp), new File(fileName));
     }
-
     public static void create(String file, byte[] data) throws IOException {
         FileOutputStream f = new FileOutputStream(file);
         f.write(data);
         f.close();
     }
-
-    public static String getRealPath(final String fileName) throws IOException
-    {
+    public static String getRealPath(final String fileName) throws IOException {
         final String name = parseFileName(fileName);
-        final String dir2 = parsePath(new File(fileName).getAbsolutePath())+"\\";
+        final String dir2 = parsePath(new File(fileName).getAbsolutePath()) + "\\";
         File dir = parseDirectory(new File(fileName));
         String[] result = dir.list(new FilenameFilter() {
-            public boolean accept(File dir, String fileName2)
-            {
+            public boolean accept(File dir, String fileName2) {
                 return name.equalsIgnoreCase(fileName2);
             }
         });
-        if(result.length == 0)
-        {
-            throw new IOException("File ["+fileName+"] doesn't exists.");
+        if (result.length == 0) {
+            throw new IOException("File [" + fileName + "] doesn't exists.");
         }
-        if(result.length == 1)
-        {
-            return dir2+result[0];
+        if (result.length == 1) {
+            return dir2 + result[0];
         }
         //the system is case sensitive
-        for (int i = 0; i < result.length; i++)
-        {
-            if(result[i].equals(name))
-            {
-                return dir2+fileName;
+        for (int i = 0; i < result.length; i++) {
+            if (result[i].equals(name)) {
+                return dir2 + fileName;
             }
         }
-        throw new IOException("File ["+fileName+"] doesn't exists. But some file with other case exists: ["+Arrays.asList(result)+"]");
+        throw new IOException("File [" + fileName
+                + "] doesn't exists. But some file with other case exists: ["
+                + Arrays.asList(result) + "]");
     }
-
-    private static String parseFileName(String url)
-    {
+    private static String parseFileName(String url) {
         String separator = null;
         if (url.indexOf(getFileSeparator()) != -1) {
             separator = getFileSeparator();
@@ -378,26 +383,29 @@ public class FileUtils {
         } else if (url.indexOf('\\') != -1) {
             separator = "\\";
         }
-        return url.substring(url.indexOf(separator)+1);
+        return url.substring(url.indexOf(separator) + 1);
     }
-
-    public static String parseDirectory(String fileName)
-    {
+    public static String parseDirectory(String fileName) {
         return parseDirectory(new File(fileName)).getAbsolutePath();
     }
-
-    public static File parseDirectory(File file)
-    {
-        if(file.isDirectory())
-        {
+    public static File parseDirectory(File file) {
+        if (file.isDirectory()) {
             return file;
         }
         return file.getParentFile();
     }
-
-    public static boolean create(String fileName) throws IOException
-    {
+    public static boolean create(String fileName) throws IOException {
         return new File(fileName).createNewFile();
     }
-
+    public static File[] list(String path, String regexp) {
+        final Pattern p = Pattern.compile(regexp);
+        return new File(path).listFiles(new FileFilter() {
+            public boolean accept(File pathname) {
+                return p.matcher(pathname.getAbsolutePath()).matches();
+            }
+        });
+    }
+    public static String getFileName(File file) {
+        return file.getName().substring(0,file.getName().lastIndexOf('.'));
+    }
 }

@@ -15,10 +15,11 @@ import junit.framework.TestCase;
 public class FileUtilsTest extends TestCase {
     public void testFileRename() throws IOException {
         String path = "temp\\";
+        new File(path).mkdir();
         String oldFileName = "temptest.something";
         String newFileName = oldFileName.toUpperCase();
-        //FileUtils.delete(path+oldFileName,false);
-        //FileUtils.create(path+oldFileName);
+        FileUtils.delete(path+oldFileName,false);
+        FileUtils.create(path+oldFileName);
         FileUtils.rename(path + oldFileName, path + newFileName);
         String allPath = FileUtils.parsePath(new File(path).getAbsolutePath());
         //assertEquals(allPath+"\\"+path+newFileName,FileUtils.getRealPath(path+oldFileName));
@@ -28,6 +29,8 @@ public class FileUtilsTest extends TestCase {
     }
 
     public void testFileRename2() throws IOException {
+        String path = "temp\\";
+        new File(path).mkdir();
         new File("temp\\SOMETHING").createNewFile();
         assertEquals("SOMETHING",new File("temp\\something").getCanonicalFile().getName());
     }

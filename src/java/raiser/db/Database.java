@@ -3,6 +3,7 @@ package raiser.db;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import org.apache.commons.lang.builder.EqualsBuilder;
 
 //one Database per application
 //one ConnectionPool per Database
@@ -395,5 +396,16 @@ public class Database
     {
         //TODO make a safe where
         return where;
+    }
+    /**
+     * @see java.lang.Object#equals(Object)
+     */
+    public boolean equals(Object object) {
+        if (!(object instanceof Database)) {
+            return false;
+        }
+        Database rhs = (Database) object;
+        return new EqualsBuilder().appendSuper(super.equals(object)).append(this.cp, rhs.cp)
+                .append(this.detailedExceptionMessages, rhs.detailedExceptionMessages).isEquals();
     }
 }

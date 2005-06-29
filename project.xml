@@ -39,6 +39,11 @@
             <name>0.3</name>
             <tag>raiser_commons-v_0_3-b_0003-d_20041203161500-t_devel</tag>
         </version>
+        <version>
+            <id>0004</id>
+            <name>0.4</name>
+            <tag>raiser_commons-v_0_4-b_0003-d_20041203161500-t_devel</tag>
+        </version>
     </versions>
     <mailingLists>
         <mailingList>
@@ -137,6 +142,19 @@
             <type>jar</type>
             <url>http://www.enterprisedt.com/products/edtftpj/download.html</url>
             <properties/>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.9</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.0</version>
+            <type>jar</type>
+            <url>http://jakarta.apache.org/commons/lang/</url>
         </dependency>
         <dependency>
             <groupId>maven-validator</groupId>
