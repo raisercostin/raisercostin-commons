@@ -22,4 +22,11 @@
 		<nature>com.atlassw.tools.eclipse.checkstyle.CheckstyleNature</nature>
 		<nature>org.eclipse.jem.beaninfo.BeanInfoNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>user-build.properties</name>
+			<type>1</type>
+			<location>USER_HOME/build.properties</location>
+		</link>
+	</linkedResources>
 </projectDescription>
