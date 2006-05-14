@@ -24,6 +24,7 @@ public class SortedList implements List
     public SortedList(List elements)
     {
         this.elements = elements;
+        resort();
     }
     public SortedList(Comparator comparator)
     {
