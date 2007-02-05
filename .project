@@ -15,10 +15,16 @@
 			<arguments>
 			</arguments>
 		</buildCommand>
+		<buildCommand>
+			<name>org.maven.ide.eclipse.maven2Builder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
 	</buildSpec>
 	<natures>
-		<nature>org.eclipse.jem.workbench.JavaEMFNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
+		<nature>org.maven.ide.eclipse.maven2Nature</nature>
+		<nature>org.eclipse.jem.workbench.JavaEMFNature</nature>
 		<nature>com.atlassw.tools.eclipse.checkstyle.CheckstyleNature</nature>
 		<nature>org.eclipse.jem.beaninfo.BeanInfoNature</nature>
 	</natures>
@@ -26,7 +32,7 @@
 		<link>
 			<name>user-build.properties</name>
 			<type>1</type>
-			<location>USER_HOME/build.properties</location>
+			<locationURI>USER_HOME/build.properties</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>
