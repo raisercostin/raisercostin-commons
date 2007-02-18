@@ -4,7 +4,9 @@
 		name="buildFile.version"
 		value="1.6"
 		description="Build file version."/>
+	<!-- 
 	<taskdef name="if" classname="ise.antelope.tasks.IfTask" description="This is an antelope task."/>
+	 -->
 
 	<!--Don't change the order.-->
 	<property file="${user.home}/build.properties" description="Load local properties."/>

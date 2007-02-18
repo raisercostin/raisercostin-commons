@@ -6,216 +6,186 @@ import java.sql.DriverManager;
 import java.util.HashMap;
 import java.util.Stack;
 
-public class ConnectionPool
-{
+public class ConnectionPool {
 
-    private int STACK_SIZE = 20;
-    private String DB_URL = "";
-    private String DB_DRIVER = "";
-    private String DB_USER = "";
-    private String DB_PASSWD = "";
-    private String DB_TEST = "select 'sample' as sample";
+	private int STACK_SIZE = 20;
 
-    public static final int RECYCLE_OK = 1;
-    public static final int RECYCLE_EX = 2;
-    private static final long RETRY_TIME = 10000L;
+	private String DB_URL = "";
 
-    private Stack available = null;
+	private String DB_DRIVER = "";
 
-    public final static Object lock = new Object();
+	private String DB_USER = "";
 
-    public ConnectionPool(String databaseUrl, String driver, String user,
-            String password, int stackSize)
-    {
-        this.STACK_SIZE = stackSize;
-        this.DB_URL = databaseUrl;
-        this.DB_DRIVER = driver;
-        this.DB_USER = user;
-        this.DB_PASSWD = password;
-        try
-        {
-            // init connections
-            Driver drv = (Driver) (Class.forName(DB_DRIVER).newInstance());
+	private String DB_PASSWD = "";
 
-            DriverManager.registerDriver(drv);
+	private String DB_TEST = "select 'sample' as sample";
 
-            available = new Stack();
+	public static final int RECYCLE_OK = 1;
 
-        }
-        catch (Exception e)
-        {
-            System.out.println(" FATAL ERROR :unable to register driver :"
-                + DB_DRIVER
-                + "\nreason :"
-                + e.getMessage());
+	public static final int RECYCLE_EX = 2;
 
-            e.printStackTrace();
+	private static final long RETRY_TIME = 10000L;
 
-            return;
-        }
+	private Stack<Connection> available = null;
 
-        for (int i = 0; i < STACK_SIZE; i++)
-            new ThreadConResolver(this).start();
-    }
+	public final static Object lock = new Object();
 
-    public ConnectionPool(HashMap params)
-    {
-        this((String) params.get("/db_password"), (String) params
-                .get("/db_url"), (String) params.get("/db_driver"),
-                (String) params.get("/db_user"), Integer
-                        .parseInt((String) params.get("/connections")));
-    }
+	public ConnectionPool(String databaseUrl, String driver, String user,
+			String password, int stackSize) {
+		STACK_SIZE = stackSize;
+		DB_URL = databaseUrl;
+		DB_DRIVER = driver;
+		DB_USER = user;
+		DB_PASSWD = password;
+		try {
+			// init connections
+			Driver drv = (Driver) (Class.forName(DB_DRIVER).newInstance());
 
-    private class ThreadConResolver extends Thread
-    {
-        ConnectionPool cp = null;
+			DriverManager.registerDriver(drv);
 
-        public ThreadConResolver(ConnectionPool cp)
-        {
-            super();
-            this.cp = cp;
-        }
+			available = new Stack<Connection>();
 
-        public synchronized void start()
-        {
-            super.start();
-        }
+		} catch (Exception e) {
+			System.out.println(" FATAL ERROR :unable to register driver :"
+					+ DB_DRIVER + "\nreason :" + e.getMessage());
 
-        public void run()
-        {
-            while (true)
-            {
-                try
-                {
-                    Connection con = DriverManager.getConnection(
-                            DB_URL,
-                            DB_USER,
-                            DB_PASSWD);
+			e.printStackTrace();
 
-                    /*
-                     * connection aquired ok 
-                     */
+			return;
+		}
 
-                    cp.recycle(con, RECYCLE_OK);
+		for (int i = 0; i < STACK_SIZE; i++) {
+			new ThreadConResolver(this).start();
+		}
+	}
 
-                    /*
-                     * exit from while loop
-                     */
-                    break;
+	public ConnectionPool(HashMap params) {
+		this((String) params.get("/db_password"), (String) params
+				.get("/db_url"), (String) params.get("/db_driver"),
+				(String) params.get("/db_user"), Integer
+						.parseInt((String) params.get("/connections")));
+	}
 
-                }
-                catch (Exception e)
-                {
-                    System.out
-                            .println("Unable to acquire db connection. Reason "
-                                + e.getMessage()
-                                + "\nRetry in "
-                                + RETRY_TIME
-                                + " ms");
+	private class ThreadConResolver extends Thread {
+		ConnectionPool cp = null;
 
-                    try
-                    {
-                        sleep(RETRY_TIME);
-                    }
-                    catch (InterruptedException ie)
-                    {
-                    }
-                }
-            }
-        }
-    }
+		public ThreadConResolver(ConnectionPool cp) {
+			super();
+			this.cp = cp;
+		}
 
-    /*	public synchronized static ConnectionPool getInstance()
-     {
-     return instance;
-     }*/
+		@Override
+		public synchronized void start() {
+			super.start();
+		}
 
-    public void recycle(Connection con, int recType)
-    {
-        if (con == null)
-            return;
+		@Override
+		public void run() {
+			while (true) {
+				try {
+					Connection con = DriverManager.getConnection(DB_URL,
+							DB_USER, DB_PASSWD);
 
-        /*
-         * check for connection ok
-         */
-        if (recType == RECYCLE_EX)
-        {
-            if (!verifyConnection(con))
-            {
-                System.out.println("Starting connection recovery ...");
-                try
-                {
-                    /*
-                     * connection is bad ..  close it to free resources
-                     * 
-                     */
-                    con.close();
-                }
-                catch (Exception e)
-                {
-                }
+					/*
+					 * connection aquired ok
+					 */
 
-                /*
-                 * create new one instead
-                 */
-                new ThreadConResolver(this).start();
+					cp.recycle(con, RECYCLE_OK);
 
-                return;
-            }
-        }
+					/*
+					 * exit from while loop
+					 */
+					break;
 
-        synchronized (available)
-        {
-            available.push(con);
-            /* 
-             * notify all that a new connection 
-             * is free and ready to be used 
-             */
-            available.notifyAll();
-        }
-    }
+				} catch (Exception e) {
+					System.out
+							.println("Unable to acquire db connection. Reason "
+									+ e.getMessage() + "\nRetry in "
+									+ RETRY_TIME + " ms");
 
-    private boolean verifyConnection(Connection con)
-    {
-        try
-        {
-            con.createStatement().execute(DB_TEST);
-            return true;
+					try {
+						sleep(RETRY_TIME);
+					} catch (InterruptedException ie) {
+					}
+				}
+			}
+		}
+	}
 
-        }
-        catch (Exception ex)
-        {
-            return false;
-        }
-    }
+	/*
+	 * public synchronized static ConnectionPool getInstance() { return
+	 * instance; }
+	 */
 
-    public Connection getConnection()
-    {
-        if (available == null)
-            return null;
+	public void recycle(Connection con, int recType) {
+		if (con == null) {
+			return;
+		}
 
-        Connection con = null;
+		/*
+		 * check for connection ok
+		 */
+		if (recType == RECYCLE_EX) {
+			if (!verifyConnection(con)) {
+				System.out.println("Starting connection recovery ...");
+				try {
+					/*
+					 * connection is bad .. close it to free resources
+					 * 
+					 */
+					con.close();
+				} catch (Exception e) {
+				}
 
-        synchronized (available)
-        {
-            while (available.isEmpty())
-            {
-                try
-                {
-                    available.wait();
-                }
-                catch (Exception e)
-                {
-                    // we just be notified 
-                }
-            }
-            con = (Connection) available.pop();
-        }
-        return con;
-    }
+				/*
+				 * create new one instead
+				 */
+				new ThreadConResolver(this).start();
 
-    public String info()
-    {
-        return "Cnx left:" + String.valueOf(available.size());
-    }
+				return;
+			}
+		}
+
+		synchronized (available) {
+			available.push(con);
+			/*
+			 * notify all that a new connection is free and ready to be used
+			 */
+			available.notifyAll();
+		}
+	}
+
+	private boolean verifyConnection(Connection con) {
+		try {
+			con.createStatement().execute(DB_TEST);
+			return true;
+
+		} catch (Exception ex) {
+			return false;
+		}
+	}
+
+	public Connection getConnection() {
+		if (available == null) {
+			return null;
+		}
+
+		Connection con = null;
+
+		synchronized (available) {
+			while (available.isEmpty()) {
+				try {
+					available.wait();
+				} catch (Exception e) {
+					// we just be notified
+				}
+			}
+			con = available.pop();
+		}
+		return con;
+	}
+
+	public String info() {
+		return "Cnx left:" + String.valueOf(available.size());
+	}
 }

@@ -11,22 +11,20 @@ package raiser.net.ftp;
 /**
  * @author: Costin Emilian GRIGORE
  */
-public class FtpClientFactory
-{
-    public static FtpClient createFtpClient()
-    {
-        return createApacheFtpClient();
-    }
-    public static FtpClient createSunFtpClient()
-    {
-        return new SunFtpClient();
-    }
-    public static FtpClient createApacheFtpClient()
-    {
-        return new ApacheFtpClient();
-    }
-    public static FtpClient createEnterpriseDistributedTechnologiesFtpClient()
-    {
-        return new EnterpriseDistributedTechnologiesFtpClient();
-    }
+public class FtpClientFactory {
+	public static FtpClient createFtpClient() {
+		return createApacheFtpClient();
+	}
+
+	public static FtpClient createSunFtpClient() {
+		return new SunFtpClient();
+	}
+
+	public static FtpClient createApacheFtpClient() {
+		return new ApacheFtpClient();
+	}
+
+	public static FtpClient createEnterpriseDistributedTechnologiesFtpClient() {
+		return new EnterpriseDistributedTechnologiesFtpClient();
+	}
 }

@@ -13,25 +13,22 @@ import junit.framework.TestCase;
 /**
  * @author: Costin Emilian GRIGORE
  */
-public class RegexpTest extends TestCase
-{
+public class RegexpTest extends TestCase {
 
-    /**
-     * Constructor for RegexpTest.
-     * @param arg0
-     */
-    public RegexpTest(String arg0)
-    {
-        super(arg0);
-    }
+	/**
+	 * Constructor for RegexpTest.
+	 * 
+	 * @param arg0
+	 */
+	public RegexpTest(String arg0) {
+		super(arg0);
+	}
 
-    public void testEscape()
-    {
-        assertEquals("\\$\\{variable\\}",Regexp.escape("${variable}"));
-    }
+	public void testEscape() {
+		assertEquals("\\$\\{variable\\}", Regexp.escape("${variable}"));
+	}
 
-    public void testEscapeAll()
-    {
-    }
+	public void testEscapeAll() {
+	}
 
 }

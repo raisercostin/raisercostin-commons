@@ -6,524 +6,463 @@ import java.util.Locale;
 /*
  * Created on Jan 17, 2004
  */
- /**
-  * A mutable string.
-  */
-public class MutableString
-{
-    /**
-     * @param name
-     */
-    public MutableString(String string)
-    {
-        setString(string);
-    }
+/**
+ * A mutable string.
+ */
+public class MutableString {
+	/**
+	 * @param name
+	 */
+	public MutableString(String string) {
+		setString(string);
+	}
 
-    String string;
-    /**
-     * @param data
-     * @return
-     */
-    public static String copyValueOf(char[] data)
-    {
-        return String.copyValueOf(data);
-    }
+	String string;
 
-    /**
-     * @param data
-     * @param offset
-     * @param count
-     * @return
-     */
-    public static String copyValueOf(char[] data, int offset, int count)
-    {
-        return String.copyValueOf(data, offset, count);
-    }
+	/**
+	 * @param data
+	 * @return
+	 */
+	public static String copyValueOf(char[] data) {
+		return String.copyValueOf(data);
+	}
 
-    /**
-     * @param b
-     * @return
-     */
-    public static String valueOf(boolean b)
-    {
-        return String.valueOf(b);
-    }
+	/**
+	 * @param data
+	 * @param offset
+	 * @param count
+	 * @return
+	 */
+	public static String copyValueOf(char[] data, int offset, int count) {
+		return String.copyValueOf(data, offset, count);
+	}
 
-    /**
-     * @param c
-     * @return
-     */
-    public static String valueOf(char c)
-    {
-        return String.valueOf(c);
-    }
+	/**
+	 * @param b
+	 * @return
+	 */
+	public static String valueOf(boolean b) {
+		return String.valueOf(b);
+	}
 
-    /**
-     * @param data
-     * @return
-     */
-    public static String valueOf(char[] data)
-    {
-        return String.valueOf(data);
-    }
+	/**
+	 * @param c
+	 * @return
+	 */
+	public static String valueOf(char c) {
+		return String.valueOf(c);
+	}
 
-    /**
-     * @param data
-     * @param offset
-     * @param count
-     * @return
-     */
-    public static String valueOf(char[] data, int offset, int count)
-    {
-        return String.valueOf(data, offset, count);
-    }
+	/**
+	 * @param data
+	 * @return
+	 */
+	public static String valueOf(char[] data) {
+		return String.valueOf(data);
+	}
 
-    /**
-     * @param d
-     * @return
-     */
-    public static String valueOf(double d)
-    {
-        return String.valueOf(d);
-    }
+	/**
+	 * @param data
+	 * @param offset
+	 * @param count
+	 * @return
+	 */
+	public static String valueOf(char[] data, int offset, int count) {
+		return String.valueOf(data, offset, count);
+	}
 
-    /**
-     * @param f
-     * @return
-     */
-    public static String valueOf(float f)
-    {
-        return String.valueOf(f);
-    }
+	/**
+	 * @param d
+	 * @return
+	 */
+	public static String valueOf(double d) {
+		return String.valueOf(d);
+	}
 
-    /**
-     * @param i
-     * @return
-     */
-    public static String valueOf(int i)
-    {
-        return String.valueOf(i);
-    }
+	/**
+	 * @param f
+	 * @return
+	 */
+	public static String valueOf(float f) {
+		return String.valueOf(f);
+	}
 
-    /**
-     * @param obj
-     * @return
-     */
-    public static String valueOf(Object obj)
-    {
-        return String.valueOf(obj);
-    }
+	/**
+	 * @param i
+	 * @return
+	 */
+	public static String valueOf(int i) {
+		return String.valueOf(i);
+	}
 
-    /**
-     * @param l
-     * @return
-     */
-    public static String valueOf(long l)
-    {
-        return String.valueOf(l);
-    }
+	/**
+	 * @param obj
+	 * @return
+	 */
+	public static String valueOf(Object obj) {
+		return String.valueOf(obj);
+	}
 
-    /**
-     * @param index
-     * @return
-     */
-    public char charAt(int index)
-    {
-        return string.charAt(index);
-    }
+	/**
+	 * @param l
+	 * @return
+	 */
+	public static String valueOf(long l) {
+		return String.valueOf(l);
+	}
 
-    /**
-     * @param o
-     * @return
-     */
-    public int compareTo(Object o)
-    {
-        return string.compareTo(o.toString());
-    }
+	/**
+	 * @param index
+	 * @return
+	 */
+	public char charAt(int index) {
+		return string.charAt(index);
+	}
 
-    /**
-     * @param anotherString
-     * @return
-     */
-    public int compareTo(String anotherString)
-    {
-        return string.compareTo(anotherString);
-    }
+	/**
+	 * @param o
+	 * @return
+	 */
+	public int compareTo(Object o) {
+		return string.compareTo(o.toString());
+	}
 
-    /**
-     * @param str
-     * @return
-     */
-    public int compareToIgnoreCase(String str)
-    {
-        return string.compareToIgnoreCase(str);
-    }
+	/**
+	 * @param anotherString
+	 * @return
+	 */
+	public int compareTo(String anotherString) {
+		return string.compareTo(anotherString);
+	}
 
-    /**
-     * @param str
-     * @return
-     */
-    public String concat(String str)
-    {
-        return string.concat(str);
-    }
+	/**
+	 * @param str
+	 * @return
+	 */
+	public int compareToIgnoreCase(String str) {
+		return string.compareToIgnoreCase(str);
+	}
 
-    /**
-     * @param sb
-     * @return
-     */
-    public boolean contentEquals(StringBuffer sb)
-    {
-        return string.contentEquals(sb);
-    }
+	/**
+	 * @param str
+	 * @return
+	 */
+	public String concat(String str) {
+		return string.concat(str);
+	}
 
-    /**
-     * @param suffix
-     * @return
-     */
-    public boolean endsWith(String suffix)
-    {
-        return string.endsWith(suffix);
-    }
+	/**
+	 * @param sb
+	 * @return
+	 */
+	public boolean contentEquals(StringBuffer sb) {
+		return string.contentEquals(sb);
+	}
 
-    public boolean equals(Object obj)
-    {
-        return string.equals(obj);
-    }
+	/**
+	 * @param suffix
+	 * @return
+	 */
+	public boolean endsWith(String suffix) {
+		return string.endsWith(suffix);
+	}
 
-    /**
-     * @param anotherString
-     * @return
-     */
-    public boolean equalsIgnoreCase(String anotherString)
-    {
-        return string.equalsIgnoreCase(anotherString);
-    }
+	@Override
+	public boolean equals(Object obj) {
+		return string.equals(obj);
+	}
 
-    /**
-     * @return
-     */
-    public byte[] getBytes()
-    {
-        return string.getBytes();
-    }
+	/**
+	 * @param anotherString
+	 * @return
+	 */
+	public boolean equalsIgnoreCase(String anotherString) {
+		return string.equalsIgnoreCase(anotherString);
+	}
 
-    /**
-     * @param charsetName
-     * @return
-     * @throws java.io.UnsupportedEncodingException
-     */
-    public byte[] getBytes(String charsetName)
-        throws UnsupportedEncodingException
-    {
-        return string.getBytes(charsetName);
-    }
+	/**
+	 * @return
+	 */
+	public byte[] getBytes() {
+		return string.getBytes();
+	}
 
-    /**
-     * @param srcBegin
-     * @param srcEnd
-     * @param dst
-     * @param dstBegin
-     */
-    public void getChars(int srcBegin, int srcEnd, char[] dst, int dstBegin)
-    {
-        string.getChars(srcBegin, srcEnd, dst, dstBegin);
-    }
+	/**
+	 * @param charsetName
+	 * @return
+	 * @throws java.io.UnsupportedEncodingException
+	 */
+	public byte[] getBytes(String charsetName)
+			throws UnsupportedEncodingException {
+		return string.getBytes(charsetName);
+	}
 
-    public int hashCode()
-    {
-        return string.hashCode();
-    }
+	/**
+	 * @param srcBegin
+	 * @param srcEnd
+	 * @param dst
+	 * @param dstBegin
+	 */
+	public void getChars(int srcBegin, int srcEnd, char[] dst, int dstBegin) {
+		string.getChars(srcBegin, srcEnd, dst, dstBegin);
+	}
 
-    /**
-     * @param ch
-     * @return
-     */
-    public int indexOf(int ch)
-    {
-        return string.indexOf(ch);
-    }
+	@Override
+	public int hashCode() {
+		return string.hashCode();
+	}
 
-    /**
-     * @param ch
-     * @param fromIndex
-     * @return
-     */
-    public int indexOf(int ch, int fromIndex)
-    {
-        return string.indexOf(ch, fromIndex);
-    }
+	/**
+	 * @param ch
+	 * @return
+	 */
+	public int indexOf(int ch) {
+		return string.indexOf(ch);
+	}
 
-    /**
-     * @param str
-     * @return
-     */
-    public int indexOf(String str)
-    {
-        return string.indexOf(str);
-    }
+	/**
+	 * @param ch
+	 * @param fromIndex
+	 * @return
+	 */
+	public int indexOf(int ch, int fromIndex) {
+		return string.indexOf(ch, fromIndex);
+	}
 
-    /**
-     * @param str
-     * @param fromIndex
-     * @return
-     */
-    public int indexOf(String str, int fromIndex)
-    {
-        return string.indexOf(str, fromIndex);
-    }
+	/**
+	 * @param str
+	 * @return
+	 */
+	public int indexOf(String str) {
+		return string.indexOf(str);
+	}
 
-    /**
-     * @return
-     */
-    public String intern()
-    {
-        return string.intern();
-    }
+	/**
+	 * @param str
+	 * @param fromIndex
+	 * @return
+	 */
+	public int indexOf(String str, int fromIndex) {
+		return string.indexOf(str, fromIndex);
+	}
 
-    /**
-     * @param ch
-     * @return
-     */
-    public int lastIndexOf(int ch)
-    {
-        return string.lastIndexOf(ch);
-    }
+	/**
+	 * @return
+	 */
+	public String intern() {
+		return string.intern();
+	}
 
-    /**
-     * @param ch
-     * @param fromIndex
-     * @return
-     */
-    public int lastIndexOf(int ch, int fromIndex)
-    {
-        return string.lastIndexOf(ch, fromIndex);
-    }
+	/**
+	 * @param ch
+	 * @return
+	 */
+	public int lastIndexOf(int ch) {
+		return string.lastIndexOf(ch);
+	}
 
-    /**
-     * @param str
-     * @return
-     */
-    public int lastIndexOf(String str)
-    {
-        return string.lastIndexOf(str);
-    }
+	/**
+	 * @param ch
+	 * @param fromIndex
+	 * @return
+	 */
+	public int lastIndexOf(int ch, int fromIndex) {
+		return string.lastIndexOf(ch, fromIndex);
+	}
 
-    /**
-     * @param str
-     * @param fromIndex
-     * @return
-     */
-    public int lastIndexOf(String str, int fromIndex)
-    {
-        return string.lastIndexOf(str, fromIndex);
-    }
+	/**
+	 * @param str
+	 * @return
+	 */
+	public int lastIndexOf(String str) {
+		return string.lastIndexOf(str);
+	}
 
-    /**
-     * @return
-     */
-    public int length()
-    {
-        return string.length();
-    }
+	/**
+	 * @param str
+	 * @param fromIndex
+	 * @return
+	 */
+	public int lastIndexOf(String str, int fromIndex) {
+		return string.lastIndexOf(str, fromIndex);
+	}
 
-    /**
-     * @param regex
-     * @return
-     */
-    public boolean matches(String regex)
-    {
-        return string.matches(regex);
-    }
+	/**
+	 * @return
+	 */
+	public int length() {
+		return string.length();
+	}
 
-    /**
-     * @param ignoreCase
-     * @param toffset
-     * @param other
-     * @param ooffset
-     * @param len
-     * @return
-     */
-    public boolean regionMatches(
-        boolean ignoreCase,
-        int toffset,
-        String other,
-        int ooffset,
-        int len)
-    {
-        return string.regionMatches(ignoreCase, toffset, other, ooffset, len);
-    }
+	/**
+	 * @param regex
+	 * @return
+	 */
+	public boolean matches(String regex) {
+		return string.matches(regex);
+	}
 
-    /**
-     * @param toffset
-     * @param other
-     * @param ooffset
-     * @param len
-     * @return
-     */
-    public boolean regionMatches(
-        int toffset,
-        String other,
-        int ooffset,
-        int len)
-    {
-        return string.regionMatches(toffset, other, ooffset, len);
-    }
+	/**
+	 * @param ignoreCase
+	 * @param toffset
+	 * @param other
+	 * @param ooffset
+	 * @param len
+	 * @return
+	 */
+	public boolean regionMatches(boolean ignoreCase, int toffset, String other,
+			int ooffset, int len) {
+		return string.regionMatches(ignoreCase, toffset, other, ooffset, len);
+	}
 
-    /**
-     * @param oldChar
-     * @param newChar
-     * @return
-     */
-    public String replace(char oldChar, char newChar)
-    {
-        return string.replace(oldChar, newChar);
-    }
+	/**
+	 * @param toffset
+	 * @param other
+	 * @param ooffset
+	 * @param len
+	 * @return
+	 */
+	public boolean regionMatches(int toffset, String other, int ooffset, int len) {
+		return string.regionMatches(toffset, other, ooffset, len);
+	}
 
-    /**
-     * @param regex
-     * @param replacement
-     * @return
-     */
-    public String replaceAll(String regex, String replacement)
-    {
-        return string.replaceAll(regex, replacement);
-    }
+	/**
+	 * @param oldChar
+	 * @param newChar
+	 * @return
+	 */
+	public String replace(char oldChar, char newChar) {
+		return string.replace(oldChar, newChar);
+	}
 
-    /**
-     * @param regex
-     * @param replacement
-     * @return
-     */
-    public String replaceFirst(String regex, String replacement)
-    {
-        return string.replaceFirst(regex, replacement);
-    }
+	/**
+	 * @param regex
+	 * @param replacement
+	 * @return
+	 */
+	public String replaceAll(String regex, String replacement) {
+		return string.replaceAll(regex, replacement);
+	}
 
-    /**
-     * @param regex
-     * @return
-     */
-    public String[] split(String regex)
-    {
-        return string.split(regex);
-    }
+	/**
+	 * @param regex
+	 * @param replacement
+	 * @return
+	 */
+	public String replaceFirst(String regex, String replacement) {
+		return string.replaceFirst(regex, replacement);
+	}
 
-    /**
-     * @param regex
-     * @param limit
-     * @return
-     */
-    public String[] split(String regex, int limit)
-    {
-        return string.split(regex, limit);
-    }
+	/**
+	 * @param regex
+	 * @return
+	 */
+	public String[] split(String regex) {
+		return string.split(regex);
+	}
 
-    /**
-     * @param prefix
-     * @return
-     */
-    public boolean startsWith(String prefix)
-    {
-        return string.startsWith(prefix);
-    }
+	/**
+	 * @param regex
+	 * @param limit
+	 * @return
+	 */
+	public String[] split(String regex, int limit) {
+		return string.split(regex, limit);
+	}
 
-    /**
-     * @param prefix
-     * @param toffset
-     * @return
-     */
-    public boolean startsWith(String prefix, int toffset)
-    {
-        return string.startsWith(prefix, toffset);
-    }
+	/**
+	 * @param prefix
+	 * @return
+	 */
+	public boolean startsWith(String prefix) {
+		return string.startsWith(prefix);
+	}
 
-    /**
-     * @param start
-     * @param end
-     * @return
-     */
-    public CharSequence subSequence(int start, int end)
-    {
-        return string.subSequence(start, end);
-    }
+	/**
+	 * @param prefix
+	 * @param toffset
+	 * @return
+	 */
+	public boolean startsWith(String prefix, int toffset) {
+		return string.startsWith(prefix, toffset);
+	}
 
-    /**
-     * @param beginIndex
-     * @return
-     */
-    public String substring(int beginIndex)
-    {
-        return string.substring(beginIndex);
-    }
+	/**
+	 * @param start
+	 * @param end
+	 * @return
+	 */
+	public CharSequence subSequence(int start, int end) {
+		return string.subSequence(start, end);
+	}
 
-    /**
-     * @param beginIndex
-     * @param endIndex
-     * @return
-     */
-    public String substring(int beginIndex, int endIndex)
-    {
-        return string.substring(beginIndex, endIndex);
-    }
+	/**
+	 * @param beginIndex
+	 * @return
+	 */
+	public String substring(int beginIndex) {
+		return string.substring(beginIndex);
+	}
 
-    /**
-     * @return
-     */
-    public char[] toCharArray()
-    {
-        return string.toCharArray();
-    }
+	/**
+	 * @param beginIndex
+	 * @param endIndex
+	 * @return
+	 */
+	public String substring(int beginIndex, int endIndex) {
+		return string.substring(beginIndex, endIndex);
+	}
 
-    /**
-     * @return
-     */
-    public String toLowerCase()
-    {
-        return string.toLowerCase();
-    }
+	/**
+	 * @return
+	 */
+	public char[] toCharArray() {
+		return string.toCharArray();
+	}
 
-    /**
-     * @param locale
-     * @return
-     */
-    public String toLowerCase(Locale locale)
-    {
-        return string.toLowerCase(locale);
-    }
+	/**
+	 * @return
+	 */
+	public String toLowerCase() {
+		return string.toLowerCase();
+	}
 
-    public String toString()
-    {
-        return string.toString();
-    }
+	/**
+	 * @param locale
+	 * @return
+	 */
+	public String toLowerCase(Locale locale) {
+		return string.toLowerCase(locale);
+	}
 
-    /**
-     * @return
-     */
-    public String toUpperCase()
-    {
-        return string.toUpperCase();
-    }
+	@Override
+	public String toString() {
+		return string.toString();
+	}
 
-    /**
-     * @param locale
-     * @return
-     */
-    public String toUpperCase(Locale locale)
-    {
-        return string.toUpperCase(locale);
-    }
+	/**
+	 * @return
+	 */
+	public String toUpperCase() {
+		return string.toUpperCase();
+	}
 
-    /**
-     * @return
-     */
-    public String trim()
-    {
-        return string.trim();
-    }
+	/**
+	 * @param locale
+	 * @return
+	 */
+	public String toUpperCase(Locale locale) {
+		return string.toUpperCase(locale);
+	}
 
-    public void setString(String string)
-    {
-        this.string = string;
-    }
+	/**
+	 * @return
+	 */
+	public String trim() {
+		return string.trim();
+	}
+
+	public void setString(String string) {
+		this.string = string;
+	}
 }

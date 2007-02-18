@@ -3,105 +3,130 @@
  */
 package raiser.gui.rcp;
 
-import java.beans.*;
-import java.io.*;
-import java.util.*;
-import javax.swing.*;
+import java.beans.ExceptionListener;
+import java.beans.XMLDecoder;
+import java.beans.XMLEncoder;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 
 public class Configuration implements Serializable {
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = Logger.getLogger(Configuration.class);
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4198596413142969464L;
 
-    public Configuration() {
-        setData(new HashMap<String, Object>());
-    }
+	/**
+	 * Logger for this class
+	 */
+	private static final Logger logger = Logger.getLogger(Configuration.class);
 
-    private Map<String, Object> data;
+	public Configuration() {
+		setData(new HashMap<String, Object>());
+	}
 
-    private static Configuration loadFromXML(Configuration result, InputStream in) {
-        Configuration fileConfig = loadFromXML2(in);
-        if (fileConfig != null) {
-            result.getData().putAll(fileConfig.getData());
-        }
-        return result;
-    }
-    private static Configuration loadFromFile(Configuration result, InputStream in) throws IOException, ClassNotFoundException {
-        Configuration fileConfig = loadFromFile2(in);
-        if (fileConfig != null) {
-            result.getData().putAll(fileConfig.getData());
-        }
-        return result;
-    }
+	private Map<String, Object> data;
 
-    private static Configuration loadFromXML2(InputStream in) {
-        XMLDecoder d = new XMLDecoder(new BufferedInputStream(in));
-        d.setExceptionListener(new ExceptionListener() {
-            public void exceptionThrown(Exception e) {
-                logger.error(e);
-            }
-        });
-        Configuration result = (Configuration) d.readObject();
-        d.close();
-        return result;
-    }
-    private static Configuration loadFromFile2(InputStream in) throws IOException, ClassNotFoundException {
-        ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(in));
-        Configuration result = (Configuration) ois.readObject();
-        return result;
-    }
+	private static Configuration loadFromXML(Configuration result,
+			InputStream in) {
+		Configuration fileConfig = loadFromXML2(in);
+		if (fileConfig != null) {
+			result.getData().putAll(fileConfig.getData());
+		}
+		return result;
+	}
 
-    private static void saveToXML(Configuration props, OutputStream os) {
-        XMLEncoder e = new XMLEncoder(new BufferedOutputStream(os));
-        e.setExceptionListener(new ExceptionListener() {
-            public void exceptionThrown(Exception e) {
-                logger.error(e);
-            }
-        });
-        e.writeObject(props);
-        e.close();
-        return;
-    }
-    private static void saveToFile(Configuration props, OutputStream os) throws IOException {
-        ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(os));
-        oos.writeObject(props);
-        oos.close();
-    }
+	private static Configuration loadFromFile(Configuration result,
+			InputStream in) throws IOException, ClassNotFoundException {
+		Configuration fileConfig = loadFromFile2(in);
+		if (fileConfig != null) {
+			result.getData().putAll(fileConfig.getData());
+		}
+		return result;
+	}
 
-    public void save(OutputStream os) throws IOException {
-        saveToFile(this, os);
-    }
+	private static Configuration loadFromXML2(InputStream in) {
+		XMLDecoder d = new XMLDecoder(new BufferedInputStream(in));
+		d.setExceptionListener(new ExceptionListener() {
+			public void exceptionThrown(Exception e) {
+				logger.error(e);
+			}
+		});
+		Configuration result = (Configuration) d.readObject();
+		d.close();
+		return result;
+	}
 
-    public void load(InputStream is) throws IOException, ClassNotFoundException {
-        loadFromFile(this, is);
-    }
-    public void saveToXML(OutputStream os) {
-        saveToXML(this, os);
-    }
+	private static Configuration loadFromFile2(InputStream in)
+			throws IOException, ClassNotFoundException {
+		ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(
+				in));
+		Configuration result = (Configuration) ois.readObject();
+		return result;
+	}
 
-    public void loadFromXML(InputStream is) {
-        loadFromXML(this, is);
-    }
+	private static void saveToXML(Configuration props, OutputStream os) {
+		XMLEncoder e = new XMLEncoder(new BufferedOutputStream(os));
+		e.setExceptionListener(new ExceptionListener() {
+			public void exceptionThrown(Exception e) {
+				logger.error(e);
+			}
+		});
+		e.writeObject(props);
+		e.close();
+		return;
+	}
 
-    public Object get(String key) {
-        return getData().get(key);
-    }
+	private static void saveToFile(Configuration props, OutputStream os)
+			throws IOException {
+		ObjectOutputStream oos = new ObjectOutputStream(
+				new BufferedOutputStream(os));
+		oos.writeObject(props);
+		oos.close();
+	}
 
-    public void remove(String key) {
-        getData().remove(key);
-    }
+	public void save(OutputStream os) throws IOException {
+		saveToFile(this, os);
+	}
 
-    public void set(String key, Object value) {
-        getData().put(key, value);
-    }
+	public void load(InputStream is) throws IOException, ClassNotFoundException {
+		loadFromFile(this, is);
+	}
 
-    public void setData(Map<String, Object> data) {
-        this.data = data;
-    }
+	public void saveToXML(OutputStream os) {
+		saveToXML(this, os);
+	}
 
-    public Map<String, Object> getData() {
-        return data;
-    }
+	public void loadFromXML(InputStream is) {
+		loadFromXML(this, is);
+	}
+
+	public Object get(String key) {
+		return getData().get(key);
+	}
+
+	public void remove(String key) {
+		getData().remove(key);
+	}
+
+	public void set(String key, Object value) {
+		getData().put(key, value);
+	}
+
+	public void setData(Map<String, Object> data) {
+		this.data = data;
+	}
+
+	public Map<String, Object> getData() {
+		return data;
+	}
 }

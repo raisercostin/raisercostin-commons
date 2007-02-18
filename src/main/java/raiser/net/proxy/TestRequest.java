@@ -1,55 +1,53 @@
 package raiser.net.proxy;
-import java.io.*;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.Socket;
+
 /**
- *
- * @author  cgr
- * @version 
+ * 
+ * @author cgr
+ * @version
  */
-public class TestRequest
-{
-    final static char CR = 13;
-    final static char LF = 10;
+public class TestRequest {
+	final static char CR = 13;
 
-    /** Creates new WebServer */
-    public String getContent(String req) throws IOException
-    {
+	final static char LF = 10;
 
-        Socket client = new Socket("http://raiser.home.ro", 80);
-        BufferedReader reader =
-            new BufferedReader(new InputStreamReader(client.getInputStream()));
-        PrintWriter writer =
-            new PrintWriter(
-                new BufferedWriter(
-                    new OutputStreamWriter(client.getOutputStream())),
-                true);
-        System.out.println("Cerere:\n(" + req + ")");
-        writer.print(req);
+	/** Creates new WebServer */
+	public String getContent(String req) throws IOException {
 
-        System.out.println("gata");
-        StringBuffer buf = new StringBuffer();
-        String line;
-        while ((line = reader.readLine()) != null)
-        {
-            buf.append(line + "\n");
-            System.out.println("Primesc:(" + line + ")");
-        }
-        return buf.toString();
-    }
+		Socket client = new Socket("http://raiser.home.ro", 80);
+		BufferedReader reader = new BufferedReader(new InputStreamReader(client
+				.getInputStream()));
+		PrintWriter writer = new PrintWriter(new BufferedWriter(
+				new OutputStreamWriter(client.getOutputStream())), true);
+		System.out.println("Cerere:\n(" + req + ")");
+		writer.print(req);
 
-    public static void main(String argv[])
-    {
-        try
-        {
-            TestRequest th = new TestRequest();
-            System.out.println(
-                th.getContent(
-                    "GET http://raiser.home.ro/ HTTP/1.0" + CR + LF + CR + LF));
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        System.out.println("gata");
-    }
+		System.out.println("gata");
+		StringBuffer buf = new StringBuffer();
+		String line;
+		while ((line = reader.readLine()) != null) {
+			buf.append(line + "\n");
+			System.out.println("Primesc:(" + line + ")");
+		}
+		return buf.toString();
+	}
+
+	public static void main(String argv[]) {
+		try {
+			TestRequest th = new TestRequest();
+			System.out.println(th
+					.getContent("GET http://raiser.home.ro/ HTTP/1.0" + CR + LF
+							+ CR + LF));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println("gata");
+	}
 }

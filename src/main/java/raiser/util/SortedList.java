@@ -8,219 +8,204 @@
  *****************************************************************************/
 package raiser.util;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 /**
  * @author: Costin Emilian GRIGORE
  */
-public class SortedList implements List
-{
-    private List elements;
-    private Comparator comparator;
-    public SortedList()
-    {
-        this.elements = new ArrayList();
-    }
-    public SortedList(List elements)
-    {
-        this.elements = elements;
-        resort();
-    }
-    public SortedList(Comparator comparator)
-    {
-        this();
-        this.comparator = comparator;
-    }
-    public Iterator iterator()
-    {
-        return this.elements.iterator();
-    }
-    public int size()
-    {
-        return this.elements.size();
-    }
-    private void resort()
-    {
-        if (this.comparator == null)
-        {
-            Collections.sort(this.elements);
-        }
-        else
-        {
-            Collections.sort(this.elements, this.comparator);
-        }
-    }
-    public boolean add(Object object)
-    {
-        boolean answer = this.elements.add(object);
-        this.resort();
-        return answer;
-    }
-    public boolean addAll(Collection collection)
-    {
-        boolean answer = this.elements.addAll(collection);
-        this.resort();
-        return answer;
-    }
-    public Object get(int index)
-    {
-        return elements.get(index);
-    }
-    public void add(int index, Object element)
-    {
-        elements.add(index, element);
-        this.resort();
-    }
+public class SortedList<T extends Comparable<? super T>> implements List<T> {
+	private List<T> elements;
 
-    public boolean addAll(int index, Collection c)
-    {
-        final boolean result = elements.addAll(index, c);
-        this.resort();
-        return result;
-    }
+	private Comparator<T> comparator;
 
-    public void clear()
-    {
-        elements.clear();
-        this.resort();
-    }
+	public SortedList() {
+		elements = new ArrayList<T>();
+	}
 
-    public Object remove(int index)
-    {
-        Object result = elements.remove(index);
-        this.resort();
-        return result;
-    }
+	public SortedList(List<T> elements) {
+		this.elements = elements;
+		resort();
+	}
 
-    public boolean remove(Object o)
-    {
-        boolean result = elements.remove(o);
-        this.resort();
-        return result;
-    }
+	public SortedList(Comparator<T> comparator) {
+		this();
+		this.comparator = comparator;
+	}
 
-    public boolean removeAll(Collection c)
-    {
-        boolean result = elements.removeAll(c);
-        this.resort();
-        return result;
-    }
+	public Iterator<T> iterator() {
+		return elements.iterator();
+	}
 
-    public boolean retainAll(Collection c)
-    {
-        boolean result = elements.retainAll(c);
-        this.resort();
-        return result;
-    }
+	public int size() {
+		return elements.size();
+	}
 
-    public Object set(int index, Object element)
-    {
-        Object result = elements.set(index, element);
-        this.resort();
-        return result;
-    }
+	private void resort() {
+		if (comparator == null) {
+			Collections.sort(elements);
+		} else {
+			Collections.sort(elements, comparator);
+		}
+	}
 
-    /**
-     * @param o
-     * @return
-     */
-    public boolean contains(Object o)
-    {
-        return elements.contains(o);
-    }
+	public boolean add(T object) {
+		boolean answer = elements.add(object);
+		resort();
+		return answer;
+	}
 
-    /**
-     * @param c
-     * @return
-     */
-    public boolean containsAll(Collection c)
-    {
-        return elements.containsAll(c);
-    }
+	public boolean addAll(Collection<? extends T> collection) {
+		boolean answer = elements.addAll(collection);
+		resort();
+		return answer;
+	}
 
-    public boolean equals(Object obj)
-    {
-        return elements.equals(obj);
-    }
+	public T get(int index) {
+		return elements.get(index);
+	}
 
-    public int hashCode()
-    {
-        return elements.hashCode();
-    }
+	public void add(int index, T element) {
+		elements.add(index, element);
+		resort();
+	}
 
-    /**
-     * @param o
-     * @return
-     */
-    public int indexOf(Object o)
-    {
-        return elements.indexOf(o);
-    }
+	public boolean addAll(int index, Collection<? extends T> c) {
+		final boolean result = elements.addAll(index, c);
+		resort();
+		return result;
+	}
 
-    /**
-     * @return
-     */
-    public boolean isEmpty()
-    {
-        return elements.isEmpty();
-    }
+	public void clear() {
+		elements.clear();
+		resort();
+	}
 
-    /**
-     * @param o
-     * @return
-     */
-    public int lastIndexOf(Object o)
-    {
-        return elements.lastIndexOf(o);
-    }
+	public T remove(int index) {
+		T result = elements.remove(index);
+		resort();
+		return result;
+	}
 
-    /**
-     * @return
-     */
-    public ListIterator listIterator()
-    {
-        return elements.listIterator();
-    }
+	public boolean remove(Object o) {
+		boolean result = elements.remove(o);
+		resort();
+		return result;
+	}
 
-    /**
-     * @param index
-     * @return
-     */
-    public ListIterator listIterator(int index)
-    {
-        return elements.listIterator(index);
-    }
+	public boolean removeAll(Collection<?> c) {
+		boolean result = elements.removeAll(c);
+		resort();
+		return result;
+	}
 
-    /**
-     * @param fromIndex
-     * @param toIndex
-     * @return
-     */
-    public List subList(int fromIndex, int toIndex)
-    {
-        return elements.subList(fromIndex, toIndex);
-    }
+	public boolean retainAll(Collection<?> c) {
+		boolean result = elements.retainAll(c);
+		resort();
+		return result;
+	}
 
-    /**
-     * @return
-     */
-    public Object[] toArray()
-    {
-        return elements.toArray();
-    }
+	public T set(int index, T element) {
+		T result = elements.set(index, element);
+		resort();
+		return result;
+	}
 
-    /**
-     * @param a
-     * @return
-     */
-    public Object[] toArray(Object[] a)
-    {
-        return elements.toArray(a);
-    }
+	/**
+	 * @param o
+	 * @return
+	 */
+	public boolean contains(Object o) {
+		return elements.contains(o);
+	}
 
-    public String toString()
-    {
-        return elements.toString();
-    }
+	/**
+	 * @param c
+	 * @return
+	 */
+	public boolean containsAll(Collection c) {
+		return elements.containsAll(c);
+	}
 
+	@Override
+	public boolean equals(Object obj) {
+		return elements.equals(obj);
+	}
+
+	@Override
+	public int hashCode() {
+		return elements.hashCode();
+	}
+
+	/**
+	 * @param o
+	 * @return
+	 */
+	public int indexOf(Object o) {
+		return elements.indexOf(o);
+	}
+
+	/**
+	 * @return
+	 */
+	public boolean isEmpty() {
+		return elements.isEmpty();
+	}
+
+	/**
+	 * @param o
+	 * @return
+	 */
+	public int lastIndexOf(Object o) {
+		return elements.lastIndexOf(o);
+	}
+
+	/**
+	 * @return
+	 */
+	public ListIterator<T> listIterator() {
+		return elements.listIterator();
+	}
+
+	/**
+	 * @param index
+	 * @return
+	 */
+	public ListIterator<T> listIterator(int index) {
+		return elements.listIterator(index);
+	}
+
+	/**
+	 * @param fromIndex
+	 * @param toIndex
+	 * @return
+	 */
+	public List<T> subList(int fromIndex, int toIndex) {
+		return elements.subList(fromIndex, toIndex);
+	}
+
+	/**
+	 * @return
+	 */
+	public Object[] toArray() {
+		return elements.toArray();
+	}
+
+	/**
+	 * @param a
+	 * @return
+	 */
+	public <E> E[] toArray(E[] a) {
+		return elements.toArray(a);
+	}
+
+	@Override
+	public String toString() {
+		return elements.toString();
+	}
 }

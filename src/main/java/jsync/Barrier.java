@@ -15,67 +15,53 @@ package jsync;
  * this class threads can wait until all of them reach some particular state
  * (barrier) and only after it continue execution.
  */
-public class Barrier
-{
-    /**
-     * Reset <code>Barrier</code> object.
-     * 
-     * @param n
-     *            specifies number of threads which should reach barrier.
-     */
-    public final synchronized void reset(int n)
-    {
-        count = n;
-    }
+public class Barrier {
+	/**
+	 * Reset <code>Barrier</code> object.
+	 * 
+	 * @param n
+	 *            specifies number of threads which should reach barrier.
+	 */
+	public final synchronized void reset(int n) {
+		count = n;
+	}
 
-    /**
-     * This method is called by thread reached barrier. Current thread will be
-     * suspended until all threads reach the barrier.
-     */
-    public final synchronized void reach()
-    {
-        Assert.that(count > 0);
-        if (--count != 0)
-        {
-            do
-            {
-                try
-                {
-                    wait();
-                }
-                catch (final InterruptedException ex)
-                {
-                    throw new InterruptedError();
-                }
-            }
-            while (count != 0); // preclude spurious wakeups
-        }
-        else
-        {
-            notifyAll();
-        }
-    }
+	/**
+	 * This method is called by thread reached barrier. Current thread will be
+	 * suspended until all threads reach the barrier.
+	 */
+	public final synchronized void reach() {
+		Assert.that(count > 0);
+		if (--count != 0) {
+			do {
+				try {
+					wait();
+				} catch (final InterruptedException ex) {
+					throw new InterruptedError();
+				}
+			} while (count != 0); // preclude spurious wakeups
+		} else {
+			notifyAll();
+		}
+	}
 
-    /**
-     * Default constructor of <code>Barrier</code> object.
-     */
-    public Barrier()
-    {
-        count = 0;
-    }
+	/**
+	 * Default constructor of <code>Barrier</code> object.
+	 */
+	public Barrier() {
+		count = 0;
+	}
 
-    /**
-     * Constructor of <code>Barrier</code> object, which also set number of
-     * threads to be meet at barrier.
-     * 
-     * @param n
-     *            specifies number of threads which should reach barrier.
-     */
-    public Barrier(int n)
-    {
-        count = n;
-    }
+	/**
+	 * Constructor of <code>Barrier</code> object, which also set number of
+	 * threads to be meet at barrier.
+	 * 
+	 * @param n
+	 *            specifies number of threads which should reach barrier.
+	 */
+	public Barrier(int n) {
+		count = n;
+	}
 
-    private int count;
+	private int count;
 }
-

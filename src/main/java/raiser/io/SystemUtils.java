@@ -4,7 +4,7 @@
 package raiser.io;
 
 public class SystemUtils {
-    public static boolean isWindows() {
-        return true;
-    }
+	public static boolean isWindows() {
+		return true;
+	}
 }

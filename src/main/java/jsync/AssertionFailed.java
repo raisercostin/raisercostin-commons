@@ -15,15 +15,17 @@ package jsync;
  * 
  * @see jsync.Assert
  */
-public class AssertionFailed extends Error
-{
-    AssertionFailed()
-    {
-        super("Assertion failed");
-    }
+public class AssertionFailed extends Error {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7072056968253686794L;
 
-    AssertionFailed(final String description)
-    {
-        super("Assertion " + description + " failed");
-    }
+	AssertionFailed() {
+		super("Assertion failed");
+	}
+
+	AssertionFailed(final String description) {
+		super("Assertion " + description + " failed");
+	}
 }

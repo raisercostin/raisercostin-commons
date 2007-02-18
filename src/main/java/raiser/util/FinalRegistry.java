@@ -10,11 +10,11 @@ package raiser.util;
 /**
  * @author cgrigore
  */
-public class FinalRegistry
-{
-    /**
-     * Used in comparation for equality for doubles in all projects.
-     * @author cgrigore
-     */
-    public static final double eps = 10e-16;
+public class FinalRegistry {
+	/**
+	 * Used in comparation for equality for doubles in all projects.
+	 * 
+	 * @author cgrigore
+	 */
+	public static final double eps = 10e-16;
 }

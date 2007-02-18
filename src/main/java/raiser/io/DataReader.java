@@ -13,10 +13,12 @@ import java.io.IOException;
 /**
  * @author: Costin Emilian GRIGORE
  */
-public interface DataReader
-{
-    public abstract void close() throws IOException;
-    public abstract Integer readInteger() throws IOException;
-    public abstract String readString() throws IOException;
-    public abstract char readCharacter(String accepted) throws IOException;
+public interface DataReader {
+	public abstract void close() throws IOException;
+
+	public abstract Integer readInteger() throws IOException;
+
+	public abstract String readString() throws IOException;
+
+	public abstract char readCharacter(String accepted) throws IOException;
 }

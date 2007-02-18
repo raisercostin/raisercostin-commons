@@ -3,12 +3,11 @@
  */
 package raiser.gui;
 
-
 /**
  * @author raiser
  */
-public interface ConsoleListener
-{
-    void setConsole(Console console);
-    void fireClose();
+public interface ConsoleListener {
+	void setConsole(Console console);
+
+	void fireClose();
 }

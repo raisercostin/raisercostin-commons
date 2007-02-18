@@ -16,13 +16,12 @@ package jsync;
  * 
  * @see jsync.Concurrent
  */
-public interface Activity
-{
-    /**
-     * Method invoked by <code>Concurrent</code> class.
-     * 
-     * @return result of method excution which is collected by
-     *         <code>Concurrent</code> class.
-     */
-    Object run();
+public interface Activity {
+	/**
+	 * Method invoked by <code>Concurrent</code> class.
+	 * 
+	 * @return result of method excution which is collected by
+	 *         <code>Concurrent</code> class.
+	 */
+	Object run();
 }

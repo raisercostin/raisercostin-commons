@@ -10,7 +10,6 @@ import javax.swing.JMenuBar;
 /**
  * An application has a menu.
  */
-public interface Menuable
-{
-    JMenuBar getJMenuBar();
+public interface Menuable {
+	JMenuBar getJMenuBar();
 }

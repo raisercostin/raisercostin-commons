@@ -11,7 +11,6 @@ package raiser.util.properties;
 /**
  * @author: Costin Emilian GRIGORE
  */
-public interface Valueable
-{
-    String getValue(Object object);
+public interface Valueable {
+	String getValue(Object object);
 }

@@ -6,31 +6,31 @@ package raiser.gui.rcp;
 import java.io.IOException;
 
 public interface ApplicationModel {
-    String getApplicationName();
+	String getApplicationName();
 
-    int getApplicationPreferredWidth();
+	int getApplicationPreferredWidth();
 
-    int getApplicationPreferredHeight();
+	int getApplicationPreferredHeight();
 
-    String getApplicationBuildType();
+	String getApplicationBuildType();
 
-    String getApplicationBuildDate();
+	String getApplicationBuildDate();
 
-    String getApplicationBuild();
+	String getApplicationBuild();
 
-    String getApplicationVersion();
+	String getApplicationVersion();
 
-    String getApplicationUniqueName();
+	String getApplicationUniqueName();
 
-    String getVersionHTML();
+	String getVersionHTML();
 
-    void setController(ApplicationController controller);
+	void setController(ApplicationController controller);
 
-    void saveProperties() throws IOException;
+	void saveProperties() throws IOException;
 
-    void loadProperties() throws IOException, ClassNotFoundException;
+	void loadProperties() throws IOException, ClassNotFoundException;
 
-    void init();
+	void init();
 
-    void onPropertiesLoaded();
+	void onPropertiesLoaded();
 }

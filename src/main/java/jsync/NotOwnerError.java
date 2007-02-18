@@ -19,10 +19,13 @@ package jsync;
  * @see jsync.Lock
  * @see jsync.Mutex
  */
-public class NotOwnerError extends Error
-{
-    public NotOwnerError()
-    {
-        super("Thread is not owner of resource");
-    }
+public class NotOwnerError extends Error {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5725943526898837812L;
+
+	public NotOwnerError() {
+		super("Thread is not owner of resource");
+	}
 }

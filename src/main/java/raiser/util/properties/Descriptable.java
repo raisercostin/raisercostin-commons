@@ -11,7 +11,6 @@ package raiser.util.properties;
 /**
  * @author: Costin Emilian GRIGORE
  */
-public interface Descriptable
-{
-    String getDescription(Object object);
+public interface Descriptable {
+	String getDescription(Object object);
 }

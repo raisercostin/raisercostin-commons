@@ -13,23 +13,28 @@ import java.io.IOException;
 /**
  * @author: Costin Emilian GRIGORE
  */
-public class FtpProtocolException extends IOException
-{
-    
-    public FtpProtocolException()
-    {
-        super();
-    }
-    public FtpProtocolException(String message)
-    {
-        super(message);
-    }
-    public FtpProtocolException(String message, Throwable cause) {
-        this(message);
-        initCause(cause);
-    }
-    public FtpProtocolException(Throwable cause) {
-        this();
-        initCause(cause);
-    }
+public class FtpProtocolException extends IOException {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5737567664320626038L;
+
+	public FtpProtocolException() {
+		super();
+	}
+
+	public FtpProtocolException(String message) {
+		super(message);
+	}
+
+	public FtpProtocolException(String message, Throwable cause) {
+		this(message);
+		initCause(cause);
+	}
+
+	public FtpProtocolException(Throwable cause) {
+		this();
+		initCause(cause);
+	}
 }

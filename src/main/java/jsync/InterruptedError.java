@@ -18,10 +18,13 @@ package jsync;
  * to make it posible for applications using JSYNC classes not to worry about
  * catching this exception or declaring it in <code>throws</code> list.
  */
-public class InterruptedError extends Error
-{
-    public InterruptedError()
-    {
-        super("thread is interrupted");
-    }
+public class InterruptedError extends Error {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2324647084051238350L;
+
+	public InterruptedError() {
+		super("thread is interrupted");
+	}
 }
