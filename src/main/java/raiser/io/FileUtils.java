@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
+import org.springframework.core.io.ClassPathResource;
 
 /**
  * @author raiser
@@ -489,5 +490,9 @@ public class FileUtils {
 		} finally {
 			in.close();
 		}
+	}
+
+	public static void copy(org.springframework.core.io.Resource source, String destination) throws IOException {
+		copy(source.getFile().getAbsolutePath(),destination);
 	}
 }
