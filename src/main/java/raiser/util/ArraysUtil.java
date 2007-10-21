@@ -114,10 +114,10 @@ public class ArraysUtil {
 		return buf.toString();
 	}
 
-	public static String toString(final List<Object> list) {
+	public static <T> String toString(final List<T> list) {
 		final StringBuffer buf = new StringBuffer();
 		buf.append("{");
-		for (final Object object : list) {
+		for (final T object : list) {
 			buf.append(object).append(", ");
 		}
 		buf.append("}");
@@ -161,8 +161,8 @@ public class ArraysUtil {
 		return true;
 	}
 
-	public static boolean equalsLists(final List<Object> map1,
-			final List<Object> map2) {
+	public static <T1,T2> boolean equalsLists(final List<T1> map1,
+			final List<T2> map2) {
 		if (map2 == map1) {
 			return true;
 		}
@@ -170,8 +170,8 @@ public class ArraysUtil {
 			return false;
 		}
 		try {
-			final Iterator<Object> i1 = map1.iterator();
-			final Iterator<Object> i2 = map2.iterator();
+			final Iterator<T1> i1 = map1.iterator();
+			final Iterator<T2> i2 = map2.iterator();
 			while (i1.hasNext() && i2.hasNext()) {
 				final Object value1 = i1.next();
 				final Object value2 = i2.next();
