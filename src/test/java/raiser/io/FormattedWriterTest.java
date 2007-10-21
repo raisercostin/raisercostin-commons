@@ -30,9 +30,9 @@ public class FormattedWriterTest extends TestCase {
 	}
 
 	public void testFormattedWriter() throws IOException {
-		new File("temp").mkdirs();
+		new File("target\\temp").mkdirs();
 		final FormattedWriter fw = new FormattedWriter(new BufferedWriter(
-				new FileWriter("temp/test.txt")));
+				new FileWriter("target/temp/test.txt")));
 		fw.writeString("hi");
 		fw.close();
 	}
