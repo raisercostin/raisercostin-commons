@@ -22,12 +22,12 @@ public class Database {
 		detailedExceptionMessages = true;
 	}
 
-	public Database(final HashMap<String,String> params) {
+	public Database(final HashMap<String, String> params) {
 		cp = new ConnectionPool(params);
 		detailedExceptionMessages = true;
 	}
 
-	public Database(final HashMap<String,String> params,
+	public Database(final HashMap<String, String> params,
 			final boolean detailedExceptionMessages) {
 		cp = new ConnectionPool(params);
 		this.detailedExceptionMessages = detailedExceptionMessages;

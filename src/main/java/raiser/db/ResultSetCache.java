@@ -13,7 +13,7 @@ public class ResultSetCache {
 			return null;
 		}
 
-		final HashMap<String,ResultSet> h = sessions.get(sid);
+		final HashMap<String, ResultSet> h = sessions.get(sid);
 		if (h != null) {
 			return h.get(rsname);
 		}
@@ -26,7 +26,7 @@ public class ResultSetCache {
 			return;
 		}
 
-		final HashMap<String,ResultSet> h = sessions.get(sid);
+		final HashMap<String, ResultSet> h = sessions.get(sid);
 		if (h != null) {
 			// System.out.println("ResultSet " + rsname + " removed from session
 			// " + sid);
@@ -62,7 +62,7 @@ public class ResultSetCache {
 			if (sid != null) {
 				System.out.println("Session destroyed " + sid);
 
-				final HashMap<String,ResultSet> s = sessions.remove(sid);
+				final HashMap<String, ResultSet> s = sessions.remove(sid);
 
 				if (s != null) {
 					final Iterator<String> si = s.keySet().iterator();

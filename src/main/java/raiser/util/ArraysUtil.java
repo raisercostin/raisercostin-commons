@@ -91,13 +91,13 @@ public class ArraysUtil {
 		return result.toString();
 	}
 
-	public static String toString(final Map<Object,Object> map) {
+	public static String toString(final Map<Object, Object> map) {
 		final StringBuffer buf = new StringBuffer();
 		buf.append("{");
-		final Iterator<Map.Entry<Object,Object>> i = map.entrySet().iterator();
+		final Iterator<Map.Entry<Object, Object>> i = map.entrySet().iterator();
 		boolean hasNext = i.hasNext();
 		while (hasNext) {
-			final Map.Entry<Object,Object> e = i.next();
+			final Map.Entry<Object, Object> e = i.next();
 			final Object key = e.getKey();
 			Object value = e.getValue();
 			if (value instanceof byte[]) {
@@ -124,7 +124,8 @@ public class ArraysUtil {
 		return buf.toString();
 	}
 
-	public static boolean equalsMaps(final Map<Object,Object> map1, final Map<Object,Object> map2) {
+	public static boolean equalsMaps(final Map<Object, Object> map1,
+			final Map<Object, Object> map2) {
 		if (map2 == map1) {
 			return true;
 		}
@@ -132,9 +133,10 @@ public class ArraysUtil {
 			return false;
 		}
 		try {
-			final Iterator<Entry<Object,Object>> i = map1.entrySet().iterator();
+			final Iterator<Entry<Object, Object>> i = map1.entrySet()
+					.iterator();
 			while (i.hasNext()) {
-				final Entry<Object,Object> e = i.next();
+				final Entry<Object, Object> e = i.next();
 				final Object key = e.getKey();
 				final Object value = e.getValue();
 				if (value == null) {
@@ -159,7 +161,8 @@ public class ArraysUtil {
 		return true;
 	}
 
-	public static boolean equalsLists(final List<Object> map1, final List<Object> map2) {
+	public static boolean equalsLists(final List<Object> map1,
+			final List<Object> map2) {
 		if (map2 == map1) {
 			return true;
 		}

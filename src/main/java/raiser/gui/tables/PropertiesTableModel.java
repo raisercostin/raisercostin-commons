@@ -13,7 +13,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
@@ -45,7 +44,8 @@ public class PropertiesTableModel<T> extends AbstractTableModel implements
 		this(null, data);
 	};
 
-	public PropertiesTableModel(final List<String> columnNames, final List<T> data) {
+	public PropertiesTableModel(final List<String> columnNames,
+			final List<T> data) {
 		super();
 		setData(data);
 		setColumns(columnNames);
@@ -157,7 +157,8 @@ public class PropertiesTableModel<T> extends AbstractTableModel implements
 		}
 	}
 
-	public List<PropertyDescriptor> getColumns(final Class<?> infoClass, final List<String> columns2) {
+	public List<PropertyDescriptor> getColumns(final Class<?> infoClass,
+			final List<String> columns2) {
 		if (columns == null) {
 			columns = computeColumns(infoClass, columns2);
 		}
@@ -167,14 +168,13 @@ public class PropertiesTableModel<T> extends AbstractTableModel implements
 	/**
 	 * @param infoClass
 	 */
-	private static List<PropertyDescriptor> computeColumns(final Class<?> infoClass,
-			final List<String> columns2) {
+	private static List<PropertyDescriptor> computeColumns(
+			final Class<?> infoClass, final List<String> columns2) {
 		final PropertyDescriptor[] desc = PropertyUtils
 				.getPropertyDescriptors(infoClass);
 		final List<PropertyDescriptor> columns = new ArrayList<PropertyDescriptor>();
 		if (columns2 != null) {
-			for (final Iterator<String> iter = columns2.iterator(); iter.hasNext();) {
-				final String columnName = iter.next();
+			for (final String columnName : columns2) {
 				final PropertyDescriptor temp = find(desc, columnName);
 				if (temp != null) {
 					columns.add(temp);

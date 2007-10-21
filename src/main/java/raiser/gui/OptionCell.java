@@ -182,8 +182,7 @@ public class OptionCell {
 	}
 
 	private void add(final List<Object> values) {
-		for (final Iterator<Object> iter = values.iterator(); iter.hasNext();) {
-			final Object element = iter.next();
+		for (final Object element : values) {
 			add(element);
 		}
 	}

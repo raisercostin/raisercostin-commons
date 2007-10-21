@@ -35,7 +35,7 @@ public class ExtendedProperties extends Properties {
 		}
 		writeln(awriter, "#" + new Date().toString());
 		for (final Enumeration<Object> e = keys(); e.hasMoreElements();) {
-			String key = (String)e.nextElement();
+			String key = (String) e.nextElement();
 			final Object value = get(key);
 
 			writeln(awriter, "#" + descriptable.getDescription(value));
