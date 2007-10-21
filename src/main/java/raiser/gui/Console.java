@@ -1,5 +1,7 @@
 package raiser.gui;
 
+import org.apache.log4j.Logger;
+
 import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.awt.Point;
@@ -22,6 +24,11 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.WindowConstants;
 
 public class Console {
+	/**
+	 * Logger for this class
+	 */
+	private static final Logger logger = Logger.getLogger(Console.class);
+
 	class MyPanel extends JPanel {
 		/**
 		 * 
@@ -379,5 +386,13 @@ public class Console {
 
 	public void setConfirmOnExit(boolean confirmOnExit) {
 		this.confirmOnExit = confirmOnExit;
+	}
+
+	public void runBlocked(JPanel view) {
+		try {
+			run(view).join();
+		} catch (InterruptedException e) {
+			logger.warn("While waiting for panel to be closed an exception occured.",e);
+		}
 	}
 }
