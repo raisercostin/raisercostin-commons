@@ -25,13 +25,13 @@ public class FormattedWriterTest extends TestCase {
 	 * 
 	 * @param arg0
 	 */
-	public FormattedWriterTest(String arg0) {
+	public FormattedWriterTest(final String arg0) {
 		super(arg0);
 	}
 
 	public void testFormattedWriter() throws IOException {
 		new File("temp").mkdirs();
-		FormattedWriter fw = new FormattedWriter(new BufferedWriter(
+		final FormattedWriter fw = new FormattedWriter(new BufferedWriter(
 				new FileWriter("temp/test.txt")));
 		fw.writeString("hi");
 		fw.close();

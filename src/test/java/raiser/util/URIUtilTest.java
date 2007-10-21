@@ -25,17 +25,17 @@ public class URIUtilTest extends TestCase {
 	 * 
 	 * @param arg0
 	 */
-	public URIUtilTest(String arg0) {
+	public URIUtilTest(final String arg0) {
 		super(arg0);
 	}
 
 	public void testGetAbsolutePath() throws IOException, URISyntaxException {
-		char disk = new File(".").getAbsolutePath().charAt(0);
+		final char disk = new File(".").getAbsolutePath().charAt(0);
 		String path = new File("").getAbsolutePath();
 		if (path.charAt(1) == ':') {
 			path = path.substring(2);
 		}
-		String sep = FileUtils.getFileSeparator();
+		final String sep = FileUtils.getFileSeparator();
 
 		// absoluta
 		// file:///c: is current directory on drive c:

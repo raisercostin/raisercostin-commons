@@ -12,14 +12,15 @@ import java.io.Reader;
  */
 public class CommentReader extends BufferedReader {
 
-	private String commentBegin;
+	private final String commentBegin;
 
-	public CommentReader(Reader in, int sz, String commentBegin) {
+	public CommentReader(final Reader in, final int sz,
+			final String commentBegin) {
 		super(in, sz);
 		this.commentBegin = commentBegin;
 	}
 
-	public CommentReader(Reader in, String commentBegin) {
+	public CommentReader(final Reader in, final String commentBegin) {
 		super(in);
 		this.commentBegin = commentBegin;
 	}

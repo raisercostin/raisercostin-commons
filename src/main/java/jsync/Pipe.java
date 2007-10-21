@@ -44,7 +44,8 @@ public class Pipe {
 	 *            size of buffer used to transfer data from the input stream to
 	 *            the output stream
 	 */
-	static public void between(InputStream in, OutputStream out, int bufferSize) {
+	static public void between(final InputStream in, final OutputStream out,
+			final int bufferSize) {
 		(new PipeThread(in, out, bufferSize)).start();
 	}
 
@@ -57,7 +58,7 @@ public class Pipe {
 	 * @param out
 	 *            output stream
 	 */
-	static public void between(InputStream in, OutputStream out) {
+	static public void between(final InputStream in, final OutputStream out) {
 		(new PipeThread(in, out, defaultBufferSize)).start();
 	}
 }
@@ -69,7 +70,8 @@ class PipeThread extends Thread {
 
 	byte[] buffer;
 
-	PipeThread(InputStream in, OutputStream out, int bufferSize) {
+	PipeThread(final InputStream in, final OutputStream out,
+			final int bufferSize) {
 		this.in = in;
 		this.out = out;
 		buffer = new byte[bufferSize];
@@ -82,7 +84,7 @@ class PipeThread extends Thread {
 			while ((length = in.read(buffer)) > 0) {
 				out.write(buffer, 0, length);
 			}
-		} catch (IOException ex) {
+		} catch (final IOException ex) {
 		}
 	}
 }

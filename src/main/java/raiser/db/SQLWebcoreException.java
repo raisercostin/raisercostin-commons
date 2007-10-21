@@ -16,7 +16,7 @@ public class SQLWebcoreException extends SQLException {
 
 	SQLException e;
 
-	public SQLWebcoreException(SQLException e) {
+	public SQLWebcoreException(final SQLException e) {
 		this.e = e;
 	}
 
@@ -24,19 +24,21 @@ public class SQLWebcoreException extends SQLException {
 		e = new SQLException();
 	}
 
-	public SQLWebcoreException(String reason) {
+	public SQLWebcoreException(final String reason) {
 		e = new SQLException(reason);
 	}
 
-	public SQLWebcoreException(String reason, String SQLState) {
+	public SQLWebcoreException(final String reason, final String SQLState) {
 		e = new SQLException(reason, SQLState);
 	}
 
-	public SQLWebcoreException(String reason, String SQLState, int vendorCode) {
+	public SQLWebcoreException(final String reason, final String SQLState,
+			final int vendorCode) {
 		e = new SQLException(reason, SQLState, vendorCode);
 	}
 
-	private static void addMessage(StringBuffer result, int pos, String message) {
+	private static void addMessage(final StringBuffer result, final int pos,
+			final String message) {
 		result.append(Integer.toString(pos));
 		result.append(".\t");
 		result.append(message);
@@ -44,7 +46,7 @@ public class SQLWebcoreException extends SQLException {
 	}
 
 	public String getDetailedMessage() {
-		StringBuffer result = new StringBuffer("\n");
+		final StringBuffer result = new StringBuffer("\n");
 		int i = 0;
 		SQLException ex = e;
 		while (ex != null) {
@@ -76,7 +78,7 @@ public class SQLWebcoreException extends SQLException {
 	}
 
 	@Override
-	public synchronized void setNextException(SQLException ex) {
+	public synchronized void setNextException(final SQLException ex) {
 		e.setNextException(ex);
 	}
 

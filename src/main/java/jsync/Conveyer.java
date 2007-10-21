@@ -36,7 +36,8 @@ public abstract class Conveyer {
 	 *            sizeof of cyclic buffer. Should be not less than
 	 *            <code>blockSize</code>.
 	 */
-	public Conveyer(java.io.InputStream stream, int blockSize, int bufferSize) {
+	public Conveyer(final java.io.InputStream stream, final int blockSize,
+			final int bufferSize) {
 		Assert.that(bufferSize > blockSize);
 		buffer = new byte[bufferSize];
 		this.bufferSize = bufferSize;
@@ -60,7 +61,7 @@ public abstract class Conveyer {
 	 *            read and data processing operation will not take more than
 	 *            <code>blockSize</code> bytes of data.
 	 */
-	public Conveyer(java.io.InputStream stream, int blockSize) {
+	public Conveyer(final java.io.InputStream stream, final int blockSize) {
 		this(stream, blockSize, blockSize * 2);
 	}
 
@@ -70,7 +71,7 @@ public abstract class Conveyer {
 	 * @param stream
 	 *            new input stream
 	 */
-	public synchronized void setInputStream(java.io.InputStream stream) {
+	public synchronized void setInputStream(final java.io.InputStream stream) {
 		this.stream = stream;
 	}
 
@@ -96,7 +97,7 @@ public abstract class Conveyer {
 	public boolean waitTermination() {
 		try {
 			consumer.join();
-		} catch (InterruptedException ex) {
+		} catch (final InterruptedException ex) {
 			throw new InterruptedError();
 		}
 		return result;
@@ -129,7 +130,7 @@ public abstract class Conveyer {
 					}
 					try {
 						consumerCS.wait();
-					} catch (InterruptedException ex) {
+					} catch (final InterruptedException ex) {
 						throw new InterruptedError();
 					}
 				}
@@ -169,7 +170,7 @@ public abstract class Conveyer {
 				while (getPos == putPos + 1) { // buffer is full
 					try {
 						producerCS.wait();
-					} catch (InterruptedException ex) {
+					} catch (final InterruptedException ex) {
 						throw new InterruptedError();
 					}
 				}
@@ -189,7 +190,7 @@ public abstract class Conveyer {
 			int len;
 			try {
 				len = stream.read(buffer, putPos, available);
-			} catch (java.io.IOException ex) {
+			} catch (final java.io.IOException ex) {
 				len = -1;
 			}
 
@@ -197,7 +198,7 @@ public abstract class Conveyer {
 				endOfStream = true;
 				try {
 					stream.close();
-				} catch (java.io.IOException ex) {
+				} catch (final java.io.IOException ex) {
 				}
 				synchronized (consumerCS) {
 					consumerCS.notify();
@@ -247,7 +248,7 @@ class Consumer extends Thread {
 		conveyer.consume();
 	}
 
-	Consumer(Conveyer conveyer) {
+	Consumer(final Conveyer conveyer) {
 		this.conveyer = conveyer;
 	}
 }
@@ -260,7 +261,7 @@ class Producer extends Thread {
 		conveyer.produce();
 	}
 
-	Producer(Conveyer conveyer) {
+	Producer(final Conveyer conveyer) {
 		this.conveyer = conveyer;
 	}
 }

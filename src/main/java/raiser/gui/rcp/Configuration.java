@@ -36,48 +36,49 @@ public class Configuration implements Serializable {
 
 	private Map<String, Object> data;
 
-	private static Configuration loadFromXML(Configuration result,
-			InputStream in) {
-		Configuration fileConfig = loadFromXML2(in);
+	private static Configuration loadFromXML(final Configuration result,
+			final InputStream in) {
+		final Configuration fileConfig = loadFromXML2(in);
 		if (fileConfig != null) {
 			result.getData().putAll(fileConfig.getData());
 		}
 		return result;
 	}
 
-	private static Configuration loadFromFile(Configuration result,
-			InputStream in) throws IOException, ClassNotFoundException {
-		Configuration fileConfig = loadFromFile2(in);
+	private static Configuration loadFromFile(final Configuration result,
+			final InputStream in) throws IOException, ClassNotFoundException {
+		final Configuration fileConfig = loadFromFile2(in);
 		if (fileConfig != null) {
 			result.getData().putAll(fileConfig.getData());
 		}
 		return result;
 	}
 
-	private static Configuration loadFromXML2(InputStream in) {
-		XMLDecoder d = new XMLDecoder(new BufferedInputStream(in));
+	private static Configuration loadFromXML2(final InputStream in) {
+		final XMLDecoder d = new XMLDecoder(new BufferedInputStream(in));
 		d.setExceptionListener(new ExceptionListener() {
-			public void exceptionThrown(Exception e) {
+			public void exceptionThrown(final Exception e) {
 				logger.error(e);
 			}
 		});
-		Configuration result = (Configuration) d.readObject();
+		final Configuration result = (Configuration) d.readObject();
 		d.close();
 		return result;
 	}
 
-	private static Configuration loadFromFile2(InputStream in)
+	private static Configuration loadFromFile2(final InputStream in)
 			throws IOException, ClassNotFoundException {
-		ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(
-				in));
-		Configuration result = (Configuration) ois.readObject();
+		final ObjectInputStream ois = new ObjectInputStream(
+				new BufferedInputStream(in));
+		final Configuration result = (Configuration) ois.readObject();
 		return result;
 	}
 
-	private static void saveToXML(Configuration props, OutputStream os) {
-		XMLEncoder e = new XMLEncoder(new BufferedOutputStream(os));
+	private static void saveToXML(final Configuration props,
+			final OutputStream os) {
+		final XMLEncoder e = new XMLEncoder(new BufferedOutputStream(os));
 		e.setExceptionListener(new ExceptionListener() {
-			public void exceptionThrown(Exception e) {
+			public void exceptionThrown(final Exception e) {
 				logger.error(e);
 			}
 		});
@@ -86,43 +87,44 @@ public class Configuration implements Serializable {
 		return;
 	}
 
-	private static void saveToFile(Configuration props, OutputStream os)
-			throws IOException {
-		ObjectOutputStream oos = new ObjectOutputStream(
+	private static void saveToFile(final Configuration props,
+			final OutputStream os) throws IOException {
+		final ObjectOutputStream oos = new ObjectOutputStream(
 				new BufferedOutputStream(os));
 		oos.writeObject(props);
 		oos.close();
 	}
 
-	public void save(OutputStream os) throws IOException {
+	public void save(final OutputStream os) throws IOException {
 		saveToFile(this, os);
 	}
 
-	public void load(InputStream is) throws IOException, ClassNotFoundException {
+	public void load(final InputStream is) throws IOException,
+			ClassNotFoundException {
 		loadFromFile(this, is);
 	}
 
-	public void saveToXML(OutputStream os) {
+	public void saveToXML(final OutputStream os) {
 		saveToXML(this, os);
 	}
 
-	public void loadFromXML(InputStream is) {
+	public void loadFromXML(final InputStream is) {
 		loadFromXML(this, is);
 	}
 
-	public Object get(String key) {
+	public Object get(final String key) {
 		return getData().get(key);
 	}
 
-	public void remove(String key) {
+	public void remove(final String key) {
 		getData().remove(key);
 	}
 
-	public void set(String key, Object value) {
+	public void set(final String key, final Object value) {
 		getData().put(key, value);
 	}
 
-	public void setData(Map<String, Object> data) {
+	public void setData(final Map<String, Object> data) {
 		this.data = data;
 	}
 

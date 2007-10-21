@@ -117,7 +117,7 @@ public class Concurrent {
 		while (nTerminated < nActivities) {
 			try {
 				wait();
-			} catch (InterruptedException ex) {
+			} catch (final InterruptedException ex) {
 				throw new InterruptedError();
 			}
 		}
@@ -134,10 +134,10 @@ public class Concurrent {
 	 *         <code>null</code> if timeout is expired before all threads
 	 *         finish execution.
 	 */
-	public synchronized Object[] waitAll(long timeout) {
-		long startTime = System.currentTimeMillis();
+	public synchronized Object[] waitAll(final long timeout) {
+		final long startTime = System.currentTimeMillis();
 		while (nTerminated < nActivities) {
-			long currentTime = System.currentTimeMillis();
+			final long currentTime = System.currentTimeMillis();
 			if (currentTime - startTime >= timeout) {
 				for (int i = nActivities; --i >= 0;) {
 					// threads[i].stop();
@@ -147,14 +147,15 @@ public class Concurrent {
 			}
 			try {
 				wait(timeout - currentTime + startTime);
-			} catch (InterruptedException ex) {
+			} catch (final InterruptedException ex) {
 				throw new InterruptedError();
 			}
 		}
 		return results;
 	}
 
-	protected synchronized void setResult(int threadNo, Object result) {
+	protected synchronized void setResult(final int threadNo,
+			final Object result) {
 		results[threadNo] = result;
 		nTerminated += 1;
 		notify();
@@ -186,14 +187,14 @@ class Task extends Thread {
 		Object result;
 		try {
 			result = activity.run();
-		} catch (Exception ex) {
+		} catch (final Exception ex) {
 			logger.error(ex);
 			result = null;
 		}
 		referee.setResult(id, result);
 	}
 
-	Task(int id, Activity activity, Concurrent referee) {
+	Task(final int id, final Activity activity, final Concurrent referee) {
 		this.id = id;
 		this.activity = activity;
 		this.referee = referee;

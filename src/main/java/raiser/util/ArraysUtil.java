@@ -18,29 +18,29 @@ import java.util.Map.Entry;
  * @author: Costin Emilian GRIGORE
  */
 public class ArraysUtil {
-	public static byte[] toByteArray(Object[] array) {
-		byte[] result = new byte[array.length];
+	public static byte[] toByteArray(final Object[] array) {
+		final byte[] result = new byte[array.length];
 		for (int i = 0; i < result.length; i++) {
 			result[i] = ((Number) array[i]).byteValue();
 		}
 		return result;
 	}
 
-	public static int[] toIntArray(Object[] array) {
-		int[] result = new int[array.length];
+	public static int[] toIntArray(final Object[] array) {
+		final int[] result = new int[array.length];
 		for (int i = 0; i < result.length; i++) {
 			result[i] = ((Number) array[i]).intValue();
 		}
 		return result;
 	}
 
-	public static String toString(byte[] objects) {
+	public static String toString(final byte[] objects) {
 		return toString(objects, objects.length, 0, ", ", false, false, false,
 				false);
 	}
 
-	public static Object toCharString(byte[] objects) {
-		StringBuffer result = new StringBuffer();
+	public static Object toCharString(final byte[] objects) {
+		final StringBuffer result = new StringBuffer();
 		result.append("[");
 		for (int i = 0; i < objects.length; i++) {
 			if (i > 0) {
@@ -52,10 +52,11 @@ public class ArraysUtil {
 		return result;
 	}
 
-	public static String toString(byte[] objects, int len,
-			int offsetLineNumber, String separator, boolean writeCharTo,
-			boolean writeBinary, boolean writeHex, boolean writeLineNumber) {
-		StringBuffer result = new StringBuffer();
+	public static String toString(final byte[] objects, int len,
+			final int offsetLineNumber, final String separator,
+			final boolean writeCharTo, final boolean writeBinary,
+			final boolean writeHex, final boolean writeLineNumber) {
+		final StringBuffer result = new StringBuffer();
 		result.append("[");
 		len = Math.min(len, objects.length);
 		for (int i = 0; i < len; i++) {
@@ -90,14 +91,14 @@ public class ArraysUtil {
 		return result.toString();
 	}
 
-	public static String toString(Map map) {
-		StringBuffer buf = new StringBuffer();
+	public static String toString(final Map<Object,Object> map) {
+		final StringBuffer buf = new StringBuffer();
 		buf.append("{");
-		Iterator i = map.entrySet().iterator();
+		final Iterator<Map.Entry<Object,Object>> i = map.entrySet().iterator();
 		boolean hasNext = i.hasNext();
 		while (hasNext) {
-			Map.Entry e = (Map.Entry) (i.next());
-			Object key = e.getKey();
+			final Map.Entry<Object,Object> e = i.next();
+			final Object key = e.getKey();
 			Object value = e.getValue();
 			if (value instanceof byte[]) {
 				value = toString((byte[]) value);
@@ -113,17 +114,17 @@ public class ArraysUtil {
 		return buf.toString();
 	}
 
-	public static String toString(List list) {
-		StringBuffer buf = new StringBuffer();
+	public static String toString(final List<Object> list) {
+		final StringBuffer buf = new StringBuffer();
 		buf.append("{");
-		for (Object object : list) {
+		for (final Object object : list) {
 			buf.append(object).append(", ");
 		}
 		buf.append("}");
 		return buf.toString();
 	}
 
-	public static boolean equalsMaps(Map map1, Map map2) {
+	public static boolean equalsMaps(final Map<Object,Object> map1, final Map<Object,Object> map2) {
 		if (map2 == map1) {
 			return true;
 		}
@@ -131,11 +132,11 @@ public class ArraysUtil {
 			return false;
 		}
 		try {
-			Iterator i = map1.entrySet().iterator();
+			final Iterator<Entry<Object,Object>> i = map1.entrySet().iterator();
 			while (i.hasNext()) {
-				Entry e = (Entry) i.next();
-				Object key = e.getKey();
-				Object value = e.getValue();
+				final Entry<Object,Object> e = i.next();
+				final Object key = e.getKey();
+				final Object value = e.getValue();
 				if (value == null) {
 					if (!((map2.get(key) == null) && map2.containsKey(key))) {
 						return false;
@@ -150,15 +151,15 @@ public class ArraysUtil {
 					}
 				}
 			}
-		} catch (ClassCastException unused) {
+		} catch (final ClassCastException unused) {
 			return false;
-		} catch (NullPointerException unused) {
+		} catch (final NullPointerException unused) {
 			return false;
 		}
 		return true;
 	}
 
-	public static boolean equalsLists(List map1, List map2) {
+	public static boolean equalsLists(final List<Object> map1, final List<Object> map2) {
 		if (map2 == map1) {
 			return true;
 		}
@@ -166,11 +167,11 @@ public class ArraysUtil {
 			return false;
 		}
 		try {
-			Iterator i1 = map1.iterator();
-			Iterator i2 = map2.iterator();
+			final Iterator<Object> i1 = map1.iterator();
+			final Iterator<Object> i2 = map2.iterator();
 			while (i1.hasNext() && i2.hasNext()) {
-				Object value1 = i1.next();
-				Object value2 = i2.next();
+				final Object value1 = i1.next();
+				final Object value2 = i2.next();
 				if (value1 instanceof byte[]) {
 					if (!Arrays.equals((byte[]) value1, (byte[]) value2)) {
 						return false;
@@ -184,9 +185,9 @@ public class ArraysUtil {
 			if (i1.hasNext() || i2.hasNext()) {
 				return false;
 			}
-		} catch (ClassCastException unused) {
+		} catch (final ClassCastException unused) {
 			return false;
-		} catch (NullPointerException unused) {
+		} catch (final NullPointerException unused) {
 			return false;
 		}
 		return true;

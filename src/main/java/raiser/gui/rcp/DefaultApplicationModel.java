@@ -91,12 +91,12 @@ public abstract class DefaultApplicationModel implements ApplicationModel {
 		return 600;
 	}
 
-	public void setController(ApplicationController controller) {
+	public void setController(final ApplicationController controller) {
 		this.controller = controller;
 	}
 
 	public void saveProperties() throws IOException {
-		OutputStream os = new FileOutputStream("configure.properties");
+		final OutputStream os = new FileOutputStream("configure.properties");
 		configuration.save(os);
 		os.close();
 		logger.info("Configuration saved.");
@@ -106,7 +106,7 @@ public abstract class DefaultApplicationModel implements ApplicationModel {
 		return controller;
 	}
 
-	private Configuration configuration;
+	private final Configuration configuration;
 
 	public void loadProperties() throws IOException, ClassNotFoundException {
 		InputStream is = null;
@@ -114,7 +114,7 @@ public abstract class DefaultApplicationModel implements ApplicationModel {
 			is = new FileInputStream("configure.properties");
 			logger.info("Found configure.properties file: "
 					+ new File("configure.properties").getAbsolutePath());
-		} catch (FileNotFoundException e) {
+		} catch (final FileNotFoundException e) {
 			is = getClass().getClassLoader().getResourceAsStream(
 					"configure.properties");
 			logger.info("Found configure.properties file in classpath.");
@@ -138,11 +138,11 @@ public abstract class DefaultApplicationModel implements ApplicationModel {
 	public void initProperties() {
 	}
 
-	public Object getProperty(String key) {
+	public Object getProperty(final String key) {
 		return configuration.get(key);
 	}
 
-	public Object getProperty(String key, Object defaultValue) {
+	public Object getProperty(final String key, final Object defaultValue) {
 		Object result = configuration.get(key);
 		if (result == null) {
 			logger.info("Can't find a value for property [" + key
@@ -152,8 +152,8 @@ public abstract class DefaultApplicationModel implements ApplicationModel {
 		return result;
 	}
 
-	public boolean setProperty(String key, Object value) {
-		Object already = configuration.get(key);
+	public boolean setProperty(final String key, final Object value) {
+		final Object already = configuration.get(key);
 		if ((already == null) && (value == null)) {
 			return false;
 		}

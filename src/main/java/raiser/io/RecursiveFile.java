@@ -28,11 +28,11 @@ public class RecursiveFile extends File {
 	/**
 	 * @param pathname
 	 */
-	public RecursiveFile(String pathname) {
+	public RecursiveFile(final String pathname) {
 		super(pathname);
 	}
 
-	public RecursiveFile(String pathname, JobController controller) {
+	public RecursiveFile(final String pathname, final JobController controller) {
 		super(pathname);
 		this.controller = controller;
 	}
@@ -40,7 +40,7 @@ public class RecursiveFile extends File {
 	/**
 	 * @param uri
 	 */
-	public RecursiveFile(URI uri) {
+	public RecursiveFile(final URI uri) {
 		super(uri);
 	}
 
@@ -48,7 +48,7 @@ public class RecursiveFile extends File {
 	 * @param parent
 	 * @param child
 	 */
-	public RecursiveFile(File parent, String child) {
+	public RecursiveFile(final File parent, final String child) {
 		super(parent, child);
 	}
 
@@ -56,17 +56,17 @@ public class RecursiveFile extends File {
 	 * @param parent
 	 * @param child
 	 */
-	public RecursiveFile(String parent, String child) {
+	public RecursiveFile(final String parent, final String child) {
 		super(parent, child);
 	}
 
-	private void list(List<File> v, File directory) {
+	private void list(final List<File> v, final File directory) {
 		v.add(directory);
-		File[] files = directory.listFiles();
+		final File[] files = directory.listFiles();
 		if (files == null) {
 			return;
 		}
-		for (File element : files) {
+		for (final File element : files) {
 			if (!canContinueRunning()) {
 				break;
 			}
@@ -83,77 +83,75 @@ public class RecursiveFile extends File {
 	}
 
 	public String[] listRecursively() {
-		List<File> ss = new Vector<File>();
+		final List<File> ss = new Vector<File>();
 		list(ss, this);
-		String[] result = new String[ss.size()];
+		final String[] result = new String[ss.size()];
 		for (int i = 0; i < result.length; i++) {
 			if (!canContinueRunning()) {
 				break;
 			}
 			try {
-				result[i] = ((File) ss.get(i)).getCanonicalPath();
-			} catch (IOException e) {
+				result[i] = (ss.get(i)).getCanonicalPath();
+			} catch (final IOException e) {
 				e.printStackTrace();
 			}
 		}
 		return result;
 	}
 
-	public String[] listRecursively(FilenameFilter filter) {
-		List<File> ss = new Vector<File>();
+	public String[] listRecursively(final FilenameFilter filter) {
+		final List<File> ss = new Vector<File>();
 		list(ss, this);
-		ArrayList<String> v = new ArrayList<String>();
+		final ArrayList<String> v = new ArrayList<String>();
 		for (int i = 0; i < ss.size(); i++) {
 			if (!canContinueRunning()) {
 				break;
 			}
-			if ((filter == null)
-					|| filter.accept(this, ((File) ss.get(i)).getName())) {
+			if ((filter == null) || filter.accept(this, (ss.get(i)).getName())) {
 				try {
 					v.add(ss.get(i).getCanonicalPath());
-				} catch (IOException e) {
+				} catch (final IOException e) {
 					e.printStackTrace();
 				}
 			}
 		}
-		return (String[]) (v.toArray(new String[0]));
+		return (v.toArray(new String[0]));
 	}
 
 	public File[] listFilesRecursively() {
-		List<File> ss = new Vector<File>();
+		final List<File> ss = new Vector<File>();
 		list(ss, this);
 		return ss.toArray(new File[0]);
 	}
 
-	public File[] listFilesRecursively(FileFilter filter) {
-		List<File> ss = new Vector<File>();
+	public File[] listFilesRecursively(final FileFilter filter) {
+		final List<File> ss = new Vector<File>();
 		list(ss, this);
-		ArrayList<File> v = new ArrayList<File>();
+		final ArrayList<File> v = new ArrayList<File>();
 		for (int i = 0; i < ss.size(); i++) {
 			if (!canContinueRunning()) {
 				break;
 			}
-			if ((filter == null) || filter.accept((File) ss.get(i))) {
+			if ((filter == null) || filter.accept(ss.get(i))) {
 				v.add(ss.get(i));
 			}
 		}
-		return (File[]) (v.toArray(new File[0]));
+		return (v.toArray(new File[0]));
 	}
 
-	public File[] listFilesRecursively(FilenameFilter filter) {
-		List<File> ss = new Vector<File>();
+	public File[] listFilesRecursively(final FilenameFilter filter) {
+		final List<File> ss = new Vector<File>();
 		list(ss, this);
-		ArrayList<File> v = new ArrayList<File>();
+		final ArrayList<File> v = new ArrayList<File>();
 		for (int i = 0; i < ss.size(); i++) {
 			if (canContinueRunning()) {
 				break;
 			}
-			if ((filter == null)
-					|| filter.accept(this, ((File) ss.get(i)).getName())) {
+			if ((filter == null) || filter.accept(this, (ss.get(i)).getName())) {
 				v.add(ss.get(i));
 			}
 		}
-		return (File[]) (v.toArray(new File[0]));
+		return (v.toArray(new File[0]));
 	}
 
 	/** @deprecated Use FileUtils.getFileSeparator() instead. */
@@ -179,7 +177,7 @@ public class RecursiveFile extends File {
 	 * @return
 	 */
 	@Deprecated
-	public static String getPath(String path) {
+	public static String getPath(final String path) {
 		return FileUtils.getPath(path);
 	}
 

@@ -29,33 +29,34 @@ public class EnterpriseDistributedTechnologiesFtpClient extends BaseFtpClient
 	public EnterpriseDistributedTechnologiesFtpClient() {
 	}
 
-	public void connect(String host, int port) throws FtpProtocolException {
+	public void connect(final String host, final int port)
+			throws FtpProtocolException {
 		try {
 			client = new FTPClient(host, port);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new FtpProtocolException(e);
-		} catch (FTPException e) {
+		} catch (final FTPException e) {
 			throw new FtpProtocolException(e);
 		}
 	}
 
-	public void connect(String host) throws FtpProtocolException {
+	public void connect(final String host) throws FtpProtocolException {
 		try {
 			client = new FTPClient(host);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new FtpProtocolException(e);
-		} catch (FTPException e) {
+		} catch (final FTPException e) {
 			throw new FtpProtocolException(e);
 		}
 	}
 
-	public void login(String userName, String password)
+	public void login(final String userName, final String password)
 			throws FtpProtocolException {
 		try {
 			client.login(userName, password);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new FtpProtocolException(e);
-		} catch (FTPException e) {
+		} catch (final FTPException e) {
 			throw new FtpProtocolException(e);
 		}
 	}
@@ -63,9 +64,9 @@ public class EnterpriseDistributedTechnologiesFtpClient extends BaseFtpClient
 	public void binary() throws FtpProtocolException {
 		try {
 			client.setType(FTPTransferType.BINARY);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new FtpProtocolException(e);
-		} catch (FTPException e) {
+		} catch (final FTPException e) {
 			throw new FtpProtocolException(e);
 		}
 	}
@@ -85,18 +86,18 @@ public class EnterpriseDistributedTechnologiesFtpClient extends BaseFtpClient
 					try {
 						try {
 							client.put(pis, fileName);
-						} catch (IOException e) {
+						} catch (final IOException e) {
 							throw new FtpProtocolException(e);
-						} catch (FTPException e) {
+						} catch (final FTPException e) {
 							throw new FtpProtocolException(e);
 						}
-					} catch (FtpProtocolException e) {
+					} catch (final FtpProtocolException e) {
 						e.printStackTrace();
 					}
 				}
 			}.start();
 			return pos;
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new FtpProtocolException(e);
 		}
 	}
@@ -112,28 +113,28 @@ public class EnterpriseDistributedTechnologiesFtpClient extends BaseFtpClient
 					try {
 						try {
 							client.get(pos, fileName);
-						} catch (IOException e) {
+						} catch (final IOException e) {
 							throw new FtpProtocolException(e);
-						} catch (FTPException e) {
+						} catch (final FTPException e) {
 							throw new FtpProtocolException(e);
 						}
-					} catch (FtpProtocolException e) {
+					} catch (final FtpProtocolException e) {
 						e.printStackTrace();
 					}
 					try {
 						pos.close();
-					} catch (IOException e1) {
+					} catch (final IOException e1) {
 						e1.printStackTrace();
 					}
 					try {
 						pis.close();
-					} catch (IOException e2) {
+					} catch (final IOException e2) {
 						e2.printStackTrace();
 					}
 				}
 			}.start();
 			return pis;
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new FtpProtocolException(e);
 		}
 	}
@@ -146,9 +147,9 @@ public class EnterpriseDistributedTechnologiesFtpClient extends BaseFtpClient
 	public void disconnect() throws FtpProtocolException {
 		try {
 			client.quit();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new FtpProtocolException(e);
-		} catch (FTPException e) {
+		} catch (final FTPException e) {
 			throw new FtpProtocolException(e);
 		}
 	}

@@ -37,15 +37,15 @@ public class URIUtil {
 		return result;
 	}
 
-	private static boolean isRelative(String uri) {
+	private static boolean isRelative(final String uri) {
 		return isFileURI(uri) && uri.startsWith("file:///:/");
 	}
 
-	private static boolean isFileURI(String uri) {
+	private static boolean isFileURI(final String uri) {
 		return uri.startsWith("file://");
 	}
 
-	public static String fileToURI(String file) throws URISyntaxException {
+	public static String fileToURI(final String file) throws URISyntaxException {
 		if (isRelativeFile(file)) {
 			return relativeFileToURI(file);
 		}
@@ -55,20 +55,20 @@ public class URIUtil {
 		throw new URISyntaxException(file, "Invalid file name.");
 	}
 
-	private static boolean isAbsoluteFile(String file) {
+	private static boolean isAbsoluteFile(final String file) {
 		return file.substring(1, 2).equals(":" + FileUtils.getFileSeparator())
 				|| file.substring(0, 1).equals(FileUtils.getFileSeparator());
 	}
 
-	private static boolean isRelativeFile(String file) {
+	private static boolean isRelativeFile(final String file) {
 		return !isAbsoluteFile(file);
 	}
 
-	public static String relativeFileToURI(String file) {
+	public static String relativeFileToURI(final String file) {
 		return "file:///:/" + file;
 	}
 
-	public static String absoluteFileToURI(String file) {
+	public static String absoluteFileToURI(final String file) {
 		return "file:///" + file;
 	}
 }

@@ -10,13 +10,13 @@ import java.util.Iterator;
  * @author raiser
  */
 public class IteratorUtils {
-	public static Iterator createIterator(final Enumeration enumeration) {
-		return new Iterator() {
+	public static <T> Iterator<T> createIterator(final Enumeration<T> enumeration) {
+		return new Iterator<T>() {
 			public boolean hasNext() {
 				return enumeration.hasMoreElements();
 			}
 
-			public Object next() {
+			public T next() {
 				return enumeration.nextElement();
 			}
 

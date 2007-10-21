@@ -46,18 +46,18 @@ class DisplayModeModel extends DefaultTableModel {
 	 */
 	private static final long serialVersionUID = 2793661294685112081L;
 
-	private DisplayMode[] modes;
+	private final DisplayMode[] modes;
 
-	public DisplayModeModel(DisplayMode[] modes) {
+	public DisplayModeModel(final DisplayMode[] modes) {
 		this.modes = modes;
 	}
 
-	public DisplayMode getDisplayMode(int r) {
+	public DisplayMode getDisplayMode(final int r) {
 		return modes[r];
 	}
 
 	@Override
-	public String getColumnName(int c) {
+	public String getColumnName(final int c) {
 		return DisplayModeTest.COLUMN_NAMES[c];
 	}
 
@@ -67,7 +67,7 @@ class DisplayModeModel extends DefaultTableModel {
 	}
 
 	@Override
-	public boolean isCellEditable(int r, int c) {
+	public boolean isCellEditable(final int r, final int c) {
 		return false;
 	}
 
@@ -80,15 +80,15 @@ class DisplayModeModel extends DefaultTableModel {
 	}
 
 	@Override
-	public Object getValueAt(int rowIndex, int colIndex) {
-		DisplayMode dm = modes[rowIndex];
+	public Object getValueAt(final int rowIndex, final int colIndex) {
+		final DisplayMode dm = modes[rowIndex];
 		switch (colIndex) {
 		case DisplayModeTest.INDEX_WIDTH:
 			return Integer.toString(dm.getWidth());
 		case DisplayModeTest.INDEX_HEIGHT:
 			return Integer.toString(dm.getHeight());
 		case DisplayModeTest.INDEX_BITDEPTH: {
-			int bitDepth = dm.getBitDepth();
+			final int bitDepth = dm.getBitDepth();
 			String ret;
 			if (bitDepth == DisplayMode.BIT_DEPTH_MULTI) {
 				ret = "Multi";
@@ -98,7 +98,7 @@ class DisplayModeModel extends DefaultTableModel {
 			return ret;
 		}
 		case DisplayModeTest.INDEX_REFRESHRATE: {
-			int refreshRate = dm.getRefreshRate();
+			final int refreshRate = dm.getRefreshRate();
 			String ret;
 			if (refreshRate == DisplayMode.REFRESH_RATE_UNKNOWN) {
 				ret = "Unknown";
@@ -121,19 +121,19 @@ public class DisplayModeTest extends JFrame implements ActionListener,
 	 */
 	private static final long serialVersionUID = -4661327107453198854L;
 
-	private GraphicsDevice device;
+	private final GraphicsDevice device;
 
-	private DisplayMode originalDM;
+	private final DisplayMode originalDM;
 
-	private JButton exit = new JButton("Exit");
+	private final JButton exit = new JButton("Exit");
 
-	private JButton changeDM = new JButton("Set Display");
+	private final JButton changeDM = new JButton("Set Display");
 
-	private JLabel currentDM = new JLabel();
+	private final JLabel currentDM = new JLabel();
 
-	private JTable dmList = new JTable();
+	private final JTable dmList = new JTable();
 
-	private JScrollPane dmPane = new JScrollPane(dmList);
+	private final JScrollPane dmPane = new JScrollPane(dmList);
 
 	private boolean isFullScreen = false;
 
@@ -150,7 +150,7 @@ public class DisplayModeTest extends JFrame implements ActionListener,
 	public static final String[] COLUMN_NAMES = new String[] { "Width",
 			"Height", "Bit Depth", "Refresh Rate" };
 
-	public DisplayModeTest(GraphicsDevice device) {
+	public DisplayModeTest(final GraphicsDevice device) {
 		super(device.getDefaultConfiguration());
 		this.device = device;
 		setTitle("Display Mode Test");
@@ -163,16 +163,18 @@ public class DisplayModeTest extends JFrame implements ActionListener,
 		changeDM.setEnabled(device.isDisplayChangeSupported());
 	}
 
-	public void actionPerformed(ActionEvent ev) {
-		Object source = ev.getSource();
+	public void actionPerformed(final ActionEvent ev) {
+		final Object source = ev.getSource();
 		if (source == exit) {
 			device.setDisplayMode(originalDM);
 			System.exit(0);
 		} else { // if (source == changeDM)
-			int index = dmList.getSelectionModel().getAnchorSelectionIndex();
+			final int index = dmList.getSelectionModel()
+					.getAnchorSelectionIndex();
 			if (index >= 0) {
-				DisplayModeModel model = (DisplayModeModel) dmList.getModel();
-				DisplayMode dm = model.getDisplayMode(index);
+				final DisplayModeModel model = (DisplayModeModel) dmList
+						.getModel();
+				final DisplayMode dm = model.getDisplayMode(index);
 				device.setDisplayMode(dm);
 				setDMLabel(dm);
 				setSize(new Dimension(dm.getWidth(), dm.getHeight()));
@@ -181,25 +183,26 @@ public class DisplayModeTest extends JFrame implements ActionListener,
 		}
 	}
 
-	public void valueChanged(ListSelectionEvent ev) {
+	public void valueChanged(final ListSelectionEvent ev) {
 		changeDM.setEnabled(device.isDisplayChangeSupported());
 	}
 
-	private void initComponents(Container c) {
+	private void initComponents(final Container c) {
 		setContentPane(c);
 		c.setLayout(new BorderLayout());
 		// Current DM
-		JPanel currentPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		final JPanel currentPanel = new JPanel(
+				new FlowLayout(FlowLayout.CENTER));
 		c.add(currentPanel, BorderLayout.NORTH);
-		JLabel current = new JLabel("Current Display Mode : ");
+		final JLabel current = new JLabel("Current Display Mode : ");
 		currentPanel.add(current);
 		currentPanel.add(currentDM);
 		// Display Modes
-		JPanel modesPanel = new JPanel(new GridLayout(1, 2));
+		final JPanel modesPanel = new JPanel(new GridLayout(1, 2));
 		c.add(modesPanel, BorderLayout.CENTER);
 		// List of display modes
 		for (int i = 0; i < COLUMN_WIDTHS.length; i++) {
-			TableColumn col = new TableColumn(i, COLUMN_WIDTHS[i]);
+			final TableColumn col = new TableColumn(i, COLUMN_WIDTHS[i]);
 			col.setIdentifier(COLUMN_NAMES[i]);
 			col.setHeaderValue(COLUMN_NAMES[i]);
 			dmList.addColumn(col);
@@ -209,32 +212,33 @@ public class DisplayModeTest extends JFrame implements ActionListener,
 		dmList.getSelectionModel().addListSelectionListener(this);
 		modesPanel.add(dmPane);
 		// Controls
-		JPanel controlsPanelA = new JPanel(new BorderLayout());
+		final JPanel controlsPanelA = new JPanel(new BorderLayout());
 		modesPanel.add(controlsPanelA);
-		JPanel controlsPanelB = new JPanel(new GridLayout(2, 1));
+		final JPanel controlsPanelB = new JPanel(new GridLayout(2, 1));
 		controlsPanelA.add(controlsPanelB, BorderLayout.NORTH);
 		// Exit
-		JPanel exitPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		final JPanel exitPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		controlsPanelB.add(exitPanel);
 		exitPanel.add(exit);
 		// Change DM
-		JPanel changeDMPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		final JPanel changeDMPanel = new JPanel(new FlowLayout(
+				FlowLayout.CENTER));
 		controlsPanelB.add(changeDMPanel);
 		changeDMPanel.add(changeDM);
 		controlsPanelA.add(new JPanel(), BorderLayout.CENTER);
 	}
 
 	@Override
-	public void setVisible(boolean isVis) {
+	public void setVisible(final boolean isVis) {
 		super.setVisible(isVis);
 		if (isVis) {
 			dmList.setModel(new DisplayModeModel(device.getDisplayModes()));
 		}
 	}
 
-	public void setDMLabel(DisplayMode newMode) {
-		int bitDepth = newMode.getBitDepth();
-		int refreshRate = newMode.getRefreshRate();
+	public void setDMLabel(final DisplayMode newMode) {
+		final int bitDepth = newMode.getBitDepth();
+		final int refreshRate = newMode.getRefreshRate();
 		String bd, rr;
 		if (bitDepth == DisplayMode.BIT_DEPTH_MULTI) {
 			bd = "Multi";
@@ -267,13 +271,13 @@ public class DisplayModeTest extends JFrame implements ActionListener,
 		}
 	}
 
-	public static void main(String[] args) {
-		GraphicsEnvironment env = GraphicsEnvironment
+	public static void main(final String[] args) {
+		final GraphicsEnvironment env = GraphicsEnvironment
 				.getLocalGraphicsEnvironment();
-		GraphicsDevice[] devices = env.getScreenDevices();
+		final GraphicsDevice[] devices = env.getScreenDevices();
 		// REMIND : Multi-monitor full-screen mode not yet supported
 		for (int i = 0; i < 1 /* devices.length */; i++) {
-			DisplayModeTest test = new DisplayModeTest(devices[i]);
+			final DisplayModeTest test = new DisplayModeTest(devices[i]);
 			test.initComponents(test.getContentPane());
 			test.begin();
 		}

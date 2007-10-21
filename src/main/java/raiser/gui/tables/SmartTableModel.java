@@ -24,7 +24,7 @@ public interface SmartTableModel<T> {
 
 	void setData(List<T> data);
 
-	void setColumns(List columns);
+	void setColumns(List<String> columns);
 
 	void setDefaultNewRow(Class<? extends T> defaultNewRow);
 }

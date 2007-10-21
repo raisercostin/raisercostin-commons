@@ -16,13 +16,13 @@ import java.util.StringTokenizer;
  * @author: Costin Emilian GRIGORE
  */
 public class FormattedReader implements DataReader {
-	private BufferedReader reader;
+	private final BufferedReader reader;
 
 	StringTokenizer st;
 
 	String line;
 
-	public FormattedReader(BufferedReader reader) {
+	public FormattedReader(final BufferedReader reader) {
 		this.reader = reader;
 	}
 
@@ -56,8 +56,8 @@ public class FormattedReader implements DataReader {
 		return st.nextToken();
 	}
 
-	public char readCharacter(String accepted) throws IOException {
-		char result = readCharacter();
+	public char readCharacter(final String accepted) throws IOException {
+		final char result = readCharacter();
 		if (accepted.indexOf(result) == -1) {
 			throw new IOException("Expected a char from '" + accepted
 					+ "', got an '" + result + "' wich is an invalid char.");
@@ -66,7 +66,7 @@ public class FormattedReader implements DataReader {
 	}
 
 	private char readCharacter() throws IOException {
-		String result = readString();
+		final String result = readString();
 		if (result.length() > 1) {
 			throw new IOException("Expected a char, got an entire string '"
 					+ result + "'.");

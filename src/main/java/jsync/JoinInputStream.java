@@ -28,7 +28,7 @@ public class JoinInputStream extends InputStream {
 	 * @param bufferSize
 	 *            specifies size of read buffer
 	 */
-	public JoinInputStream(InputStream[] streams, int bufferSize) {
+	public JoinInputStream(final InputStream[] streams, final int bufferSize) {
 		openedStreams = nReaders = streams.length;
 		reader = new Reader[nReaders];
 		for (int i = 0; i < nReaders; i++) {
@@ -48,7 +48,8 @@ public class JoinInputStream extends InputStream {
 	 * @param bufferSize
 	 *            specifies size of read buffer
 	 */
-	public JoinInputStream(InputStream one, InputStream two, int bufferSize) {
+	public JoinInputStream(final InputStream one, final InputStream two,
+			final int bufferSize) {
 		this(new InputStream[] { one, two }, bufferSize);
 	}
 
@@ -60,7 +61,7 @@ public class JoinInputStream extends InputStream {
 	 * @param two
 	 *            second input stream to be merged
 	 */
-	public JoinInputStream(InputStream one, InputStream two) {
+	public JoinInputStream(final InputStream one, final InputStream two) {
 		this(one, two, defaultBufferSize);
 	}
 
@@ -82,7 +83,7 @@ public class JoinInputStream extends InputStream {
 	public synchronized int read() throws IOException {
 		while (openedStreams != 0) {
 			for (int i = 0; i < nReaders; i++) {
-				Reader rd = reader[currentReader];
+				final Reader rd = reader[currentReader];
 				if (rd.available > 0) {
 					return rd.read();
 				}
@@ -93,7 +94,7 @@ public class JoinInputStream extends InputStream {
 			}
 			try {
 				wait();
-			} catch (InterruptedException ex) {
+			} catch (final InterruptedException ex) {
 				break;
 			}
 		}
@@ -124,10 +125,11 @@ public class JoinInputStream extends InputStream {
 	 *                if an I/O error occurs.
 	 */
 	@Override
-	public synchronized int read(byte b[], int off, int len) throws IOException {
+	public synchronized int read(final byte b[], final int off, final int len)
+			throws IOException {
 		while (openedStreams != 0) {
 			for (int i = 0; i < nReaders; i++) {
-				Reader rd = reader[currentReader];
+				final Reader rd = reader[currentReader];
 				if (rd.available > 0) {
 					return rd.read(b, off, len);
 				}
@@ -138,7 +140,7 @@ public class JoinInputStream extends InputStream {
 			}
 			try {
 				wait();
-			} catch (InterruptedException ex) {
+			} catch (final InterruptedException ex) {
 				break;
 			}
 		}
@@ -195,7 +197,8 @@ class Reader extends Thread {
 
 	JoinInputStream monitor;
 
-	Reader(JoinInputStream monitor, InputStream stream, int bufferSize) {
+	Reader(final JoinInputStream monitor, final InputStream stream,
+			final int bufferSize) {
 		this.stream = stream;
 		this.monitor = monitor;
 		buffer = new byte[bufferSize];
@@ -210,7 +213,7 @@ class Reader extends Thread {
 			int len;
 			try {
 				len = stream.read(buffer);
-			} catch (IOException ex) {
+			} catch (final IOException ex) {
 				exception = ex;
 				len = -1;
 			}
@@ -221,7 +224,7 @@ class Reader extends Thread {
 				if (len < 0) {
 					try {
 						stream.close();
-					} catch (IOException ex) {
+					} catch (final IOException ex) {
 					}
 					monitor.openedStreams -= 1;
 					return;
@@ -230,7 +233,7 @@ class Reader extends Thread {
 			do {
 				try {
 					wait();
-				} catch (InterruptedException ex) {
+				} catch (final InterruptedException ex) {
 					return;
 				}
 			} while (available != 0); // preclude spurious wakeups
@@ -241,7 +244,7 @@ class Reader extends Thread {
 		if (exception != null) {
 			throw exception;
 		}
-		int ch = buffer[pos] & 0xFF;
+		final int ch = buffer[pos] & 0xFF;
 		if (++pos == available) {
 			available = 0;
 			notify();
@@ -249,7 +252,8 @@ class Reader extends Thread {
 		return ch;
 	}
 
-	synchronized int read(byte[] b, int off, int len) throws IOException {
+	synchronized int read(final byte[] b, final int off, int len)
+			throws IOException {
 		if (exception != null) {
 			throw exception;
 		}

@@ -22,7 +22,7 @@ public class Regexp {
 	 * @param data
 	 * @return
 	 */
-	public static String escape(String data) {
+	public static String escape(final String data) {
 		return data.replaceAll("(\\p{Punct})", "\\\\$1");
 		// result = result.replaceAll("[?*+$^.\\\\,{}|()<>!=:-&\\[\\]]",
 		// "\\$1");
@@ -31,7 +31,7 @@ public class Regexp {
 		// return result;
 	}
 
-	public static String escapeAll(String data) {
+	public static String escapeAll(final String data) {
 		return data.replaceAll("(.)", "[$1]");
 	}
 
@@ -46,16 +46,16 @@ public class Regexp {
 		return command;
 	}
 
-	public static String escapeVariable(String name) {
+	public static String escapeVariable(final String name) {
 		return Regexp.escape("${" + name + "}");
 	}
 
-	public static String escapeValue(String value) {
+	public static String escapeValue(final String value) {
 		return value.replaceAll("[$]", "\\\\\\$");
 	}
 
-	public static String escapeVariable(String command, String name,
-			String value) {
+	public static String escapeVariable(final String command,
+			final String name, final String value) {
 		return command.replaceAll(Regexp.escapeVariable(name), Regexp
 				.escapeValue(value));
 	}

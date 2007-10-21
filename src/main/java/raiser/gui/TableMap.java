@@ -29,7 +29,7 @@ public class TableMap extends AbstractTableModel implements TableModelListener {
 		return model;
 	}
 
-	public void setModel(TableModel model) {
+	public void setModel(final TableModel model) {
 		this.model = model;
 		model.addTableModelListener(this);
 	}
@@ -37,12 +37,13 @@ public class TableMap extends AbstractTableModel implements TableModelListener {
 	// By default, implement TableModel by forwarding all messages
 	// to the model.
 
-	public Object getValueAt(int aRow, int aColumn) {
+	public Object getValueAt(final int aRow, final int aColumn) {
 		return model.getValueAt(aRow, aColumn);
 	}
 
 	@Override
-	public void setValueAt(Object aValue, int aRow, int aColumn) {
+	public void setValueAt(final Object aValue, final int aRow,
+			final int aColumn) {
 		model.setValueAt(aValue, aRow, aColumn);
 	}
 
@@ -55,17 +56,17 @@ public class TableMap extends AbstractTableModel implements TableModelListener {
 	}
 
 	@Override
-	public String getColumnName(int aColumn) {
+	public String getColumnName(final int aColumn) {
 		return model.getColumnName(aColumn);
 	}
 
 	@Override
-	public Class<?> getColumnClass(int aColumn) {
+	public Class<?> getColumnClass(final int aColumn) {
 		return model.getColumnClass(aColumn);
 	}
 
 	@Override
-	public boolean isCellEditable(int row, int column) {
+	public boolean isCellEditable(final int row, final int column) {
 		return model.isCellEditable(row, column);
 	}
 
@@ -73,7 +74,7 @@ public class TableMap extends AbstractTableModel implements TableModelListener {
 	// Implementation of the TableModelListener interface,
 	//
 	// By default forward all events to all the listeners.
-	public void tableChanged(TableModelEvent e) {
+	public void tableChanged(final TableModelEvent e) {
 		fireTableChanged(e);
 	}
 }

@@ -17,19 +17,20 @@ import javax.swing.Icon;
  * @author raiser
  */
 public class RandomizeIcon implements Icon {
-	private int width;
+	private final int width;
 
-	private int height;
+	private final int height;
 
-	private Shape[] shapes;
+	private final Shape[] shapes;
 
-	private Color[] colors;
+	private final Color[] colors;
 
-	public RandomizeIcon(int width, int height, int shapeCount, int colorCount) {
+	public RandomizeIcon(final int width, final int height,
+			final int shapeCount, final int colorCount) {
 		this.width = width;
 		this.height = height;
 		colors = new Color[shapeCount];
-		Color[] colors2 = new Color[colorCount];
+		final Color[] colors2 = new Color[colorCount];
 		for (int i = 0; i < colors2.length; i++) {
 			colors2[i] = new Color((int) (Math.random() * Integer.MAX_VALUE));
 		}
@@ -66,9 +67,9 @@ public class RandomizeIcon implements Icon {
 		return width;
 	}
 
-	public void paintIcon(Component c, Graphics g, int x, int y) {
-		Graphics2D g2 = (Graphics2D) g;
-		Shape oldClip = g2.getClip();
+	public void paintIcon(final Component c, final Graphics g, int x, int y) {
+		final Graphics2D g2 = (Graphics2D) g;
+		final Shape oldClip = g2.getClip();
 		g2.setClip(x, y, width, height);
 		g2.translate(x, y);
 		for (int i = 0; i < shapes.length; i++) {

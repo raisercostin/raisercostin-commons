@@ -28,24 +28,25 @@ public class ApacheFtpClient extends BaseFtpClient implements FtpClient {
 	public ApacheFtpClient() {
 	}
 
-	public void connect(String host, int port) throws FtpProtocolException {
+	public void connect(final String host, final int port)
+			throws FtpProtocolException {
 		client = new FTPClient();
 		try {
 			client.connect(host, port);
 			// After connection attempt, you should check the reply code to
 			// verify
 			// success.
-			int reply = client.getReplyCode();
+			final int reply = client.getReplyCode();
 			if (!FTPReply.isPositiveCompletion(reply)) {
 				client.disconnect();
 				client = null;
 				throw new FtpProtocolException("FTP server refused connection.");
 			}
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			if (client.isConnected()) {
 				try {
 					client.disconnect();
-				} catch (IOException e2) {
+				} catch (final IOException e2) {
 				}
 			}
 			client = null;
@@ -53,17 +54,17 @@ public class ApacheFtpClient extends BaseFtpClient implements FtpClient {
 		}
 	}
 
-	public void connect(String host) throws FtpProtocolException {
+	public void connect(final String host) throws FtpProtocolException {
 		connect(host, DEFAULT_FTP_PORT);
 	}
 
-	public void login(String userName, String password)
+	public void login(final String userName, final String password)
 			throws FtpProtocolException {
 		try {
 			client.login(userName, password);
-		} catch (SocketException e) {
+		} catch (final SocketException e) {
 			throw new FtpProtocolException(e);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new FtpProtocolException(e);
 		}
 	}
@@ -71,9 +72,9 @@ public class ApacheFtpClient extends BaseFtpClient implements FtpClient {
 	public void binary() throws FtpProtocolException {
 		try {
 			client.setFileType(FTP.BINARY_FILE_TYPE);
-		} catch (SocketException e) {
+		} catch (final SocketException e) {
 			throw new FtpProtocolException(e);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new FtpProtocolException(e);
 		}
 	}
@@ -81,7 +82,7 @@ public class ApacheFtpClient extends BaseFtpClient implements FtpClient {
 	public void passive() throws FtpProtocolException {
 		try {
 			client.mode(FTPClient.PASSIVE_LOCAL_DATA_CONNECTION_MODE);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new FtpProtocolException(e);
 		}
 	}
@@ -89,15 +90,15 @@ public class ApacheFtpClient extends BaseFtpClient implements FtpClient {
 	public OutputStream put(final String fileName) throws FtpProtocolException {
 		try {
 			return client.storeFileStream(fileName);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new FtpProtocolException(e);
 		}
 	}
 
-	public InputStream get(String fileName) throws FtpProtocolException {
+	public InputStream get(final String fileName) throws FtpProtocolException {
 		try {
 			return client.retrieveFileStream(fileName);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new FtpProtocolException(e);
 		}
 	}
@@ -105,7 +106,7 @@ public class ApacheFtpClient extends BaseFtpClient implements FtpClient {
 	public void disconnect() throws FtpProtocolException {
 		try {
 			client.disconnect();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new FtpProtocolException(e);
 		}
 	}
@@ -113,7 +114,7 @@ public class ApacheFtpClient extends BaseFtpClient implements FtpClient {
 	public void quit() throws FtpProtocolException {
 		try {
 			client.quit();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new FtpProtocolException(e);
 		}
 	}

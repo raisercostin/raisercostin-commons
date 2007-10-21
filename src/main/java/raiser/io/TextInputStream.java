@@ -29,7 +29,7 @@ public class TextInputStream {
 	 * 
 	 * @param r
 	 */
-	public TextInputStream(Reader r) throws ParseException {
+	public TextInputStream(final Reader r) throws ParseException {
 		reader = new BufferedReader(r);
 	}
 
@@ -43,7 +43,8 @@ public class TextInputStream {
 	 * @param r
 	 * @param string
 	 */
-	public TextInputStream(Reader r, String commentChar) throws ParseException {
+	public TextInputStream(final Reader r, final String commentChar)
+			throws ParseException {
 		this(r);
 		setComment(commentChar);
 	}
@@ -55,7 +56,7 @@ public class TextInputStream {
 	 * @throws IOException
 	 */
 	public String readLine() throws ParseException {
-		String result = read("(.*)", 1, -1);
+		final String result = read("(.*)", 1, -1);
 		return result;
 	}
 
@@ -66,7 +67,8 @@ public class TextInputStream {
 	 * @throws IOException
 	 */
 	public String readWord() throws ParseException {
-		String result = read("\\s*" + wordRegexp + "\\s*(.*\\S*)\\s*", 1, 2);
+		final String result = read("\\s*" + wordRegexp + "\\s*(.*\\S*)\\s*", 1,
+				2);
 		return result;
 	}
 
@@ -76,8 +78,8 @@ public class TextInputStream {
 	 * @param string
 	 * @return String
 	 */
-	public String readSpecificWord(String string) throws ParseException {
-		String result = read(string + "\\s*(.*\\S*)\\s*", 1, 2);
+	public String readSpecificWord(final String string) throws ParseException {
+		final String result = read(string + "\\s*(.*\\S*)\\s*", 1, 2);
 		return result;
 	}
 
@@ -88,7 +90,8 @@ public class TextInputStream {
 	 * @throws IOException
 	 */
 	public Integer readInteger() throws ParseException {
-		String result = read("\\s*" + integerRegexp + "\\s*(.*\\S*)\\s*", 1, 2);
+		final String result = read("\\s*" + integerRegexp + "\\s*(.*\\S*)\\s*",
+				1, 2);
 		if (result == null) {
 			return null;
 		}
@@ -102,7 +105,8 @@ public class TextInputStream {
 	 * @throws IOException
 	 */
 	public Double readDouble() throws ParseException {
-		String result = read("\\s*" + doubleRegexp + "\\s*(.*\\S*)\\s*", 1, 2);
+		final String result = read("\\s*" + doubleRegexp + "\\s*(.*\\S*)\\s*",
+				1, 2);
 		if (result == null) {
 			return null;
 		}
@@ -113,7 +117,8 @@ public class TextInputStream {
 	 * Method readBoolean.
 	 */
 	public Boolean readBoolean() throws ParseException {
-		String result = read("\\s*" + booleanRegexp + "\\s*(.*\\S*)\\s*", 1, 2);
+		final String result = read("\\s*" + booleanRegexp + "\\s*(.*\\S*)\\s*",
+				1, 2);
 		if (result == null) {
 			return null;
 		}
@@ -125,7 +130,7 @@ public class TextInputStream {
 	 * 
 	 * @param c
 	 */
-	public void setComment(String commentChar) {
+	public void setComment(final String commentChar) {
 		this.commentChar = commentChar.charAt(0);
 		withComments = true;
 	}
@@ -154,8 +159,8 @@ public class TextInputStream {
 		return (lastLine == null);
 	}
 
-	private String read(String patternText, int matchGroup, int restGroup)
-			throws ParseException {
+	private String read(final String patternText, final int matchGroup,
+			final int restGroup) throws ParseException {
 		try {
 			if (currentLine == 0) {
 				nextLine();
@@ -163,9 +168,9 @@ public class TextInputStream {
 					return null;
 				}
 			}
-			Pattern pattern = Pattern.compile(patternText, Pattern.COMMENTS
-					| Pattern.MULTILINE);
-			Matcher matcher = pattern.matcher(lastLine);
+			final Pattern pattern = Pattern.compile(patternText,
+					Pattern.COMMENTS | Pattern.MULTILINE);
+			final Matcher matcher = pattern.matcher(lastLine);
 			matcher.matches();
 			if (restGroup == -1) {
 				lastLine = null;
@@ -178,7 +183,7 @@ public class TextInputStream {
 			}
 			nextLine();
 			return matcher.group(matchGroup);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new ParseException("error at line: " + lineno(), e);
 		}
 	}

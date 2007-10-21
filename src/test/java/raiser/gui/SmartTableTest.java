@@ -28,7 +28,7 @@ public class SmartTableTest extends TestCase {
 						new Task(false, "Task 5", "nana", 0),
 						new Task(false, "Task 6", "baby", 100), })));
 
-		List<Task> data = new ArrayList<Task>();
+		final List<Task> data = new ArrayList<Task>();
 		data.add(new Task(false, "Task 0", "?", 0));
 		data.add(new Task(true, "Task 1", "gigel", 20));
 		data.add(new Task(false, "Task 2", "?", 0));

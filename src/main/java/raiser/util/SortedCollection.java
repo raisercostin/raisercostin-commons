@@ -26,7 +26,7 @@ public class SortedCollection<T extends Comparable<? super T>> extends
 		elements = new LinkedList<T>();
 	}
 
-	public SortedCollection(Comparator<T> comparator) {
+	public SortedCollection(final Comparator<T> comparator) {
 		this();
 		this.comparator = comparator;
 	}
@@ -50,15 +50,15 @@ public class SortedCollection<T extends Comparable<? super T>> extends
 	}
 
 	@Override
-	public boolean add(T object) {
-		boolean answer = elements.add(object);
+	public boolean add(final T object) {
+		final boolean answer = elements.add(object);
 		resort();
 		return answer;
 	}
 
 	@Override
-	public boolean addAll(Collection<? extends T> collection) {
-		boolean answer = elements.addAll(collection);
+	public boolean addAll(final Collection<? extends T> collection) {
+		final boolean answer = elements.addAll(collection);
 		resort();
 		return answer;
 	}

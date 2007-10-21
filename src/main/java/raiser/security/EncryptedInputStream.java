@@ -48,7 +48,7 @@ public class EncryptedInputStream extends FilterInputStream {
 	 * @param i
 	 * @param passPhrase
 	 */
-	public EncryptedInputStream(InputStream in, char[] password) {
+	public EncryptedInputStream(final InputStream in, final char[] password) {
 		super(in);
 		setPassword(password);
 		finished = false;
@@ -65,33 +65,34 @@ public class EncryptedInputStream extends FilterInputStream {
 	 *            Pass Phrase used to initialize both the encrypter and
 	 *            decrypter instances.
 	 */
-	void setPassword(char[] password) {
+	void setPassword(final char[] password) {
 
 		// 8-bytes Salt
-		byte[] salt = { (byte) 0xA9, (byte) 0x9B, (byte) 0xC8, (byte) 0x32,
-				(byte) 0x56, (byte) 0x34, (byte) 0xE3, (byte) 0x03 };
+		final byte[] salt = { (byte) 0xA9, (byte) 0x9B, (byte) 0xC8,
+				(byte) 0x32, (byte) 0x56, (byte) 0x34, (byte) 0xE3, (byte) 0x03 };
 
 		// Iteration count
-		int iterationCount = 19;
+		final int iterationCount = 19;
 		try {
-			KeySpec keySpec = new PBEKeySpec(password, salt, iterationCount);
-			SecretKey key = SecretKeyFactory.getInstance("PBEWithMD5AndDES")
-					.generateSecret(keySpec);
+			final KeySpec keySpec = new PBEKeySpec(password, salt,
+					iterationCount);
+			final SecretKey key = SecretKeyFactory.getInstance(
+					"PBEWithMD5AndDES").generateSecret(keySpec);
 			dcipher = Cipher.getInstance(key.getAlgorithm());
 			// Prepare the parameters to the cipthers
-			AlgorithmParameterSpec paramSpec = new PBEParameterSpec(salt,
+			final AlgorithmParameterSpec paramSpec = new PBEParameterSpec(salt,
 					iterationCount);
 			dcipher.init(Cipher.DECRYPT_MODE, key, paramSpec);
 
-		} catch (InvalidAlgorithmParameterException e) {
+		} catch (final InvalidAlgorithmParameterException e) {
 			System.out.println("EXCEPTION: InvalidAlgorithmParameterException");
-		} catch (InvalidKeySpecException e) {
+		} catch (final InvalidKeySpecException e) {
 			System.out.println("EXCEPTION: InvalidKeySpecException");
-		} catch (NoSuchPaddingException e) {
+		} catch (final NoSuchPaddingException e) {
 			System.out.println("EXCEPTION: NoSuchPaddingException");
-		} catch (NoSuchAlgorithmException e) {
+		} catch (final NoSuchAlgorithmException e) {
 			System.out.println("EXCEPTION: NoSuchAlgorithmException");
-		} catch (InvalidKeyException e) {
+		} catch (final InvalidKeyException e) {
 			System.out.println("EXCEPTION: InvalidKeyException");
 		}
 	}
@@ -105,7 +106,7 @@ public class EncryptedInputStream extends FilterInputStream {
 	}
 
 	@Override
-	public synchronized void mark(int readlimit) {
+	public synchronized void mark(final int readlimit) {
 		throw new UnsupportedOperationException();
 		// super.mark(readlimit);
 	}
@@ -116,14 +117,15 @@ public class EncryptedInputStream extends FilterInputStream {
 	}
 
 	@Override
-	public int read(byte[] b) throws IOException {
+	public int read(final byte[] b) throws IOException {
 		return read(b, 0, b.length);
 	}
 
 	@Override
-	public int read(byte[] b, int off, int len) throws IOException {
+	public int read(final byte[] b, final int off, final int len)
+			throws IOException {
 		for (int i = off; i < off + len; i++) {
-			int value = read();
+			final int value = read();
 			if (value == -1) {
 				// HACK
 				return i - off;
@@ -135,7 +137,7 @@ public class EncryptedInputStream extends FilterInputStream {
 
 	@Override
 	public int read() throws IOException {
-		int result = readInternaly();
+		final int result = readInternaly();
 		// System.err.println("read "+(count++)+":"+result+" "+((char)result));
 		return result;
 	}
@@ -150,7 +152,7 @@ public class EncryptedInputStream extends FilterInputStream {
 		}
 		try {
 			while (isResultBufferEmpty()) {
-				int result = super.read();
+				final int result = super.read();
 				if (result == -1) {
 					if (finished) {
 						return -1;
@@ -163,11 +165,11 @@ public class EncryptedInputStream extends FilterInputStream {
 				}
 			}
 			return readResultBuffer();
-		} catch (IllegalStateException e) {
+		} catch (final IllegalStateException e) {
 			e.printStackTrace();
-		} catch (IllegalBlockSizeException e) {
+		} catch (final IllegalBlockSizeException e) {
 			e.printStackTrace();
-		} catch (BadPaddingException e) {
+		} catch (final BadPaddingException e) {
 			e.printStackTrace();
 		}
 		return -1;
@@ -179,7 +181,7 @@ public class EncryptedInputStream extends FilterInputStream {
 		return last[offset++] & 0xff;
 	}
 
-	private void writeResultBuffer(byte[] bs) {
+	private void writeResultBuffer(final byte[] bs) {
 		last = bs;
 		offset = 0;
 	}
@@ -195,7 +197,7 @@ public class EncryptedInputStream extends FilterInputStream {
 	}
 
 	@Override
-	public long skip(long n) throws IOException {
+	public long skip(final long n) throws IOException {
 		throw new UnsupportedOperationException();
 		// return super.skip(n);
 	}
@@ -206,5 +208,5 @@ public class EncryptedInputStream extends FilterInputStream {
 
 	private boolean finished;
 
-	private byte temp[] = new byte[1];
+	private final byte temp[] = new byte[1];
 }

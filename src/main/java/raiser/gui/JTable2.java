@@ -66,7 +66,7 @@ public class JTable2 extends JTable {
 	 * @param numRows
 	 * @param numColumns
 	 */
-	public JTable2(int numRows, int numColumns) {
+	public JTable2(final int numRows, final int numColumns) {
 		super(numRows, numColumns);
 		ToolTipManager.sharedInstance().unregisterComponent(this);
 	}
@@ -75,7 +75,7 @@ public class JTable2 extends JTable {
 	 * @param rowData
 	 * @param columnNames
 	 */
-	public JTable2(Object[][] rowData, Object[] columnNames) {
+	public JTable2(final Object[][] rowData, final Object[] columnNames) {
 		super(rowData, columnNames);
 		ToolTipManager.sharedInstance().unregisterComponent(this);
 	}
@@ -84,7 +84,8 @@ public class JTable2 extends JTable {
 	 * @param rowData
 	 * @param columnNames
 	 */
-	public JTable2(Vector rowData, Vector columnNames) {
+	public JTable2(final Vector<Object> rowData,
+			final Vector<Object> columnNames) {
 		super(rowData, columnNames);
 		ToolTipManager.sharedInstance().unregisterComponent(this);
 	}
@@ -94,7 +95,8 @@ public class JTable2 extends JTable {
 	 * @param cm
 	 * @param sm
 	 */
-	public JTable2(TableModel dm, TableColumnModel cm, ListSelectionModel sm) {
+	public JTable2(final TableModel dm, final TableColumnModel cm,
+			final ListSelectionModel sm) {
 		super(dm, cm, sm);
 		ToolTipManager.sharedInstance().unregisterComponent(this);
 	}
@@ -103,13 +105,13 @@ public class JTable2 extends JTable {
 
 	private Listener listener;
 
-	public JTable2(TableModel data) {
+	public JTable2(final TableModel data) {
 		super(data);
 
 		ToolTipManager.sharedInstance().unregisterComponent(this);
 	}
 
-	public JTable2(TableModel data, TableColumnModel columns) {
+	public JTable2(final TableModel data, final TableColumnModel columns) {
 		super(data, columns);
 
 		ToolTipManager.sharedInstance().unregisterComponent(this);
@@ -130,7 +132,7 @@ public class JTable2 extends JTable {
 	}
 
 	@Override
-	public void setTableHeader(JTableHeader h) {
+	public void setTableHeader(final JTableHeader h) {
 		unconfigureEnclosingScrollPane();
 
 		super.setTableHeader(h);
@@ -139,18 +141,19 @@ public class JTable2 extends JTable {
 	}
 
 	@Override
-	public void changeSelection(int row, int column, boolean toggle,
-			boolean extend) {
-		ListSelectionModel rows = getSelectionModel();
-		ListSelectionModel columns = getColumnModel().getSelectionModel();
+	public void changeSelection(final int row, final int column,
+			final boolean toggle, final boolean extend) {
+		final ListSelectionModel rows = getSelectionModel();
+		final ListSelectionModel columns = getColumnModel().getSelectionModel();
 
-		boolean selected = isCellSelected(row, column);
+		final boolean selected = isCellSelected(row, column);
 
-		int anchorRow = rows.getAnchorSelectionIndex(), anchorColumn = columns
+		final int anchorRow = rows.getAnchorSelectionIndex(), anchorColumn = columns
 				.getAnchorSelectionIndex();
 
 		// This is done wrongly even in 1.4
-		boolean anchorSelected = (anchorRow != -1) && (anchorColumn != -1)
+		final boolean anchorSelected = (anchorRow != -1)
+				&& (anchorColumn != -1)
 				&& isCellSelected(anchorRow, anchorColumn);
 
 		TableColumnModels.change(columns, column, toggle, extend, selected,
@@ -163,7 +166,7 @@ public class JTable2 extends JTable {
 	}
 
 	@Override
-	public void setColumnModel(TableColumnModel c) {
+	public void setColumnModel(final TableColumnModel c) {
 		if (c == null) {
 			throw new IllegalArgumentException("null");
 		}
@@ -185,7 +188,7 @@ public class JTable2 extends JTable {
 	}
 
 	@Override
-	public void setSelectionModel(ListSelectionModel s) {
+	public void setSelectionModel(final ListSelectionModel s) {
 		if (s == null) {
 			throw new IllegalArgumentException("null");
 		}
@@ -207,7 +210,7 @@ public class JTable2 extends JTable {
 	// super.setModel will call tableChanged()
 	// and the editor will be removed there.
 	@Override
-	public void setModel(TableModel data) {
+	public void setModel(final TableModel data) {
 		if (data == null) {
 			throw new IllegalArgumentException("null");
 		}
@@ -227,13 +230,13 @@ public class JTable2 extends JTable {
 	}
 
 	@Override
-	public void setRowHeight(int height) {
+	public void setRowHeight(final int height) {
 		// hasRowModel = false;
 		super.setRowHeight(height);
 	}
 
 	@Override
-	public void setRowHeight(int row, int height) {
+	public void setRowHeight(final int row, final int height) {
 		// hasRowModel = true;
 		super.setRowHeight(row, height);
 	}
@@ -272,8 +275,8 @@ public class JTable2 extends JTable {
 	}
 
 	@Override
-	public void columnAdded(TableColumnModelEvent e) {
-		int index = e.getToIndex();
+	public void columnAdded(final TableColumnModelEvent e) {
+		final int index = e.getToIndex();
 
 		if ((editingColumn != -1) && (index <= editingColumn)) {
 			setEditingColumn(editingColumn + 1);
@@ -283,9 +286,9 @@ public class JTable2 extends JTable {
 	}
 
 	@Override
-	public void columnRemoved(TableColumnModelEvent e) {
+	public void columnRemoved(final TableColumnModelEvent e) {
 		if (editingColumn != -1) {
-			int from = e.getFromIndex();
+			final int from = e.getFromIndex();
 
 			if (editingColumn == from) {
 				// The event doesn't carry the TableColumn,
@@ -303,9 +306,9 @@ public class JTable2 extends JTable {
 	}
 
 	@Override
-	public void columnMoved(TableColumnModelEvent e) {
+	public void columnMoved(final TableColumnModelEvent e) {
 		if (editingColumn != -1) {
-			int from = e.getFromIndex(), to = e.getToIndex();
+			final int from = e.getFromIndex(), to = e.getToIndex();
 
 			// Need to adjust editing column first. The value may
 			// stored there below.
@@ -322,7 +325,7 @@ public class JTable2 extends JTable {
 				}
 			}
 
-			TableColumn c = tableHeader != null ? tableHeader
+			final TableColumn c = tableHeader != null ? tableHeader
 					.getDraggedColumn() : null;
 
 			// remove the editor because it appears on top of the moved column
@@ -352,12 +355,13 @@ public class JTable2 extends JTable {
 
 	// Fix for rtl width assumption.
 	@Override
-	public Rectangle getCellRect(int row, int column, boolean includeSpacing) {
-		Rectangle result = super.getCellRect(row, column, includeSpacing);
+	public Rectangle getCellRect(final int row, final int column,
+			boolean includeSpacing) {
+		final Rectangle result = super.getCellRect(row, column, includeSpacing);
 
 		if (!getComponentOrientation().isLeftToRight() && (column >= 0)
 				&& (column < getColumnCount())) {
-			TableColumnModel columns = getColumnModel();
+			final TableColumnModel columns = getColumnModel();
 
 			result.width = columns.getColumn(column).getWidth();
 
@@ -368,7 +372,7 @@ public class JTable2 extends JTable {
 			}
 
 			if (!includeSpacing && (row >= 0) && (row < getRowCount())) {
-				int margin = getColumnModel().getColumnMargin();
+				final int margin = getColumnModel().getColumnMargin();
 
 				result.x -= margin / 2;
 				result.width -= margin;
@@ -385,8 +389,8 @@ public class JTable2 extends JTable {
 	// will be called-back again, which will revalidate again. Hopefully
 	// the second time no widths are changed anymore.
 	@Override
-	public void columnMarginChanged(ChangeEvent e) {
-		TableColumn c = resizingColumn();
+	public void columnMarginChanged(final ChangeEvent e) {
+		final TableColumn c = resizingColumn();
 
 		if ((c != null) && (autoResizeMode == AUTO_RESIZE_OFF)) {
 			c.setPreferredWidth(c.getWidth());
@@ -404,9 +408,9 @@ public class JTable2 extends JTable {
 	@Override
 	public void doLayout() {
 		if (getAutoResizeMode() == AUTO_RESIZE_OFF) {
-			for (Enumeration e = getColumnModel().getColumns(); e
-					.hasMoreElements();) {
-				TableColumn d = (TableColumn) e.nextElement();
+			for (final Enumeration<TableColumn> e = getColumnModel()
+					.getColumns(); e.hasMoreElements();) {
+				final TableColumn d = e.nextElement();
 
 				if (d.getWidth() != d.getPreferredWidth()) {
 					d.setWidth(d.getPreferredWidth());
@@ -416,12 +420,12 @@ public class JTable2 extends JTable {
 			return;
 		}
 
-		TableColumn c = resizingColumn();
+		final TableColumn c = resizingColumn();
 
 		if (c == null) {
 			super.doLayout();
 		} else {
-			int column = TableColumnModels.indexOf(getColumnModel(), c);
+			final int column = TableColumnModels.indexOf(getColumnModel(), c);
 
 			sizeColumnsToFit(column);
 
@@ -429,7 +433,8 @@ public class JTable2 extends JTable {
 			 * This is what 1.4 does. May this infinite loop?
 			 */
 
-			int delta = getWidth() - getColumnModel().getTotalColumnWidth();
+			final int delta = getWidth()
+					- getColumnModel().getTotalColumnWidth();
 
 			if (delta != 0) {
 				c.setWidth(c.getWidth() + delta);
@@ -438,8 +443,8 @@ public class JTable2 extends JTable {
 	}
 
 	@Override
-	public void tableChanged(TableModelEvent e) {
-		int first = e.getFirstRow(), last = e.getLastRow();
+	public void tableChanged(final TableModelEvent e) {
+		final int first = e.getFirstRow(), last = e.getLastRow();
 
 		if (e.getType() == TableModelEvent.UPDATE) {
 			if ((first == TableModelEvent.HEADER_ROW)
@@ -528,8 +533,8 @@ public class JTable2 extends JTable {
 	// Need to replace removeEditor() by super.removeEditor().
 
 	@Override
-	public void editingStopped(ChangeEvent e) {
-		TableCellEditor f = getCellEditor();
+	public void editingStopped(final ChangeEvent e) {
+		final TableCellEditor f = getCellEditor();
 
 		if (f != null) {
 			// JTable implementation is the other way around:
@@ -540,7 +545,7 @@ public class JTable2 extends JTable {
 			// distributing the events.
 
 			// these change by removeEditor()
-			int row = editingRow, column = editingColumn;
+			final int row = editingRow, column = editingColumn;
 
 			originalRemoveEditor();
 
@@ -553,7 +558,7 @@ public class JTable2 extends JTable {
 	 * When this method returns, the JTable isn't editing.
 	 */
 	public void finishEditing() {
-		TableCellEditor e = getCellEditor();
+		final TableCellEditor e = getCellEditor();
 
 		if (e != null) {
 			if (!e.stopCellEditing()) {
@@ -570,7 +575,7 @@ public class JTable2 extends JTable {
 	 * @returns true iff the JTable isn't editing (anymore).
 	 */
 	public boolean stopEditing() {
-		TableCellEditor e = getCellEditor();
+		final TableCellEditor e = getCellEditor();
 
 		return (e == null) || e.stopCellEditing();
 	}
@@ -582,7 +587,7 @@ public class JTable2 extends JTable {
 	// This now does the same as removeEditor(), but that has a less
 	// obvious method name.
 	public void cancelEditing() {
-		TableCellEditor e = getCellEditor();
+		final TableCellEditor e = getCellEditor();
 
 		if (e != null) {
 			e.cancelCellEditing();
@@ -590,12 +595,12 @@ public class JTable2 extends JTable {
 	}
 
 	@Override
-	public void editingCanceled(ChangeEvent e) {
+	public void editingCanceled(final ChangeEvent e) {
 		originalRemoveEditor();
 	}
 
 	private void originalRemoveEditor() {
-		TableCellEditor e = getCellEditor();
+		final TableCellEditor e = getCellEditor();
 
 		if (e != null) {
 			e.removeCellEditorListener(listener());
@@ -606,7 +611,7 @@ public class JTable2 extends JTable {
 
 	@Override
 	public void removeEditor() {
-		TableCellEditor e = getCellEditor();
+		final TableCellEditor e = getCellEditor();
 
 		if (e != null) {
 			e.cancelCellEditing();
@@ -614,7 +619,8 @@ public class JTable2 extends JTable {
 	}
 
 	@Override
-	public boolean editCellAt(int row, int column, EventObject e) {
+	public boolean editCellAt(final int row, final int column,
+			final EventObject e) {
 		// Don't call super.editCellAt() which installs the weird focus
 		// lost editing *canceler* (1.4beta2).
 
@@ -634,7 +640,7 @@ public class JTable2 extends JTable {
 
 		// Insert better focus logic later
 
-		TableCellEditor editor = getCellEditor(row, column);
+		final TableCellEditor editor = getCellEditor(row, column);
 
 		if ((editor == null) || !editor.isCellEditable(e)) {
 			return false;
@@ -691,19 +697,19 @@ public class JTable2 extends JTable {
 	}
 
 	@Override
-	public String getToolTipText(MouseEvent e) {
+	public String getToolTipText(final MouseEvent e) {
 		String result = null;
 
-		Point p = e.getPoint();
+		final Point p = e.getPoint();
 
-		int row = rowAtPoint(p), column = columnAtPoint(p);
+		final int row = rowAtPoint(p), column = columnAtPoint(p);
 
 		if ((column != -1) && (row != -1)) {
-			Rectangle r = getCellRect(row, column, false);
+			final Rectangle r = getCellRect(row, column, false);
 
 			if (r.contains(p)) // may be inside the intercell spacing
 			{
-				TableCellRenderer s = getCellRenderer(row, column);
+				final TableCellRenderer s = getCellRenderer(row, column);
 				Component c = prepareRenderer(s, row, column);
 
 				p.translate(-r.x, -r.y);
@@ -713,7 +719,7 @@ public class JTable2 extends JTable {
 				if (c instanceof Container) {
 					c.validate();
 
-					Component d = ((Container) c).findComponentAt(p);
+					final Component d = ((Container) c).findComponentAt(p);
 
 					for (Component cc = d; cc != c; cc = cc.getParent()) {
 						p.translate(-cc.getX(), -cc.getY());
@@ -723,9 +729,9 @@ public class JTable2 extends JTable {
 				}
 
 				if (c instanceof JComponent) {
-					MouseEvent f = new MouseEvent(c, e.getID(), e.getWhen(), e
-							.getModifiers(), p.x, p.y, e.getClickCount(), e
-							.isPopupTrigger());
+					final MouseEvent f = new MouseEvent(c, e.getID(), e
+							.getWhen(), e.getModifiers(), p.x, p.y, e
+							.getClickCount(), e.isPopupTrigger());
 
 					result = ((JComponent) c).getToolTipText(f);
 				}
@@ -740,7 +746,8 @@ public class JTable2 extends JTable {
 	}
 
 	private static class TableColumnModels {
-		private static int indexOf(TableColumnModel columns, TableColumn c) {
+		private static int indexOf(final TableColumnModel columns,
+				final TableColumn c) {
 			for (int i = columns.getColumnCount() - 1; i >= 0; --i) {
 				if (c.equals(columns.getColumn(i))) {
 					return i;
@@ -781,9 +788,9 @@ public class JTable2 extends JTable {
 		 * selected suddenly becoming it by changing a totally different cell
 		 * would be strange.
 		 */
-		private static void change(ListSelectionModel selection, int index,
-				boolean toggle, boolean extend, boolean selected,
-				boolean anchorSelected) {
+		private static void change(final ListSelectionModel selection,
+				final int index, final boolean toggle, final boolean extend,
+				final boolean selected, final boolean anchorSelected) {
 			if (toggle) {
 				if (extend) {
 					selection.setAnchorSelectionIndex(index);
@@ -796,7 +803,7 @@ public class JTable2 extends JTable {
 				}
 			} else {
 				if (extend) {
-					int anchor = selection.getAnchorSelectionIndex();
+					final int anchor = selection.getAnchorSelectionIndex();
 
 					if (anchor == -1) {
 						if (selected) {
@@ -812,7 +819,7 @@ public class JTable2 extends JTable {
 						}
 
 						if (anchorSelected) {
-							boolean old = selection.getValueIsAdjusting();
+							final boolean old = selection.getValueIsAdjusting();
 
 							selection.setValueIsAdjusting(true);
 
@@ -854,16 +861,16 @@ public class JTable2 extends JTable {
 		}
 	}
 
-	private boolean processKeyBindingImpl(KeyStroke k, KeyEvent e,
-			int condition, boolean pressed) {
+	private boolean processKeyBindingImpl(final KeyStroke k, final KeyEvent e,
+			final int condition, final boolean pressed) {
 		if (isEnabled()) {
-			Object binding = getInputMap(condition).get(k);
+			final Object binding = getInputMap(condition).get(k);
 
 			if (binding == null) {
 				return false;
 			}
 
-			Action a = getActionMap().get(binding);
+			final Action a = getActionMap().get(binding);
 
 			if (a != null) {
 				return SwingUtilities.notifyAction(a, k, e, this, e
@@ -875,8 +882,8 @@ public class JTable2 extends JTable {
 	}
 
 	@Override
-	protected boolean processKeyBinding(KeyStroke k, KeyEvent e, int condition,
-			boolean pressed) {
+	protected boolean processKeyBinding(final KeyStroke k, final KeyEvent e,
+			final int condition, final boolean pressed) {
 		if ((condition == WHEN_ANCESTOR_OF_FOCUSED_COMPONENT) && !isEditing()) {
 			return processKeyBindingImpl(k, e, condition, pressed);
 		} else {
@@ -888,11 +895,11 @@ public class JTable2 extends JTable {
 	// postpone starting the editor after all other parties have been
 	// given chance to handle/consume the event.
 	@Override
-	protected void processKeyEvent(KeyEvent e) {
+	protected void processKeyEvent(final KeyEvent e) {
 		super.processKeyEvent(e);
 
 		if (!e.isConsumed() && !isEditing()) {
-			KeyStroke k = KeyStroke.getKeyStrokeForEvent(e);
+			final KeyStroke k = KeyStroke.getKeyStrokeForEvent(e);
 
 			if (super.processKeyBinding(k, e,
 					WHEN_ANCESTOR_OF_FOCUSED_COMPONENT,
@@ -902,7 +909,7 @@ public class JTable2 extends JTable {
 		}
 	}
 
-	private void readObject(ObjectInputStream s) throws IOException,
+	private void readObject(final ObjectInputStream s) throws IOException,
 			ClassNotFoundException {
 		s.defaultReadObject();
 
@@ -940,39 +947,39 @@ public class JTable2 extends JTable {
 	// Delegates methods back to JTable, but is not Serializable.
 	private class Listener implements TableModelListener,
 			TableColumnModelListener, ListSelectionListener, CellEditorListener {
-		public void tableChanged(TableModelEvent e) {
+		public void tableChanged(final TableModelEvent e) {
 			JTable2.this.tableChanged(e);
 		}
 
-		public void columnAdded(TableColumnModelEvent e) {
+		public void columnAdded(final TableColumnModelEvent e) {
 			JTable2.this.columnAdded(e);
 		}
 
-		public void columnRemoved(TableColumnModelEvent e) {
+		public void columnRemoved(final TableColumnModelEvent e) {
 			JTable2.this.columnRemoved(e);
 		}
 
-		public void columnMoved(TableColumnModelEvent e) {
+		public void columnMoved(final TableColumnModelEvent e) {
 			JTable2.this.columnMoved(e);
 		}
 
-		public void columnMarginChanged(ChangeEvent e) {
+		public void columnMarginChanged(final ChangeEvent e) {
 			JTable2.this.columnMarginChanged(e);
 		}
 
-		public void columnSelectionChanged(ListSelectionEvent e) {
+		public void columnSelectionChanged(final ListSelectionEvent e) {
 			JTable2.this.columnSelectionChanged(e);
 		}
 
-		public void valueChanged(ListSelectionEvent e) {
+		public void valueChanged(final ListSelectionEvent e) {
 			JTable2.this.valueChanged(e);
 		}
 
-		public void editingStopped(ChangeEvent e) {
+		public void editingStopped(final ChangeEvent e) {
 			JTable2.this.editingStopped(e);
 		}
 
-		public void editingCanceled(ChangeEvent e) {
+		public void editingCanceled(final ChangeEvent e) {
 			JTable2.this.editingCanceled(e);
 		}
 	}

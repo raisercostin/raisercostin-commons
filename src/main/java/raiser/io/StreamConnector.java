@@ -21,7 +21,7 @@ public class StreamConnector {
 	 * @param source
 	 * @param destination
 	 */
-	public void connect(InputStream source, OutputStream destination) {
+	public void connect(final InputStream source, final OutputStream destination) {
 
 	}
 
@@ -31,7 +31,7 @@ public class StreamConnector {
 	 * @param source
 	 * @param destination
 	 */
-	public void connect(OutputStream source, InputStream destination) {
+	public void connect(final OutputStream source, final InputStream destination) {
 
 	}
 }

@@ -21,27 +21,28 @@ public class SunFtpClient extends BaseFtpClient implements FtpClient {
 	public SunFtpClient() {
 	}
 
-	public void connect(String host, int port) throws FtpProtocolException {
+	public void connect(final String host, final int port)
+			throws FtpProtocolException {
 		try {
 			client = new sun.net.ftp.FtpClient(host, port);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new FtpProtocolException(e);
 		}
 	}
 
-	public void connect(String host) throws FtpProtocolException {
+	public void connect(final String host) throws FtpProtocolException {
 		try {
 			client = new sun.net.ftp.FtpClient(host);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new FtpProtocolException(e);
 		}
 	}
 
-	public void login(String userName, String password)
+	public void login(final String userName, final String password)
 			throws FtpProtocolException {
 		try {
 			client.login(userName, password);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new FtpProtocolException(e);
 		}
 	}
@@ -49,7 +50,7 @@ public class SunFtpClient extends BaseFtpClient implements FtpClient {
 	public void binary() throws FtpProtocolException {
 		try {
 			client.binary();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new FtpProtocolException(e);
 		}
 	}
@@ -61,18 +62,18 @@ public class SunFtpClient extends BaseFtpClient implements FtpClient {
 		 */
 	}
 
-	public OutputStream put(String fileName) throws FtpProtocolException {
+	public OutputStream put(final String fileName) throws FtpProtocolException {
 		try {
 			return client.put(fileName);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new FtpProtocolException(e);
 		}
 	}
 
-	public InputStream get(String fileName) throws FtpProtocolException {
+	public InputStream get(final String fileName) throws FtpProtocolException {
 		try {
 			return client.get(fileName);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new FtpProtocolException(e);
 		}
 	}
@@ -80,7 +81,7 @@ public class SunFtpClient extends BaseFtpClient implements FtpClient {
 	public void quit() throws FtpProtocolException {
 		try {
 			client.closeServer();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new FtpProtocolException(e);
 		}
 	}

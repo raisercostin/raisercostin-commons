@@ -14,8 +14,8 @@ import raiser.gui.Console;
 import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
 
 public class Platform {
-	public static void start(ApplicationController controller,
-			ApplicationModel model, ApplicationView view) {
+	public static void start(final ApplicationController controller,
+			final ApplicationModel model, final ApplicationView view) {
 		try {
 			controller.setView(view);
 			controller.setModel(model);
@@ -30,11 +30,11 @@ public class Platform {
 			controller.join();
 			controller.saveProperties();
 			controller.setSplashVisible(false);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
-		} catch (InterruptedException e) {
+		} catch (final InterruptedException e) {
 			e.printStackTrace();
-		} catch (Throwable e) {
+		} catch (final Throwable e) {
 			e.printStackTrace();
 		}
 	}

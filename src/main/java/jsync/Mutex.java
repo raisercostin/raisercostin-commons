@@ -20,7 +20,7 @@ public class Mutex {
 	 * section.
 	 */
 	public synchronized void enter() {
-		Thread self = Thread.currentThread();
+		final Thread self = Thread.currentThread();
 		if ((owner != null) || (nBlocked != 0)) {
 			if (owner == self) {
 				nested += 1;
@@ -31,7 +31,7 @@ public class Mutex {
 					nBlocked += 1;
 					wait();
 					nBlocked -= 1;
-				} catch (InterruptedException ex) {
+				} catch (final InterruptedException ex) {
 					// It is possible for a thread to be interrupted after
 					// being notified but before returning from the wait()
 					// call. To prevent lost of notification notify()
@@ -57,8 +57,8 @@ public class Mutex {
 	 *         <code>false</code> if <code>enter()</code> was terminated due
 	 *         to timeout expiration.
 	 */
-	public synchronized boolean enter(long timeout) {
-		Thread self = Thread.currentThread();
+	public synchronized boolean enter(final long timeout) {
+		final Thread self = Thread.currentThread();
 		if ((owner != null) || (nBlocked != 0)) {
 			if (owner == self) {
 				nested += 1;
@@ -67,9 +67,9 @@ public class Mutex {
 			if (timeout == 0) {
 				return false;
 			}
-			long startTime = System.currentTimeMillis();
+			final long startTime = System.currentTimeMillis();
 			do {
-				long currentTime = System.currentTimeMillis();
+				final long currentTime = System.currentTimeMillis();
 				if (currentTime - startTime >= timeout) {
 					return false;
 				}
@@ -77,7 +77,7 @@ public class Mutex {
 					nBlocked += 1;
 					wait(timeout - currentTime + startTime);
 					nBlocked -= 1;
-				} catch (InterruptedException ex) {
+				} catch (final InterruptedException ex) {
 					// It is possible for a thread to be interrupted after
 					// being notified but before returning from the wait()
 					// call. To prevent lost of notification notify()

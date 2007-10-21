@@ -21,11 +21,11 @@ public class Event {
 	 * Wait until event is set to signaled state.
 	 */
 	public synchronized void waitEvent() {
-		int nSignalsBefore = nSignals;
+		final int nSignalsBefore = nSignals;
 		while (!signaled && (nSignals == nSignalsBefore)) {
 			try {
 				wait();
-			} catch (InterruptedException ex) {
+			} catch (final InterruptedException ex) {
 				throw new InterruptedError();
 			}
 		}
@@ -40,21 +40,21 @@ public class Event {
 	 * @return <code>true</code> if event is signaled, <code>false</code> if
 	 *         <code>wait()</code> was terminated due to timeout expiration.
 	 */
-	public synchronized boolean waitEvent(long timeout) {
+	public synchronized boolean waitEvent(final long timeout) {
 		if (!signaled) {
 			if (timeout == 0) {
 				return false;
 			}
-			int nSignalsBefore = nSignals;
-			long startTime = System.currentTimeMillis();
+			final int nSignalsBefore = nSignals;
+			final long startTime = System.currentTimeMillis();
 			do {
-				long currentTime = System.currentTimeMillis();
+				final long currentTime = System.currentTimeMillis();
 				if (currentTime - startTime >= timeout) {
 					return false;
 				}
 				try {
 					wait(timeout);
-				} catch (InterruptedException ex) {
+				} catch (final InterruptedException ex) {
 					throw new InterruptedError();
 				}
 			} while (nSignals == nSignalsBefore);
@@ -92,7 +92,7 @@ public class Event {
 	 * @param initState
 	 *            initial state of event
 	 */
-	public Event(boolean initState) {
+	public Event(final boolean initState) {
 		signaled = initState;
 		nSignals = 0;
 	}

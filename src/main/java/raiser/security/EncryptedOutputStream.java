@@ -38,12 +38,13 @@ public class EncryptedOutputStream extends FilterOutputStream {
 	 * @param i
 	 * @param password
 	 */
-	public EncryptedOutputStream(OutputStream stream, char[] password) {
+	public EncryptedOutputStream(final OutputStream stream,
+			final char[] password) {
 		super(stream);
 		setPassword(password);
 		try {
 			fo = new FileOutputStream("xml.out");
-		} catch (FileNotFoundException e) {
+		} catch (final FileNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
@@ -59,37 +60,38 @@ public class EncryptedOutputStream extends FilterOutputStream {
 	 *            Pass Phrase used to initialize both the encrypter and
 	 *            decrypter instances.
 	 */
-	private void setPassword(char[] passPhrase) {
+	private void setPassword(final char[] passPhrase) {
 
 		// 8-bytes Salt
-		byte[] salt = { (byte) 0xA9, (byte) 0x9B, (byte) 0xC8, (byte) 0x32,
-				(byte) 0x56, (byte) 0x34, (byte) 0xE3, (byte) 0x03 };
+		final byte[] salt = { (byte) 0xA9, (byte) 0x9B, (byte) 0xC8,
+				(byte) 0x32, (byte) 0x56, (byte) 0x34, (byte) 0xE3, (byte) 0x03 };
 
 		// Iteration count
-		int iterationCount = 19;
+		final int iterationCount = 19;
 
 		try {
-			KeySpec keySpec = new PBEKeySpec(passPhrase, salt, iterationCount);
-			SecretKey key = SecretKeyFactory.getInstance("PBEWithMD5AndDES")
-					.generateSecret(keySpec);
+			final KeySpec keySpec = new PBEKeySpec(passPhrase, salt,
+					iterationCount);
+			final SecretKey key = SecretKeyFactory.getInstance(
+					"PBEWithMD5AndDES").generateSecret(keySpec);
 
 			ecipher = Cipher.getInstance(key.getAlgorithm());
 
 			// Prepare the parameters to the cipthers
-			AlgorithmParameterSpec paramSpec = new PBEParameterSpec(salt,
+			final AlgorithmParameterSpec paramSpec = new PBEParameterSpec(salt,
 					iterationCount);
 
 			ecipher.init(Cipher.ENCRYPT_MODE, key, paramSpec);
 
-		} catch (InvalidAlgorithmParameterException e) {
+		} catch (final InvalidAlgorithmParameterException e) {
 			System.out.println("EXCEPTION: InvalidAlgorithmParameterException");
-		} catch (InvalidKeySpecException e) {
+		} catch (final InvalidKeySpecException e) {
 			System.out.println("EXCEPTION: InvalidKeySpecException");
-		} catch (NoSuchPaddingException e) {
+		} catch (final NoSuchPaddingException e) {
 			System.out.println("EXCEPTION: NoSuchPaddingException");
-		} catch (NoSuchAlgorithmException e) {
+		} catch (final NoSuchAlgorithmException e) {
 			System.out.println("EXCEPTION: NoSuchAlgorithmException");
-		} catch (InvalidKeyException e) {
+		} catch (final InvalidKeyException e) {
 			System.out.println("EXCEPTION: InvalidKeyException");
 		}
 	}
@@ -108,48 +110,49 @@ public class EncryptedOutputStream extends FilterOutputStream {
 	@Override
 	public void close() throws IOException {
 		try {
-			byte[] data = ecipher.doFinal();
+			final byte[] data = ecipher.doFinal();
 			if (data != null) {
 				out.write(data);
 			}
-		} catch (IllegalStateException e) {
+		} catch (final IllegalStateException e) {
 			e.printStackTrace();
-		} catch (IllegalBlockSizeException e) {
+		} catch (final IllegalBlockSizeException e) {
 			e.printStackTrace();
-		} catch (BadPaddingException e) {
+		} catch (final BadPaddingException e) {
 			e.printStackTrace();
 		}
 		try {
 			flush();
-		} catch (IOException ignored) {
+		} catch (final IOException ignored) {
 		}
 		out.close();
 		fo.close();
 	}
 
 	@Override
-	public void write(byte[] b, int off, int len) throws IOException {
+	public void write(final byte[] b, final int off, final int len)
+			throws IOException {
 		fo.write(b, off, len);
-		byte[] data = ecipher.update(b, off, len);
+		final byte[] data = ecipher.update(b, off, len);
 		if (data != null) {
 			out.write(data);
 		}
 	}
 
 	@Override
-	public void write(byte[] b) throws IOException {
+	public void write(final byte[] b) throws IOException {
 		fo.write(b);
-		byte[] data = ecipher.update(b);
+		final byte[] data = ecipher.update(b);
 		if (data != null) {
 			out.write(data);
 		}
 	}
 
 	@Override
-	public void write(int b) throws IOException {
+	public void write(final int b) throws IOException {
 		fo.write(b);
 		temp[0] = (byte) (b & 0xff);
-		byte[] data = ecipher.update(temp);
+		final byte[] data = ecipher.update(temp);
 		if (data != null) {
 			out.write(data);
 		}

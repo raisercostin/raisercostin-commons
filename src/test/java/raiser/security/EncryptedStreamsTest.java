@@ -31,7 +31,7 @@ public class EncryptedStreamsTest extends TestCase {
 	 * 
 	 * @param arg0
 	 */
-	public EncryptedStreamsTest(String arg0) {
+	public EncryptedStreamsTest(final String arg0) {
 		super(arg0);
 	}
 
@@ -42,30 +42,30 @@ public class EncryptedStreamsTest extends TestCase {
 	 */
 	public static void testUsingPassPhrase() throws IllegalStateException,
 			IllegalBlockSizeException, BadPaddingException, IOException {
-		String secretString = "Attack at dawn!aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab";
-		String passPhrase = "parola";
+		final String secretString = "Attack at dawn!aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab";
+		final String passPhrase = "parola";
 		// Create encrypter/decrypter class
-		ByteArrayOutputStream bout = new ByteArrayOutputStream();
-		OutputStream out = new EncryptedOutputStream(bout, passPhrase
+		final ByteArrayOutputStream bout = new ByteArrayOutputStream();
+		final OutputStream out = new EncryptedOutputStream(bout, passPhrase
 				.toCharArray());
 
 		out.write(secretString.getBytes());
 		out.close();
 
 		// Encrypt the string
-		byte[] desEncrypted = bout.toByteArray();
+		final byte[] desEncrypted = bout.toByteArray();
 
-		ByteArrayInputStream in = new ByteArrayInputStream(desEncrypted);
-		InputStream desDecrypter = new EncryptedInputStream(in, passPhrase
-				.toCharArray());
+		final ByteArrayInputStream in = new ByteArrayInputStream(desEncrypted);
+		final InputStream desDecrypter = new EncryptedInputStream(in,
+				passPhrase.toCharArray());
 
 		// Decrypt the string
-		StringBuffer sb = new StringBuffer();
+		final StringBuffer sb = new StringBuffer();
 		int value;
 		while ((value = desDecrypter.read()) != -1) {
 			sb.append((char) value);
 		}
-		String desDecrypted = sb.toString();
+		final String desDecrypted = sb.toString();
 
 		// Print out values
 		System.out.println("PBEWithMD5AndDES Encryption algorithm");
@@ -89,7 +89,7 @@ public class EncryptedStreamsTest extends TestCase {
 
 	public void test3() throws IOException {
 		mySetUp(createData(1013));
-		int max = Math.max(expected.length, resultedLength);
+		final int max = Math.max(expected.length, resultedLength);
 		for (int i = 0; i < max; i++) {
 			assertEquals("Char " + i + ": ", expected[i], resulted[i]);
 		}
@@ -115,7 +115,7 @@ public class EncryptedStreamsTest extends TestCase {
 		 * 
 		 */
 		mySetUp(data2.getBytes());
-		int max = Math.max(expected.length, resultedLength);
+		final int max = Math.max(expected.length, resultedLength);
 		for (int i = 0; i < max; i++) {
 			assertEquals("Char " + i + ": ", expected[i], resulted[i]);
 		}
@@ -127,23 +127,23 @@ public class EncryptedStreamsTest extends TestCase {
 
 	int resultedLength;
 
-	private void mySetUp(byte[] expected) throws IOException {
+	private void mySetUp(final byte[] expected) throws IOException {
 		this.expected = expected;
-		String password = "a mers";
-		OutputStream out = new EncryptedOutputStream(new FileOutputStream(
-				"test.encrypted"), password.toCharArray());
+		final String password = "a mers";
+		final OutputStream out = new EncryptedOutputStream(
+				new FileOutputStream("test.encrypted"), password.toCharArray());
 		out.write(expected);
 		out.close();
 
 		resulted = new byte[2000];
-		InputStream in = new EncryptedInputStream(new FileInputStream(
+		final InputStream in = new EncryptedInputStream(new FileInputStream(
 				"test.encrypted"), password.toCharArray());
 		resultedLength = in.read(resulted);
 		in.close();
 	}
 
-	private byte[] createData(int size) {
-		byte[] result = new byte[size];
+	private byte[] createData(final int size) {
+		final byte[] result = new byte[size];
 		for (int i = 0; i < result.length; i++) {
 			result[i] = (byte) ((i % 256) & 0xf);
 		}

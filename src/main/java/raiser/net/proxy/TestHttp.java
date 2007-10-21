@@ -13,10 +13,10 @@ import java.net.URL;
  */
 public class TestHttp {
 	/** Creates new WebServer */
-	public String getContent(URL url) throws IOException {
-		StringBuffer buf = new StringBuffer();
-		InputStream is = url.openStream();
-		BufferedReader in = new BufferedReader(new InputStreamReader(is));
+	public String getContent(final URL url) throws IOException {
+		final StringBuffer buf = new StringBuffer();
+		final InputStream is = url.openStream();
+		final BufferedReader in = new BufferedReader(new InputStreamReader(is));
 		String line;
 		while ((line = in.readLine()) != null) {
 			buf.append(line + "\n");
@@ -24,12 +24,12 @@ public class TestHttp {
 		return buf.toString();
 	}
 
-	public static void main(String argv[]) {
+	public static void main(final String argv[]) {
 		try {
-			TestHttp th = new TestHttp();
+			final TestHttp th = new TestHttp();
 			System.out
 					.println(th.getContent(new URL("http://raiser.home.ro/")));
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 		System.out.println("gata");

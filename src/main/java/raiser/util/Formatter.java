@@ -23,13 +23,14 @@ public class Formatter {
 	 */
 	private static final Logger logger = Logger.getLogger(Formatter.class);
 
-	public static String toHexString(int number, int digits) {
+	public static String toHexString(int number, final int digits) {
 		boolean possitive = true;
 		if (number < 0) {
 			number = -number;
 			possitive = false;
 		}
-		StringBuffer result = new StringBuffer(Integer.toHexString(number));
+		final StringBuffer result = new StringBuffer(Integer
+				.toHexString(number));
 		if (result.length() < digits) {
 			for (int i = digits - result.length(); i > 0; i--) {
 				result.insert(0, '0');
@@ -41,8 +42,9 @@ public class Formatter {
 		return result.toString();
 	}
 
-	public static String formatDouble(double value, int width, int decimals) {
-		StringBuffer sb = new StringBuffer();
+	public static String formatDouble(final double value, final int width,
+			final int decimals) {
+		final StringBuffer sb = new StringBuffer();
 		for (int i = 0; i < width; i++) {
 			sb.append('0');
 		}
@@ -56,8 +58,8 @@ public class Formatter {
 		return formatter.format(value);
 	}
 
-	public static String formatInteger(int value, int width) {
-		StringBuffer sb = new StringBuffer();
+	public static String formatInteger(final int value, final int width) {
+		final StringBuffer sb = new StringBuffer();
 		for (int i = 0; i < width; i++) {
 			sb.append("0");
 		}
@@ -75,7 +77,8 @@ public class Formatter {
 	 * @param i1
 	 * @return int
 	 */
-	public static String formatDouble(Double value, int width, int decimals) {
+	public static String formatDouble(final Double value, final int width,
+			final int decimals) {
 		return formatDouble(value.doubleValue(), width, decimals);
 	}
 
@@ -86,7 +89,7 @@ public class Formatter {
 	 * @param pattern
 	 * @return Object
 	 */
-	public static Object formatDouble(Double value, String pattern) {
+	public static Object formatDouble(final Double value, final String pattern) {
 		formatter.applyPattern(pattern);
 		return formatter.format(value);
 	}
@@ -98,14 +101,15 @@ public class Formatter {
 	 * @param string
 	 * @return Object
 	 */
-	public static Object formatDouble(double value, String pattern) {
+	public static Object formatDouble(final double value, final String pattern) {
 		formatter.applyPattern(pattern);
 		return formatter.format(value);
 	}
 
-	public static String paddLeft(String string, int length, char paddChar) {
+	public static String paddLeft(String string, final int length,
+			final char paddChar) {
 		if (string.length() < length) {
-			StringBuffer buffer = new StringBuffer();
+			final StringBuffer buffer = new StringBuffer();
 			for (int i = length - string.length(); i > 0; i--) {
 				buffer.append(paddChar);
 			}
@@ -115,36 +119,36 @@ public class Formatter {
 		return string;
 	}
 
-	public static String toString(byte value, int length) {
+	public static String toString(final byte value, final int length) {
 		return Formatter.paddLeft(Byte.toString(value), length, '0');
 	}
 
-	public static String toString(int value, int length) {
+	public static String toString(final int value, final int length) {
 		return Formatter.paddLeft(Integer.toString(value), length, '0');
 	}
 
-	public static String toHexString(byte value) {
+	public static String toHexString(final byte value) {
 		return Integer.toHexString(value & 0xff);
 	}
 
-	public static String toHexString(byte value, int length) {
+	public static String toHexString(final byte value, final int length) {
 		return Formatter.paddLeft(Integer.toHexString(value & 0xff), length,
 				'0');
 	}
 
-	public static String toBinString(byte value) {
+	public static String toBinString(final byte value) {
 		return Integer.toBinaryString(value & 0xff);
 	}
 
-	public static String toBinString(int value) {
+	public static String toBinString(final int value) {
 		return Integer.toBinaryString(value & 0xffffffff);
 	}
 
-	public static String toBinString(byte value, int length) {
+	public static String toBinString(final byte value, final int length) {
 		return Formatter.paddLeft(toBinString(value), length, '0');
 	}
 
-	public static String toBinString(int value, int length) {
+	public static String toBinString(final int value, final int length) {
 		return Formatter.paddLeft(toBinString(value), length, '0');
 	}
 
@@ -152,11 +156,11 @@ public class Formatter {
 	 * @param ch
 	 * @return
 	 */
-	public static String decode(int value) {
+	public static String decode(final int value) {
 		return value + "(" + (value >= 32 ? (char) value : '*') + ")";
 	}
 
-	public static String toChar(int value) {
+	public static String toChar(final int value) {
 		if ((value < 32) && (value != 13) && (value != 10)) {
 			return "(" + value + ")";
 		}
@@ -190,17 +194,17 @@ public class Formatter {
 	 * @param date
 	 * @return
 	 */
-	public static Calendar parseDate(String date) {
-		for (Map.Entry<String, Formatter.FormatterEntry> entry : parsers
+	public static Calendar parseDate(final String date) {
+		for (final Map.Entry<String, Formatter.FormatterEntry> entry : parsers
 				.entrySet()) {
 			try {
-				Date d = entry.getValue().getDateFormatter().parse(date);
+				final Date d = entry.getValue().getDateFormatter().parse(date);
 				if (d != null) {
-					Calendar result = Calendar.getInstance();
+					final Calendar result = Calendar.getInstance();
 					result.setTimeInMillis(d.getTime());
 					return result;
 				}
-			} catch (ParseException e) {
+			} catch (final ParseException e) {
 				logger.info("Can't parse with " + entry.getValue().getName()
 						+ "[" + entry.getValue().getValue() + "] the date ["
 						+ date + "].");
@@ -216,7 +220,7 @@ public class Formatter {
 
 		DateFormat dateFormatter;
 
-		public FormatterEntry(String name, String value) {
+		public FormatterEntry(final String name, final String value) {
 			this.name = name;
 			this.value = value;
 		}
@@ -240,16 +244,16 @@ public class Formatter {
 	private static Map<String, FormatterEntry> parsers;
 	static {
 		parsers = new TreeMap<String, FormatterEntry>();
-		for (String[] element : DATE_FORMAT) {
+		for (final String[] element : DATE_FORMAT) {
 			addParser(element[0], element[1]);
 		}
 	}
 
-	public static void addParser(String name, String formatter) {
+	public static void addParser(final String name, final String formatter) {
 		parsers.put(name, new FormatterEntry(name, formatter));
 	}
 
-	public static DateFormat getParser(String parserName) {
+	public static DateFormat getParser(final String parserName) {
 		return parsers.get(parserName).getDateFormatter();
 	}
 }

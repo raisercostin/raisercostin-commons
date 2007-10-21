@@ -22,7 +22,7 @@ public class Barrier {
 	 * @param n
 	 *            specifies number of threads which should reach barrier.
 	 */
-	public final synchronized void reset(int n) {
+	public final synchronized void reset(final int n) {
 		count = n;
 	}
 
@@ -59,7 +59,7 @@ public class Barrier {
 	 * @param n
 	 *            specifies number of threads which should reach barrier.
 	 */
-	public Barrier(int n) {
+	public Barrier(final int n) {
 		count = n;
 	}
 

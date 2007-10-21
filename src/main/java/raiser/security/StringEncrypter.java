@@ -57,17 +57,17 @@ public class StringEncrypter {
 	 *            Which algorithm to use for creating the encrypter and
 	 *            decrypter instances.
 	 */
-	public StringEncrypter(SecretKey key, String algorithm) {
+	public StringEncrypter(final SecretKey key, final String algorithm) {
 		try {
 			ecipher = Cipher.getInstance(algorithm);
 			dcipher = Cipher.getInstance(algorithm);
 			ecipher.init(Cipher.ENCRYPT_MODE, key);
 			dcipher.init(Cipher.DECRYPT_MODE, key);
-		} catch (NoSuchPaddingException e) {
+		} catch (final NoSuchPaddingException e) {
 			System.out.println("EXCEPTION: NoSuchPaddingException");
-		} catch (NoSuchAlgorithmException e) {
+		} catch (final NoSuchAlgorithmException e) {
 			System.out.println("EXCEPTION: NoSuchAlgorithmException");
-		} catch (InvalidKeyException e) {
+		} catch (final InvalidKeyException e) {
 			System.out.println("EXCEPTION: InvalidKeyException");
 		}
 	}
@@ -81,43 +81,44 @@ public class StringEncrypter {
 	 *            Pass Phrase used to initialize both the encrypter and
 	 *            decrypter instances.
 	 */
-	public StringEncrypter(String passPhrase) {
+	public StringEncrypter(final String passPhrase) {
 		this(passPhrase.toCharArray());
 	}
 
-	public StringEncrypter(char[] passPhrase) {
+	public StringEncrypter(final char[] passPhrase) {
 
 		// 8-bytes Salt
-		byte[] salt = { (byte) 0xA9, (byte) 0x9B, (byte) 0xC8, (byte) 0x32,
-				(byte) 0x56, (byte) 0x34, (byte) 0xE3, (byte) 0x03 };
+		final byte[] salt = { (byte) 0xA9, (byte) 0x9B, (byte) 0xC8,
+				(byte) 0x32, (byte) 0x56, (byte) 0x34, (byte) 0xE3, (byte) 0x03 };
 
 		// Iteration count
-		int iterationCount = 19;
+		final int iterationCount = 19;
 
 		try {
 
-			KeySpec keySpec = new PBEKeySpec(passPhrase, salt, iterationCount);
-			SecretKey key = SecretKeyFactory.getInstance("PBEWithMD5AndDES")
-					.generateSecret(keySpec);
+			final KeySpec keySpec = new PBEKeySpec(passPhrase, salt,
+					iterationCount);
+			final SecretKey key = SecretKeyFactory.getInstance(
+					"PBEWithMD5AndDES").generateSecret(keySpec);
 			ecipher = Cipher.getInstance(key.getAlgorithm());
 			dcipher = Cipher.getInstance(key.getAlgorithm());
 
 			// Prepare the parameters to the cipthers
-			AlgorithmParameterSpec paramSpec = new PBEParameterSpec(salt,
+			final AlgorithmParameterSpec paramSpec = new PBEParameterSpec(salt,
 					iterationCount);
 
 			ecipher.init(Cipher.ENCRYPT_MODE, key, paramSpec);
 			dcipher.init(Cipher.DECRYPT_MODE, key, paramSpec);
 
-		} catch (InvalidAlgorithmParameterException e) {
+		} catch (final InvalidAlgorithmParameterException e) {
 			System.out.println("EXCEPTION: InvalidAlgorithmParameterException");
-		} catch (InvalidKeySpecException e) {
+		} catch (final InvalidKeySpecException e) {
 			System.out.println("EXCEPTION: InvalidKeySpecException");
-		} catch (NoSuchPaddingException e) {
+		} catch (final NoSuchPaddingException e) {
 			System.out.println("EXCEPTION: NoSuchPaddingException");
-		} catch (NoSuchAlgorithmException e) {
+		} catch (final NoSuchAlgorithmException e) {
 			System.out.println("EXCEPTION: NoSuchAlgorithmException");
-		} catch (InvalidKeyException e) {
+		} catch (final InvalidKeyException e) {
 			System.out.println("EXCEPTION: InvalidKeyException");
 		}
 	}
@@ -130,7 +131,7 @@ public class StringEncrypter {
 	 *            String to be encrypted
 	 * @return <code>String</code> Encrypted version of the provided String
 	 */
-	public byte[] encrypt(byte[] data) throws IllegalStateException,
+	public byte[] encrypt(final byte[] data) throws IllegalStateException,
 			IllegalBlockSizeException, BadPaddingException {
 		return ecipher.doFinal(data);
 	}
@@ -143,18 +144,20 @@ public class StringEncrypter {
 	 *            Encrypted String to be decrypted
 	 * @return <code>String</code> Decrypted version of the provided String
 	 */
-	public byte[] decrypt(byte[] data) throws IllegalStateException,
+	public byte[] decrypt(final byte[] data) throws IllegalStateException,
 			IllegalBlockSizeException, BadPaddingException {
 		return dcipher.doFinal(data);
 	}
 
-	public byte[] encryptFromString(String data) throws IllegalStateException,
-			IllegalBlockSizeException, BadPaddingException {
+	public byte[] encryptFromString(final String data)
+			throws IllegalStateException, IllegalBlockSizeException,
+			BadPaddingException {
 		return encrypt(data.getBytes());
 	}
 
-	public String decryptToString(byte[] data) throws IllegalStateException,
-			IllegalBlockSizeException, BadPaddingException {
+	public String decryptToString(final byte[] data)
+			throws IllegalStateException, IllegalBlockSizeException,
+			BadPaddingException {
 		return new String(decrypt(data));
 	}
 
@@ -173,37 +176,40 @@ public class StringEncrypter {
 			System.out.println("+----------------------------------------+");
 			System.out.println();
 
-			String secretString = "Attack at dawn!";
+			final String secretString = "Attack at dawn!";
 
 			// Generate a temporary key for this example. In practice, you would
 			// save this key somewhere. Keep in mind that you can also use a
 			// Pass Phrase.
-			SecretKey desKey = KeyGenerator.getInstance("DES").generateKey();
-			SecretKey blowfishKey = KeyGenerator.getInstance("Blowfish")
+			final SecretKey desKey = KeyGenerator.getInstance("DES")
 					.generateKey();
-			SecretKey desedeKey = KeyGenerator.getInstance("DESede")
+			final SecretKey blowfishKey = KeyGenerator.getInstance("Blowfish")
+					.generateKey();
+			final SecretKey desedeKey = KeyGenerator.getInstance("DESede")
 					.generateKey();
 
 			// Create encrypter/decrypter class
-			StringEncrypter desEncrypter = new StringEncrypter(desKey, desKey
-					.getAlgorithm());
-			StringEncrypter blowfishEncrypter = new StringEncrypter(
+			final StringEncrypter desEncrypter = new StringEncrypter(desKey,
+					desKey.getAlgorithm());
+			final StringEncrypter blowfishEncrypter = new StringEncrypter(
 					blowfishKey, blowfishKey.getAlgorithm());
-			StringEncrypter desedeEncrypter = new StringEncrypter(desedeKey,
-					desedeKey.getAlgorithm());
+			final StringEncrypter desedeEncrypter = new StringEncrypter(
+					desedeKey, desedeKey.getAlgorithm());
 
 			// Encrypt the string
-			byte[] desEncrypted = desEncrypter.encryptFromString(secretString);
-			byte[] blowfishEncrypted = blowfishEncrypter
+			final byte[] desEncrypted = desEncrypter
 					.encryptFromString(secretString);
-			byte[] desedeEncrypted = desedeEncrypter
+			final byte[] blowfishEncrypted = blowfishEncrypter
+					.encryptFromString(secretString);
+			final byte[] desedeEncrypted = desedeEncrypter
 					.encryptFromString(secretString);
 
 			// Decrypt the string
-			String desDecrypted = desEncrypter.decryptToString(desEncrypted);
-			String blowfishDecrypted = blowfishEncrypter
+			final String desDecrypted = desEncrypter
+					.decryptToString(desEncrypted);
+			final String blowfishDecrypted = blowfishEncrypter
 					.decryptToString(blowfishEncrypted);
-			String desedeDecrypted = desedeEncrypter
+			final String desedeDecrypted = desedeEncrypter
 					.decryptToString(desedeEncrypted);
 
 			// Print out values
@@ -227,7 +233,7 @@ public class StringEncrypter {
 			System.out.println("    Decrypted String : " + desedeDecrypted);
 			System.out.println();
 
-		} catch (NoSuchAlgorithmException e) {
+		} catch (final NoSuchAlgorithmException e) {
 		}
 	}
 
@@ -245,17 +251,18 @@ public class StringEncrypter {
 		System.out.println("+----------------------------------------+");
 		System.out.println();
 
-		String secretString = "Attack at dawn!";
-		String passPhrase = "parola";
+		final String secretString = "Attack at dawn!";
+		final String passPhrase = "parola";
 
 		// Create encrypter/decrypter class
-		StringEncrypter desEncrypter = new StringEncrypter(passPhrase);
+		final StringEncrypter desEncrypter = new StringEncrypter(passPhrase);
 
 		// Encrypt the string
-		byte[] desEncrypted = desEncrypter.encryptFromString(secretString);
+		final byte[] desEncrypted = desEncrypter
+				.encryptFromString(secretString);
 
 		// Decrypt the string
-		String desDecrypted = desEncrypter.decryptToString(desEncrypted);
+		final String desDecrypted = desEncrypter.decryptToString(desEncrypted);
 
 		// Print out values
 		System.out.println("PBEWithMD5AndDES Encryption algorithm");
@@ -274,7 +281,7 @@ public class StringEncrypter {
 	 * @param args
 	 *            Array of String arguments.
 	 */
-	public static void main(String[] args) throws IllegalStateException,
+	public static void main(final String[] args) throws IllegalStateException,
 			IllegalBlockSizeException, BadPaddingException {
 		testUsingSecretKey();
 		testUsingPassPhrase();

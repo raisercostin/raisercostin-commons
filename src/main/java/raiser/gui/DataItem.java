@@ -10,13 +10,13 @@ public class DataItem {
 
 	private Object key;
 
-	public DataItem(String label, Object data, Object key) {
+	public DataItem(final String label, final Object data, final Object key) {
 		this.label = label;
 		this.data = data;
 		this.key = key;
 	}
 
-	public DataItem(String label, Object data) {
+	public DataItem(final String label, final Object data) {
 		this(label, data, null);
 	}
 
@@ -24,7 +24,7 @@ public class DataItem {
 		return data;
 	}
 
-	public void setData(Object data) {
+	public void setData(final Object data) {
 		this.data = data;
 	}
 
@@ -32,7 +32,7 @@ public class DataItem {
 		return key;
 	}
 
-	public void setKey(Object key) {
+	public void setKey(final Object key) {
 		this.key = key;
 	}
 
@@ -40,7 +40,7 @@ public class DataItem {
 		return label;
 	}
 
-	public void setLabel(String label) {
+	public void setLabel(final String label) {
 		this.label = label;
 	}
 

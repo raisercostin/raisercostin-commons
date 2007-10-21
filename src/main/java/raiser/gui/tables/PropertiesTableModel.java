@@ -27,11 +27,13 @@ public class PropertiesTableModel<T> extends AbstractTableModel implements
 	 */
 	private static final long serialVersionUID = 2254858775537494543L;
 
-	private List descriptors;
+	private List<PropertyDescriptor> descriptors;
 
 	private List<T> data;
 
-	private List initialColumns;
+	public List<PropertyDescriptor> columns;
+
+	private List<String> initialColumns;
 
 	private Class<? extends T> defaultNewRow;
 
@@ -39,14 +41,14 @@ public class PropertiesTableModel<T> extends AbstractTableModel implements
 		this(null, new ArrayList<T>());
 	};
 
-	public PropertiesTableModel(List<T> data) {
+	public PropertiesTableModel(final List<T> data) {
 		this(null, data);
 	};
 
-	public PropertiesTableModel(List columnNames, List<T> data) {
+	public PropertiesTableModel(final List<String> columnNames, final List<T> data) {
 		super();
 		setData(data);
-		setColumns(columns);
+		setColumns(columnNames);
 		fireTableStructureChanged();
 	}
 
@@ -64,7 +66,7 @@ public class PropertiesTableModel<T> extends AbstractTableModel implements
 	}
 
 	@Override
-	public Class<?> getColumnClass(int columnIndex) {
+	public Class<?> getColumnClass(final int columnIndex) {
 		for (int i = 0; i < getRowCount(); i++) {
 			if (getValueAt(i, columnIndex) != null) {
 				return getValueAt(i, columnIndex).getClass();
@@ -73,7 +75,7 @@ public class PropertiesTableModel<T> extends AbstractTableModel implements
 		return super.getColumnClass(columnIndex);
 	}
 
-	private List getDescriptors() {
+	private List<PropertyDescriptor> getDescriptors() {
 		if (descriptors == null) {
 			init();
 		}
@@ -85,76 +87,77 @@ public class PropertiesTableModel<T> extends AbstractTableModel implements
 	}
 
 	@Override
-	public String getColumnName(int column) {
-		return ((PropertyDescriptor) descriptors.get(column)).getName();
+	public String getColumnName(final int column) {
+		return descriptors.get(column).getName();
 	}
 
 	public int getRowCount() {
 		return getData().size();
 	}
 
-	private List getData() {
+	private List<?> getData() {
 		if (data == null) {
 			init();
 		}
 		return data;
 	}
 
-	public Object getValueAt(int row, int column) {
+	public Object getValueAt(final int row, final int column) {
 		return getProperty(getObject(row), getColumnName(column));
 	}
 
 	@Override
-	public void setValueAt(Object aValue, int row, int column) {
+	public void setValueAt(final Object aValue, final int row, final int column) {
 		setProperty(getObject(row), getColumnName(column), aValue);
 	}
 
-	private Object getObject(int row) {
+	private Object getObject(final int row) {
 		return data.get(row);
 	}
 
 	@Override
-	public boolean isCellEditable(int row, int column) {
-		return ((PropertyDescriptor) descriptors.get(column)).getWriteMethod() != null;
+	public boolean isCellEditable(final int row, final int column) {
+		return descriptors.get(column).getWriteMethod() != null;
 	}
 
 	private void computeDescriptors() {
 		System.out.println("computeDescriptors");
-		Class infoClass = data.size() == 0 ? getDefaultNewRow() : data.get(0)
-				.getClass();
+		final Class<?> infoClass = data.size() == 0 ? getDefaultNewRow() : data
+				.get(0).getClass();
 		columns = null;
 		descriptors = getColumns(infoClass, initialColumns);
 	}
 
-	public Object getProperty(Object object, String name) {
+	public Object getProperty(final Object object, final String name) {
 		try {
 			return PropertyUtils.getProperty(object, name);
-		} catch (IllegalAccessException e) {
+		} catch (final IllegalAccessException e) {
 			e.printStackTrace();
-		} catch (InvocationTargetException e) {
+		} catch (final InvocationTargetException e) {
 			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
+		} catch (final NoSuchMethodException e) {
 			return "****";
 		}
 		return "";
 	}
 
-	public void setProperty(Object object, String name, Object value) {
+	public void setProperty(final Object object, final String name,
+			final Object value) {
 		try {
 			PropertyUtils.setProperty(object, name, value);
-		} catch (IllegalArgumentException e) {
+		} catch (final IllegalArgumentException e) {
 			System.err.println("Can't set property '" + name + "' with value '"
 					+ value + "'.");
-		} catch (IllegalAccessException e) {
+		} catch (final IllegalAccessException e) {
 			e.printStackTrace();
-		} catch (InvocationTargetException e) {
+		} catch (final InvocationTargetException e) {
 			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
+		} catch (final NoSuchMethodException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public List getColumns(Class infoClass, List columns2) {
+	public List<PropertyDescriptor> getColumns(final Class<?> infoClass, final List<String> columns2) {
 		if (columns == null) {
 			columns = computeColumns(infoClass, columns2);
 		}
@@ -164,20 +167,21 @@ public class PropertiesTableModel<T> extends AbstractTableModel implements
 	/**
 	 * @param infoClass
 	 */
-	private static List computeColumns(Class infoClass, List columns2) {
-		PropertyDescriptor[] desc = PropertyUtils
+	private static List<PropertyDescriptor> computeColumns(final Class<?> infoClass,
+			final List<String> columns2) {
+		final PropertyDescriptor[] desc = PropertyUtils
 				.getPropertyDescriptors(infoClass);
-		List<PropertyDescriptor> columns = new ArrayList<PropertyDescriptor>();
+		final List<PropertyDescriptor> columns = new ArrayList<PropertyDescriptor>();
 		if (columns2 != null) {
-			for (Iterator iter = columns2.iterator(); iter.hasNext();) {
-				String columnName = (String) iter.next();
-				PropertyDescriptor temp = find(desc, columnName);
+			for (final Iterator<String> iter = columns2.iterator(); iter.hasNext();) {
+				final String columnName = iter.next();
+				final PropertyDescriptor temp = find(desc, columnName);
 				if (temp != null) {
 					columns.add(temp);
 				}
 			}
 		} else {
-			for (PropertyDescriptor element : desc) {
+			for (final PropertyDescriptor element : desc) {
 				if (!element.getName().equals("class")) {
 					if ((columns2 == null)
 							|| (columns2.indexOf(element.getName()) != -1)) {
@@ -186,7 +190,8 @@ public class PropertiesTableModel<T> extends AbstractTableModel implements
 				}
 			}
 			Collections.sort(columns, new Comparator<PropertyDescriptor>() {
-				public int compare(PropertyDescriptor o1, PropertyDescriptor o2) {
+				public int compare(final PropertyDescriptor o1,
+						final PropertyDescriptor o2) {
 					return o1.getName().compareToIgnoreCase(o1.getName());
 				}
 			});
@@ -199,9 +204,9 @@ public class PropertiesTableModel<T> extends AbstractTableModel implements
 	 * @param columnName
 	 * @return
 	 */
-	private static PropertyDescriptor find(PropertyDescriptor[] desc,
-			String columnName) {
-		for (PropertyDescriptor element : desc) {
+	private static PropertyDescriptor find(final PropertyDescriptor[] desc,
+			final String columnName) {
+		for (final PropertyDescriptor element : desc) {
 			if (columnName.equals(element.getName())) {
 				return element;
 			}
@@ -209,14 +214,12 @@ public class PropertiesTableModel<T> extends AbstractTableModel implements
 		return null;
 	}
 
-	public List columns;
-
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see raiser.gui.tables.SmartTableModel#add(java.lang.Object)
 	 */
-	public void add(T object) {
+	public void add(final T object) {
 		data.add(object);
 		fireTableRowsInserted(getRowCount() - 1, getRowCount() - 1);
 	}
@@ -231,7 +234,7 @@ public class PropertiesTableModel<T> extends AbstractTableModel implements
 	 * 
 	 * @see raiser.gui.tables.SmartTableModel#setData(java.util.List)
 	 */
-	public void setData(List<T> data) {
+	public void setData(final List<T> data) {
 		this.data = data;
 	}
 
@@ -240,15 +243,14 @@ public class PropertiesTableModel<T> extends AbstractTableModel implements
 	 * 
 	 * @see raiser.gui.tables.SmartTableModel#setColumns(java.util.List)
 	 */
-	public void setColumns(List columns) {
-		this.columns = columns;
-		initialColumns = columns;
+	public void setColumns(final List<String> columns) {
+		this.initialColumns = columns;
 	}
 
 	/*
 	 * (non-Javadoc) @param defaultNewRow The defaultNewRow to set.
 	 */
-	public void setDefaultNewRow(Class<? extends T> defaultNewRow) {
+	public void setDefaultNewRow(final Class<? extends T> defaultNewRow) {
 		this.defaultNewRow = defaultNewRow;
 	}
 
@@ -262,7 +264,7 @@ public class PropertiesTableModel<T> extends AbstractTableModel implements
 		return defaultNewRow;
 	}
 
-	public void removeElementAt(int index) {
+	public void removeElementAt(final int index) {
 		data.remove(index);
 		fireTableStructureChanged();
 	}

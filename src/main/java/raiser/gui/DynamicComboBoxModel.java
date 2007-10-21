@@ -57,7 +57,7 @@ public class DynamicComboBoxModel extends DefaultComboBoxModel implements
 	 * @param v
 	 *            a Vector object ...
 	 */
-	public DynamicComboBoxModel(Vector<Object> v) {
+	public DynamicComboBoxModel(final Vector<Object> v) {
 		objects = v;
 
 		if (getSize() > 0) {
@@ -74,7 +74,7 @@ public class DynamicComboBoxModel extends DefaultComboBoxModel implements
 	 *            The combo box value or null for no selection.
 	 */
 	@Override
-	public void setSelectedItem(Object anObject) {
+	public void setSelectedItem(final Object anObject) {
 		if ((selectedObject != null && !selectedObject.equals(anObject))
 				|| selectedObject == null && anObject != null) {
 			selectedObject = anObject;
@@ -96,7 +96,7 @@ public class DynamicComboBoxModel extends DefaultComboBoxModel implements
 
 	// implements javax.swing.ListModel
 	@Override
-	public Object getElementAt(int index) {
+	public Object getElementAt(final int index) {
 		if ((index >= 0) && (index < objects.size())) {
 			return objects.elementAt(index);
 		} else {
@@ -112,13 +112,13 @@ public class DynamicComboBoxModel extends DefaultComboBoxModel implements
 	 *         position
 	 */
 	@Override
-	public int getIndexOf(Object anObject) {
+	public int getIndexOf(final Object anObject) {
 		return objects.indexOf(anObject);
 	}
 
 	// implements javax.swing.MutableComboBoxModel
 	@Override
-	public void addElement(Object anObject) {
+	public void addElement(final Object anObject) {
 		objects.addElement(anObject);
 		fireIntervalAdded(this, objects.size() - 1, objects.size() - 1);
 		if ((objects.size() == 1) && (selectedObject == null)
@@ -129,7 +129,7 @@ public class DynamicComboBoxModel extends DefaultComboBoxModel implements
 
 	// implements javax.swing.MutableComboBoxModel
 	@Override
-	public void insertElementAt(Object anObject, int index) {
+	public void insertElementAt(final Object anObject, final int index) {
 		objects.insertElementAt(anObject, index);
 		fireIntervalAdded(this, index, index);
 	}
@@ -139,7 +139,7 @@ public class DynamicComboBoxModel extends DefaultComboBoxModel implements
 	 * @param obj
 	 * @param index
 	 */
-	public void insertElementsAt(Object[] obj, int index) {
+	public void insertElementsAt(final Object[] obj, final int index) {
 		objects.ensureCapacity(objects.size() + obj.length);
 		for (int i = 0; i < obj.length; i++) {
 			objects.insertElementAt(obj[i], index + i);
@@ -149,7 +149,7 @@ public class DynamicComboBoxModel extends DefaultComboBoxModel implements
 
 	// implements javax.swing.MutableComboBoxModel
 	@Override
-	public void removeElementAt(int index) {
+	public void removeElementAt(final int index) {
 		if (getElementAt(index) == selectedObject) {
 			if (index == 0) {
 				setSelectedItem(getSize() == 1 ? null : getElementAt(index + 1));
@@ -165,8 +165,8 @@ public class DynamicComboBoxModel extends DefaultComboBoxModel implements
 
 	// implements javax.swing.MutableComboBoxModel
 	@Override
-	public void removeElement(Object anObject) {
-		int index = objects.indexOf(anObject);
+	public void removeElement(final Object anObject) {
+		final int index = objects.indexOf(anObject);
 		if (index != -1) {
 			removeElementAt(index);
 		}
@@ -178,8 +178,8 @@ public class DynamicComboBoxModel extends DefaultComboBoxModel implements
 	@Override
 	public void removeAllElements() {
 		if (objects.size() > 0) {
-			int firstIndex = 0;
-			int lastIndex = objects.size() - 1;
+			final int firstIndex = 0;
+			final int lastIndex = objects.size() - 1;
 			objects.removeAllElements();
 			selectedObject = null;
 			fireIntervalRemoved(this, firstIndex, lastIndex);
@@ -192,7 +192,7 @@ public class DynamicComboBoxModel extends DefaultComboBoxModel implements
 	 * @param objectsList
 	 * @param i
 	 */
-	public void insertElementsAt(List objectsList, int index) {
+	public void insertElementsAt(final List<Object> objectsList, final int index) {
 		objects.ensureCapacity(objects.size() + objectsList.size());
 		for (int i = 0; i < objectsList.size(); i++) {
 			objects.insertElementAt(objectsList.get(i), index + i);

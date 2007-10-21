@@ -25,9 +25,9 @@ public abstract class BaseFtpClient implements FtpClient {
 	 *         fileName is empty. all data into a byte array if fileName exists
 	 *         and is not empty.
 	 */
-	public byte[] getBytes(String fileName) throws FtpProtocolException {
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		InputStream in = get(fileName);
+	public byte[] getBytes(final String fileName) throws FtpProtocolException {
+		final ByteArrayOutputStream out = new ByteArrayOutputStream();
+		final InputStream in = get(fileName);
 		if (in == null) {
 			return null;
 		}
@@ -35,13 +35,13 @@ public abstract class BaseFtpClient implements FtpClient {
 			Util.copyStream(in, out);
 			try {
 				in.close();
-			} catch (IOException e1) {
+			} catch (final IOException e1) {
 				throw new FtpProtocolException(e1);
 			}
-		} catch (CopyStreamException e) {
+		} catch (final CopyStreamException e) {
 			try {
 				in.close();
-			} catch (IOException e1) {
+			} catch (final IOException e1) {
 				throw new FtpProtocolException(e1);
 			}
 			throw new FtpProtocolException(e);
@@ -49,26 +49,26 @@ public abstract class BaseFtpClient implements FtpClient {
 		return out.toByteArray();
 	}
 
-	public void putBytes(String fileName, byte[] data)
+	public void putBytes(final String fileName, final byte[] data)
 			throws FtpProtocolException {
-		OutputStream out = put(fileName);
+		final OutputStream out = put(fileName);
 		try {
 			out.write(data);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new FtpProtocolException(e);
 		}
 		try {
 			out.close();
-		} catch (IOException e1) {
+		} catch (final IOException e1) {
 			throw new FtpProtocolException(e1);
 		}
 	}
 
 	// PROFILE
-	public boolean exists(String fileName) throws FtpProtocolException {
+	public boolean exists(final String fileName) throws FtpProtocolException {
 		try {
 			return getBytes(fileName) != null;
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			return false;
 		}
 	}

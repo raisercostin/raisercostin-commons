@@ -20,7 +20,7 @@ public class RegexpTest extends TestCase {
 	 * 
 	 * @param arg0
 	 */
-	public RegexpTest(String arg0) {
+	public RegexpTest(final String arg0) {
 		super(arg0);
 	}
 

@@ -24,16 +24,16 @@ public class FtpProtocolException extends IOException {
 		super();
 	}
 
-	public FtpProtocolException(String message) {
+	public FtpProtocolException(final String message) {
 		super(message);
 	}
 
-	public FtpProtocolException(String message, Throwable cause) {
+	public FtpProtocolException(final String message, final Throwable cause) {
 		this(message);
 		initCause(cause);
 	}
 
-	public FtpProtocolException(Throwable cause) {
+	public FtpProtocolException(final Throwable cause) {
 		this();
 		initCause(cause);
 	}

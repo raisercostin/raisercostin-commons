@@ -18,8 +18,8 @@ public class Task {
 	 * @param owner
 	 * @param percenteComplete
 	 */
-	public Task(boolean completed, String description, String owner,
-			int percenteComplete) {
+	public Task(final boolean completed, final String description,
+			final String owner, final int percenteComplete) {
 		super();
 		this.completed = completed;
 		this.description = description;
@@ -41,7 +41,7 @@ public class Task {
 		return completed;
 	}
 
-	public void setCompleted(boolean completed) {
+	public void setCompleted(final boolean completed) {
 		this.completed = completed;
 	}
 
@@ -49,7 +49,7 @@ public class Task {
 		return description;
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(final String description) {
 		this.description = description;
 	}
 
@@ -57,7 +57,7 @@ public class Task {
 		return owner;
 	}
 
-	public void setOwner(String owner) {
+	public void setOwner(final String owner) {
 		this.owner = owner;
 	}
 
@@ -65,11 +65,11 @@ public class Task {
 		return percenteComplete;
 	}
 
-	public void setPercenteComplete(int percenteComplete) {
+	public void setPercenteComplete(final int percenteComplete) {
 		this.percenteComplete = percenteComplete;
 	}
 
-	public void setAudit(String audit) {
+	public void setAudit(final String audit) {
 		this.audit = audit;
 	}
 

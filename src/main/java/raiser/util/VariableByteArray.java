@@ -24,19 +24,19 @@ public class VariableByteArray extends ArrayList<Number> implements
 	private static final long serialVersionUID = 7603888715774526663L;
 
 	@Override
-	public void removeRange(int fromIndex, int toIndex) {
+	public void removeRange(final int fromIndex, final int toIndex) {
 		super.removeRange(fromIndex, toIndex);
 	}
 
-	public void addAll(byte[] values) {
-		for (byte element : values) {
+	public void addAll(final byte[] values) {
+		for (final byte element : values) {
 			add(new Byte(element));
 		}
 	}
 
-	public void copyTo(int off, int len, byte[] b) {
+	public void copyTo(final int off, final int len, final byte[] b) {
 		for (int i = 0; i < len; i++) {
-			b[off + i] = ((Number) get(i)).byteValue();
+			b[off + i] = (get(i)).byteValue();
 		}
 	}
 }

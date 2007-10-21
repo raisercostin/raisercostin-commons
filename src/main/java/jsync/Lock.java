@@ -27,8 +27,8 @@ public class Lock {
 	 *         <code>false</code> if resource can't be locked before
 	 *         expiration of timeout.
 	 */
-	public synchronized boolean setShared(long timeout) {
-		Thread self = Thread.currentThread();
+	public synchronized boolean setShared(final long timeout) {
+		final Thread self = Thread.currentThread();
 		if (self == owner) {
 			Assert.that((nested != 0) && (nWriters == 1) && (nReaders <= 1));
 			if (nReaders == 1) {
@@ -36,7 +36,7 @@ public class Lock {
 				sharedLockChain.count += 1;
 			} else {
 				nReaders = 1;
-				LockObject lck = createLock();
+				final LockObject lck = createLock();
 				lck.owner = self;
 				lck.count = 1;
 				lck.next = sharedLockChain;
@@ -44,16 +44,16 @@ public class Lock {
 			}
 			return true;
 		}
-		long startTime = System.currentTimeMillis();
+		final long startTime = System.currentTimeMillis();
 		while (nWriters != 0) {
-			long currentTime = System.currentTimeMillis();
+			final long currentTime = System.currentTimeMillis();
 			if (currentTime - startTime >= timeout) {
 				return false;
 			}
 			waiting = true;
 			try {
 				wait(timeout - currentTime + startTime);
-			} catch (InterruptedException ex) {
+			} catch (final InterruptedException ex) {
 				throw new InterruptedError();
 			}
 		}
@@ -92,24 +92,24 @@ public class Lock {
 	 *         <code>false</code> if resource can't be locked within specified
 	 *         time.
 	 */
-	public synchronized boolean setExclusive(long timeout) {
-		Thread self = Thread.currentThread();
+	public synchronized boolean setExclusive(final long timeout) {
+		final Thread self = Thread.currentThread();
 		if (self == owner) {
 			Assert.that((nested != 0) && (nWriters == 1));
 			nested += 1;
 			return true;
 		}
-		long startTime = System.currentTimeMillis();
+		final long startTime = System.currentTimeMillis();
 		while ((nWriters != 0)
 				|| ((nReaders != 0) && ((nReaders != 1) || (sharedLockChain.owner != self)))) {
-			long currentTime = System.currentTimeMillis();
+			final long currentTime = System.currentTimeMillis();
 			if (currentTime - startTime >= timeout) {
 				return false;
 			}
 			waiting = true;
 			try {
 				wait(timeout - currentTime + startTime);
-			} catch (InterruptedException ex) {
+			} catch (final InterruptedException ex) {
 				throw new InterruptedError();
 			}
 		}
@@ -132,7 +132,7 @@ public class Lock {
 	 * was not previously set by this thread.
 	 */
 	public synchronized void unsetShared() {
-		Thread self = Thread.currentThread();
+		final Thread self = Thread.currentThread();
 		LockObject prev = null;
 		for (LockObject lck = sharedLockChain; lck != null; lck = lck.next) {
 			if (lck.owner == self) {
@@ -163,7 +163,7 @@ public class Lock {
 	 * if exclusive lock was not previously set by this thread.
 	 */
 	public synchronized void unsetExclusive() {
-		Thread self = Thread.currentThread();
+		final Thread self = Thread.currentThread();
 		if (owner != self) {
 			throw new NotOwnerError();
 		}
@@ -195,7 +195,7 @@ public class Lock {
 	protected static LockObject freeLockChain;
 
 	protected synchronized final static LockObject createLock() {
-		LockObject lck = freeLockChain;
+		final LockObject lck = freeLockChain;
 		if (lck != null) {
 			freeLockChain = lck.next;
 			return lck;
@@ -203,7 +203,7 @@ public class Lock {
 		return new LockObject();
 	}
 
-	protected synchronized final static void freeLock(LockObject lck) {
+	protected synchronized final static void freeLock(final LockObject lck) {
 		lck.next = freeLockChain;
 		freeLockChain = lck;
 	}

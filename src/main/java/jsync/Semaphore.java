@@ -22,7 +22,7 @@ public class Semaphore {
 		while (counter == 0) {
 			try {
 				wait();
-			} catch (InterruptedException ex) {
+			} catch (final InterruptedException ex) {
 				// It is possible for a thread to be interrupted after
 				// being notified but before returning from the wait()
 				// call. To prevent lost of notification notify()
@@ -44,17 +44,17 @@ public class Semaphore {
 	 *         if <code>wait()</code> was terminated due to timeout
 	 *         expiration.
 	 */
-	public synchronized boolean waitSemaphore(long timeout) {
+	public synchronized boolean waitSemaphore(final long timeout) {
 		if (counter == 0) {
-			long startTime = System.currentTimeMillis();
+			final long startTime = System.currentTimeMillis();
 			do {
-				long currentTime = System.currentTimeMillis();
+				final long currentTime = System.currentTimeMillis();
 				if (currentTime - startTime >= timeout) {
 					return false;
 				}
 				try {
 					wait(timeout - currentTime + startTime);
-				} catch (InterruptedException ex) {
+				} catch (final InterruptedException ex) {
 					// It is possible for a thread to be interrupted after
 					// being notified but before returning from the wait()
 					// call. To prevent lost of notification notify()
@@ -90,7 +90,7 @@ public class Semaphore {
 	 * @param initValue
 	 *            initial value of semaphore counter
 	 */
-	public Semaphore(int initValue) {
+	public Semaphore(final int initValue) {
 		Assert.that(initValue >= 0);
 		counter = initValue;
 	}

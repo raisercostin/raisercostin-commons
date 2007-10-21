@@ -18,7 +18,7 @@ public class ConnectionPool {
 
 	private String DB_PASSWD = "";
 
-	private String DB_TEST = "select 'sample' as sample";
+	private final String DB_TEST = "select 'sample' as sample";
 
 	public static final int RECYCLE_OK = 1;
 
@@ -30,8 +30,8 @@ public class ConnectionPool {
 
 	public final static Object lock = new Object();
 
-	public ConnectionPool(String databaseUrl, String driver, String user,
-			String password, int stackSize) {
+	public ConnectionPool(final String databaseUrl, final String driver,
+			final String user, final String password, final int stackSize) {
 		STACK_SIZE = stackSize;
 		DB_URL = databaseUrl;
 		DB_DRIVER = driver;
@@ -39,13 +39,13 @@ public class ConnectionPool {
 		DB_PASSWD = password;
 		try {
 			// init connections
-			Driver drv = (Driver) (Class.forName(DB_DRIVER).newInstance());
+			final Driver drv = (Driver) (Class.forName(DB_DRIVER).newInstance());
 
 			DriverManager.registerDriver(drv);
 
 			available = new Stack<Connection>();
 
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			System.out.println(" FATAL ERROR :unable to register driver :"
 					+ DB_DRIVER + "\nreason :" + e.getMessage());
 
@@ -59,17 +59,16 @@ public class ConnectionPool {
 		}
 	}
 
-	public ConnectionPool(HashMap params) {
-		this((String) params.get("/db_password"), (String) params
-				.get("/db_url"), (String) params.get("/db_driver"),
-				(String) params.get("/db_user"), Integer
-						.parseInt((String) params.get("/connections")));
+	public ConnectionPool(final HashMap<String, String> params) {
+		this(params.get("/db_password"), params.get("/db_url"), params
+				.get("/db_driver"), params.get("/db_user"), Integer
+				.parseInt(params.get("/connections")));
 	}
 
 	private class ThreadConResolver extends Thread {
 		ConnectionPool cp = null;
 
-		public ThreadConResolver(ConnectionPool cp) {
+		public ThreadConResolver(final ConnectionPool cp) {
 			super();
 			this.cp = cp;
 		}
@@ -83,7 +82,7 @@ public class ConnectionPool {
 		public void run() {
 			while (true) {
 				try {
-					Connection con = DriverManager.getConnection(DB_URL,
+					final Connection con = DriverManager.getConnection(DB_URL,
 							DB_USER, DB_PASSWD);
 
 					/*
@@ -97,7 +96,7 @@ public class ConnectionPool {
 					 */
 					break;
 
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					System.out
 							.println("Unable to acquire db connection. Reason "
 									+ e.getMessage() + "\nRetry in "
@@ -105,7 +104,7 @@ public class ConnectionPool {
 
 					try {
 						sleep(RETRY_TIME);
-					} catch (InterruptedException ie) {
+					} catch (final InterruptedException ie) {
 					}
 				}
 			}
@@ -117,7 +116,7 @@ public class ConnectionPool {
 	 * instance; }
 	 */
 
-	public void recycle(Connection con, int recType) {
+	public void recycle(final Connection con, final int recType) {
 		if (con == null) {
 			return;
 		}
@@ -134,7 +133,7 @@ public class ConnectionPool {
 					 * 
 					 */
 					con.close();
-				} catch (Exception e) {
+				} catch (final Exception e) {
 				}
 
 				/*
@@ -155,12 +154,12 @@ public class ConnectionPool {
 		}
 	}
 
-	private boolean verifyConnection(Connection con) {
+	private boolean verifyConnection(final Connection con) {
 		try {
 			con.createStatement().execute(DB_TEST);
 			return true;
 
-		} catch (Exception ex) {
+		} catch (final Exception ex) {
 			return false;
 		}
 	}
@@ -176,7 +175,7 @@ public class ConnectionPool {
 			while (available.isEmpty()) {
 				try {
 					available.wait();
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					// we just be notified
 				}
 			}

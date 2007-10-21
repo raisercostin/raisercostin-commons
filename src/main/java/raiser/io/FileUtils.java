@@ -18,7 +18,6 @@ import java.util.Arrays;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
-import org.springframework.core.io.ClassPathResource;
 
 /**
  * @author raiser
@@ -48,7 +47,7 @@ public class FileUtils {
 	 * @param path
 	 * @return
 	 */
-	public static String getPath(String path) {
+	public static String getPath(final String path) {
 		return path.endsWith(getFileSeparator()) ? path : path
 				+ getFileSeparator();
 	}
@@ -61,13 +60,14 @@ public class FileUtils {
 	 * @param dest
 	 *            Destination file (no directory!)
 	 */
-	public static void copy(String sourceFileName, String destinationFileName)
-			throws IOException {
+	public static void copy(final String sourceFileName,
+			final String destinationFileName) throws IOException {
 		copy(sourceFileName, destinationFileName, true);
 	}
 
-	public static void copy(String sourceFileName, String destinationFileName,
-			boolean createDirectoriesIfNecessary) throws IOException {
+	public static void copy(final String sourceFileName,
+			final String destinationFileName,
+			final boolean createDirectoriesIfNecessary) throws IOException {
 		subfile(sourceFileName, destinationFileName,
 				createDirectoriesIfNecessary, 0, -1);
 	}
@@ -78,7 +78,7 @@ public class FileUtils {
 	 * @param destinationFileName
 	 * @return
 	 */
-	public static String parsePath(String url) {
+	public static String parsePath(final String url) {
 		String separator = null;
 		if (url.indexOf(getFileSeparator()) != -1) {
 			separator = getFileSeparator();
@@ -93,8 +93,8 @@ public class FileUtils {
 	/**
 	 * @param destinationFileName
 	 */
-	public static boolean makedir(String path) {
-		File file = new File(path);
+	public static boolean makedir(final String path) {
+		final File file = new File(path);
 		if (file.exists()) {
 			if (file.isDirectory()) {
 				logger.debug("Path [" + extractCanonicalName(file)
@@ -109,22 +109,22 @@ public class FileUtils {
 				return false;
 			}
 		}
-		String pathString = extractCanonicalName(file);
+		final String pathString = extractCanonicalName(file);
 		if (logger.isDebugEnabled()) {
 			logger.debug("makedir(" + pathString + ")");
 		}
-		boolean result = file.mkdirs();
+		final boolean result = file.mkdirs();
 		if (logger.isDebugEnabled()) {
 			logger.debug("makedir(" + pathString + ")=>" + result);
 		}
 		return result;
 	}
 
-	private static String extractCanonicalName(File file) {
+	private static String extractCanonicalName(final File file) {
 		String pathString = null;
 		try {
 			pathString = file.getCanonicalPath();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			pathString = file.getAbsolutePath();
 		}
 		return pathString;
@@ -133,27 +133,27 @@ public class FileUtils {
 	/**
 	 * On some JVMs there is a bug in delete method.
 	 */
-	public static boolean delete(File file) throws IOException {
+	public static boolean delete(final File file) throws IOException {
 		return delete(file, 1000, 10, true);
 	}
 
 	/**
 	 * On some JVMs there is a bug in delete method.
 	 */
-	public static boolean delete(String fileName) throws IOException {
+	public static boolean delete(final String fileName) throws IOException {
 		return delete(new File(fileName), 1000, 10, true);
 	}
 
-	public static boolean delete(String fileName, boolean errorIfNotExists)
-			throws IOException {
+	public static boolean delete(final String fileName,
+			final boolean errorIfNotExists) throws IOException {
 		return delete(new File(fileName), 100, 10, errorIfNotExists);
 	}
 
 	/**
 	 * On some JVMs there is a bug in delete method.
 	 */
-	static boolean delete(File file, int timeout, int tries,
-			boolean errorIfNotExists) throws IOException {
+	static boolean delete(final File file, final int timeout, final int tries,
+			final boolean errorIfNotExists) throws IOException {
 		try {
 			if (!file.exists()) {
 				if (errorIfNotExists) {
@@ -183,7 +183,7 @@ public class FileUtils {
 					+ (result ? " was deleted." : " was NOT deleted. I tried "
 							+ tries + " times x " + +pause + " miliseconds."));
 			return result;
-		} catch (InterruptedException e) {
+		} catch (final InterruptedException e) {
 			throw new IOException("The process of deleting file "
 					+ file.getAbsolutePath() + " was interrupted.");
 		}
@@ -192,8 +192,8 @@ public class FileUtils {
 	/**
 	 * Checks if directory chosen exists and is writable
 	 */
-	private static boolean checkTempLocation(String dir) {
-		java.io.File test = new java.io.File(dir);
+	private static boolean checkTempLocation(final String dir) {
+		final java.io.File test = new java.io.File(dir);
 		if (test.isDirectory() && test.canWrite()) {
 			return true;
 		} else {
@@ -207,7 +207,8 @@ public class FileUtils {
 	 * @return
 	 * @throws IOException
 	 */
-	public static String getTempFile(String id, String near) throws IOException {
+	public static String getTempFile(final String id, final String near)
+			throws IOException {
 		return getTempFile(id, new File(near)).getCanonicalPath();
 	}
 
@@ -226,23 +227,24 @@ public class FileUtils {
 	 *            c:/temp 4) c:/windows/temp 5) / 6) current directory
 	 * @return a temporary File with a unique name of the form XXXnnnnn.tmp.
 	 */
-	public static java.io.File getTempFile(String id, java.io.File near)
-			throws java.io.IOException {
-		String prepend = (id != null) ? id : "";
+	public static java.io.File getTempFile(final String id,
+			final java.io.File near) throws java.io.IOException {
+		final String prepend = (id != null) ? id : "";
 		// Find location for temp file
 		String temp_loc = null;
 		if (near != null) {
 			if (near.isDirectory()) {
 				temp_loc = near.getAbsolutePath();
 			} else {
-				java.io.File tmp = new java.io.File(near.getAbsolutePath());
+				final java.io.File tmp = new java.io.File(near
+						.getAbsolutePath());
 				temp_loc = tmp.getParent();
 			}
 		}
 		if ((near == null)
 				|| ((near != null) && (checkTempLocation(temp_loc) == false))) {
-			String pathSep = System.getProperty("path.separator");
-			String fileSep = System.getProperty("file.separator");
+			final String pathSep = System.getProperty("path.separator");
+			final String fileSep = System.getProperty("file.separator");
 			if (checkTempLocation(fileSep + "tmp") == true) {
 				temp_loc = fileSep + "tmp";
 			} else if (checkTempLocation(fileSep + "var" + fileSep + "tmp") == true) {
@@ -263,12 +265,13 @@ public class FileUtils {
 						"Could not find directory for temporary file");
 			}
 		}
-		java.util.Random wheel = new java.util.Random(); // seeded from the
+		final java.util.Random wheel = new java.util.Random(); // seeded from
+																// the
 		// clock
 		java.io.File tempFile = null;
 		do {
 			// generate random a number 10,000 .. 99,999
-			int unique = ((wheel.nextInt() & Integer.MAX_VALUE) % 90000) + 10000;
+			final int unique = ((wheel.nextInt() & Integer.MAX_VALUE) % 90000) + 10000;
 			tempFile = new java.io.File(temp_loc, prepend
 					+ Integer.toString(unique) + ".tmp");
 		} while (tempFile.exists());
@@ -280,8 +283,8 @@ public class FileUtils {
 		return tempFile;
 	}
 
-	public static void rename(File srcFile, File dstFile,
-			boolean checkDestination, boolean deleteDestination)
+	public static void rename(final File srcFile, final File dstFile,
+			final boolean checkDestination, final boolean deleteDestination)
 			throws IOException {
 		if (checkDestination) {
 			if (exists(dstFile, true)) {
@@ -302,8 +305,8 @@ public class FileUtils {
 		}
 	}
 
-	private static boolean exists(File dstFile, boolean caseSensitive)
-			throws IOException {
+	private static boolean exists(final File dstFile,
+			final boolean caseSensitive) throws IOException {
 		boolean result = dstFile.exists();
 		if (caseSensitive && result) {
 			result = dstFile.getCanonicalPath().equals(
@@ -312,13 +315,13 @@ public class FileUtils {
 		return result;
 	}
 
-	private static boolean renameFixed(File srcFile, File dstFile) {
+	private static boolean renameFixed(final File srcFile, final File dstFile) {
 		boolean result = true;
 		// windows case sensitive rename
 		if (SystemUtils.isWindows()
 				&& srcFile.getAbsolutePath().equalsIgnoreCase(
 						dstFile.getAbsolutePath())) {
-			File dstFile2 = new File(dstFile.getAbsolutePath()
+			final File dstFile2 = new File(dstFile.getAbsolutePath()
 					+ "tempdfwaetw2134213rwefsda");
 			result &= srcFile.renameTo(dstFile2);
 			result &= dstFile2.renameTo(dstFile);
@@ -336,30 +339,32 @@ public class FileUtils {
 	 * @param dstFile
 	 * @throws IOException
 	 */
-	public static void rename(File srcFile, File dstFile) throws IOException {
+	public static void rename(final File srcFile, final File dstFile)
+			throws IOException {
 		rename(srcFile, dstFile, false, false);
 	}
 
-	public static byte[] readFile(File file) throws IOException {
-		InputStream in = new FileInputStream(file);
-		byte[] buffer = new byte[(int) file.length()];
+	public static byte[] readFile(final File file) throws IOException {
+		final InputStream in = new FileInputStream(file);
+		final byte[] buffer = new byte[(int) file.length()];
 		in.read(buffer);
 		in.close();
 		return buffer;
 	}
 
-	public static byte[] readFile(String htmlFile) throws IOException {
+	public static byte[] readFile(final String htmlFile) throws IOException {
 		return readFile(new File(htmlFile));
 	}
 
 	public static String getCurrentDirectory() {
-		String result = new File(".").getAbsolutePath();
+		final String result = new File(".").getAbsolutePath();
 		return result.substring(0, result.length() - 1);
 	}
 
-	public static void subfile(String sourceFileName,
-			String destinationFileName, boolean createDirectoriesIfNecessary,
-			long from, long to) throws IOException {
+	public static void subfile(final String sourceFileName,
+			final String destinationFileName,
+			final boolean createDirectoriesIfNecessary, final long from,
+			final long to) throws IOException {
 		if (createDirectoriesIfNecessary) {
 			makedir(parsePath(destinationFileName));
 		}
@@ -369,7 +374,7 @@ public class FileUtils {
 			in = new BufferedInputStream(new FileInputStream(sourceFileName));
 			out = new BufferedOutputStream(new FileOutputStream(
 					destinationFileName));
-			byte str[] = new byte[1024];
+			final byte str[] = new byte[1024];
 			long index = 0;
 			int nb;
 			int max;
@@ -398,19 +403,21 @@ public class FileUtils {
 		}
 	}
 
-	public static void rename(String temp, String fileName,
-			boolean checkDestination, boolean deleteDestination)
+	public static void rename(final String temp, final String fileName,
+			final boolean checkDestination, final boolean deleteDestination)
 			throws IOException {
 		rename(new File(temp), new File(fileName), checkDestination,
 				deleteDestination);
 	}
 
-	public static void rename(String temp, String fileName) throws IOException {
+	public static void rename(final String temp, final String fileName)
+			throws IOException {
 		rename(new File(temp), new File(fileName));
 	}
 
-	public static void create(String file, byte[] data) throws IOException {
-		FileOutputStream f = new FileOutputStream(file);
+	public static void create(final String file, final byte[] data)
+			throws IOException {
+		final FileOutputStream f = new FileOutputStream(file);
 		f.write(data);
 		f.close();
 	}
@@ -419,8 +426,8 @@ public class FileUtils {
 		final String name = parseFileName(fileName);
 		final String dir2 = parsePath(new File(fileName).getAbsolutePath())
 				+ "\\";
-		File dir = parseDirectory(new File(fileName));
-		String[] result = dir.list(new FilenameFilter() {
+		final File dir = parseDirectory(new File(fileName));
+		final String[] result = dir.list(new FilenameFilter() {
 			public boolean accept(File dir, String fileName2) {
 				return name.equalsIgnoreCase(fileName2);
 			}
@@ -431,7 +438,7 @@ public class FileUtils {
 		if (result.length == 1) {
 			return dir2 + result[0];
 		}
-		for (String element : result) {
+		for (final String element : result) {
 			if (element.equals(name)) {
 				return dir2 + fileName;
 			}
@@ -441,7 +448,7 @@ public class FileUtils {
 				+ Arrays.asList(result) + "]");
 	}
 
-	private static String parseFileName(String url) {
+	private static String parseFileName(final String url) {
 		String separator = null;
 		if (url.indexOf(getFileSeparator()) != -1) {
 			separator = getFileSeparator();
@@ -453,38 +460,38 @@ public class FileUtils {
 		return url.substring(url.indexOf(separator) + 1);
 	}
 
-	public static String parseDirectory(String fileName) {
+	public static String parseDirectory(final String fileName) {
 		return parseDirectory(new File(fileName)).getAbsolutePath();
 	}
 
-	public static File parseDirectory(File file) {
+	public static File parseDirectory(final File file) {
 		if (file.isDirectory()) {
 			return file;
 		}
 		return file.getParentFile();
 	}
 
-	public static boolean create(String fileName) throws IOException {
+	public static boolean create(final String fileName) throws IOException {
 		return new File(fileName).createNewFile();
 	}
 
-	public static File[] list(String path, String regexp) {
+	public static File[] list(final String path, final String regexp) {
 		final Pattern p = Pattern.compile(regexp);
 		return new File(path).listFiles(new FileFilter() {
-			public boolean accept(File pathname) {
+			public boolean accept(final File pathname) {
 				return p.matcher(pathname.getAbsolutePath()).matches();
 			}
 		});
 	}
 
-	public static String getFileName(File file) {
+	public static String getFileName(final File file) {
 		return file.getName().substring(0, file.getName().lastIndexOf('.'));
 	}
 
-	public static String readString(File file) throws IOException {
-		FileReader in = new FileReader(file);
+	public static String readString(final File file) throws IOException {
+		final FileReader in = new FileReader(file);
 		try {
-			char[] buffer = new char[(int) file.length() / 2];
+			final char[] buffer = new char[(int) file.length() / 2];
 			in.read(buffer);
 			return new String(buffer);
 		} finally {
@@ -492,7 +499,8 @@ public class FileUtils {
 		}
 	}
 
-	public static void copy(org.springframework.core.io.Resource source, String destination) throws IOException {
-		copy(source.getFile().getAbsolutePath(),destination);
+	public static void copy(final org.springframework.core.io.Resource source,
+			final String destination) throws IOException {
+		copy(source.getFile().getAbsolutePath(), destination);
 	}
 }

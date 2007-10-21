@@ -13,7 +13,7 @@ public class MutableString {
 	/**
 	 * @param name
 	 */
-	public MutableString(String string) {
+	public MutableString(final String string) {
 		setString(string);
 	}
 
@@ -23,7 +23,7 @@ public class MutableString {
 	 * @param data
 	 * @return
 	 */
-	public static String copyValueOf(char[] data) {
+	public static String copyValueOf(final char[] data) {
 		return String.copyValueOf(data);
 	}
 
@@ -33,7 +33,8 @@ public class MutableString {
 	 * @param count
 	 * @return
 	 */
-	public static String copyValueOf(char[] data, int offset, int count) {
+	public static String copyValueOf(final char[] data, final int offset,
+			final int count) {
 		return String.copyValueOf(data, offset, count);
 	}
 
@@ -41,7 +42,7 @@ public class MutableString {
 	 * @param b
 	 * @return
 	 */
-	public static String valueOf(boolean b) {
+	public static String valueOf(final boolean b) {
 		return String.valueOf(b);
 	}
 
@@ -49,7 +50,7 @@ public class MutableString {
 	 * @param c
 	 * @return
 	 */
-	public static String valueOf(char c) {
+	public static String valueOf(final char c) {
 		return String.valueOf(c);
 	}
 
@@ -57,7 +58,7 @@ public class MutableString {
 	 * @param data
 	 * @return
 	 */
-	public static String valueOf(char[] data) {
+	public static String valueOf(final char[] data) {
 		return String.valueOf(data);
 	}
 
@@ -67,7 +68,8 @@ public class MutableString {
 	 * @param count
 	 * @return
 	 */
-	public static String valueOf(char[] data, int offset, int count) {
+	public static String valueOf(final char[] data, final int offset,
+			final int count) {
 		return String.valueOf(data, offset, count);
 	}
 
@@ -75,7 +77,7 @@ public class MutableString {
 	 * @param d
 	 * @return
 	 */
-	public static String valueOf(double d) {
+	public static String valueOf(final double d) {
 		return String.valueOf(d);
 	}
 
@@ -83,7 +85,7 @@ public class MutableString {
 	 * @param f
 	 * @return
 	 */
-	public static String valueOf(float f) {
+	public static String valueOf(final float f) {
 		return String.valueOf(f);
 	}
 
@@ -91,7 +93,7 @@ public class MutableString {
 	 * @param i
 	 * @return
 	 */
-	public static String valueOf(int i) {
+	public static String valueOf(final int i) {
 		return String.valueOf(i);
 	}
 
@@ -99,7 +101,7 @@ public class MutableString {
 	 * @param obj
 	 * @return
 	 */
-	public static String valueOf(Object obj) {
+	public static String valueOf(final Object obj) {
 		return String.valueOf(obj);
 	}
 
@@ -107,7 +109,7 @@ public class MutableString {
 	 * @param l
 	 * @return
 	 */
-	public static String valueOf(long l) {
+	public static String valueOf(final long l) {
 		return String.valueOf(l);
 	}
 
@@ -115,7 +117,7 @@ public class MutableString {
 	 * @param index
 	 * @return
 	 */
-	public char charAt(int index) {
+	public char charAt(final int index) {
 		return string.charAt(index);
 	}
 
@@ -123,7 +125,7 @@ public class MutableString {
 	 * @param o
 	 * @return
 	 */
-	public int compareTo(Object o) {
+	public int compareTo(final Object o) {
 		return string.compareTo(o.toString());
 	}
 
@@ -131,7 +133,7 @@ public class MutableString {
 	 * @param anotherString
 	 * @return
 	 */
-	public int compareTo(String anotherString) {
+	public int compareTo(final String anotherString) {
 		return string.compareTo(anotherString);
 	}
 
@@ -139,7 +141,7 @@ public class MutableString {
 	 * @param str
 	 * @return
 	 */
-	public int compareToIgnoreCase(String str) {
+	public int compareToIgnoreCase(final String str) {
 		return string.compareToIgnoreCase(str);
 	}
 
@@ -147,7 +149,7 @@ public class MutableString {
 	 * @param str
 	 * @return
 	 */
-	public String concat(String str) {
+	public String concat(final String str) {
 		return string.concat(str);
 	}
 
@@ -155,7 +157,7 @@ public class MutableString {
 	 * @param sb
 	 * @return
 	 */
-	public boolean contentEquals(StringBuffer sb) {
+	public boolean contentEquals(final StringBuffer sb) {
 		return string.contentEquals(sb);
 	}
 
@@ -163,12 +165,12 @@ public class MutableString {
 	 * @param suffix
 	 * @return
 	 */
-	public boolean endsWith(String suffix) {
+	public boolean endsWith(final String suffix) {
 		return string.endsWith(suffix);
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		return string.equals(obj);
 	}
 
@@ -176,7 +178,7 @@ public class MutableString {
 	 * @param anotherString
 	 * @return
 	 */
-	public boolean equalsIgnoreCase(String anotherString) {
+	public boolean equalsIgnoreCase(final String anotherString) {
 		return string.equalsIgnoreCase(anotherString);
 	}
 
@@ -192,7 +194,7 @@ public class MutableString {
 	 * @return
 	 * @throws java.io.UnsupportedEncodingException
 	 */
-	public byte[] getBytes(String charsetName)
+	public byte[] getBytes(final String charsetName)
 			throws UnsupportedEncodingException {
 		return string.getBytes(charsetName);
 	}
@@ -203,7 +205,8 @@ public class MutableString {
 	 * @param dst
 	 * @param dstBegin
 	 */
-	public void getChars(int srcBegin, int srcEnd, char[] dst, int dstBegin) {
+	public void getChars(final int srcBegin, final int srcEnd,
+			final char[] dst, final int dstBegin) {
 		string.getChars(srcBegin, srcEnd, dst, dstBegin);
 	}
 
@@ -216,7 +219,7 @@ public class MutableString {
 	 * @param ch
 	 * @return
 	 */
-	public int indexOf(int ch) {
+	public int indexOf(final int ch) {
 		return string.indexOf(ch);
 	}
 
@@ -225,7 +228,7 @@ public class MutableString {
 	 * @param fromIndex
 	 * @return
 	 */
-	public int indexOf(int ch, int fromIndex) {
+	public int indexOf(final int ch, final int fromIndex) {
 		return string.indexOf(ch, fromIndex);
 	}
 
@@ -233,7 +236,7 @@ public class MutableString {
 	 * @param str
 	 * @return
 	 */
-	public int indexOf(String str) {
+	public int indexOf(final String str) {
 		return string.indexOf(str);
 	}
 
@@ -242,7 +245,7 @@ public class MutableString {
 	 * @param fromIndex
 	 * @return
 	 */
-	public int indexOf(String str, int fromIndex) {
+	public int indexOf(final String str, final int fromIndex) {
 		return string.indexOf(str, fromIndex);
 	}
 
@@ -257,7 +260,7 @@ public class MutableString {
 	 * @param ch
 	 * @return
 	 */
-	public int lastIndexOf(int ch) {
+	public int lastIndexOf(final int ch) {
 		return string.lastIndexOf(ch);
 	}
 
@@ -266,7 +269,7 @@ public class MutableString {
 	 * @param fromIndex
 	 * @return
 	 */
-	public int lastIndexOf(int ch, int fromIndex) {
+	public int lastIndexOf(final int ch, final int fromIndex) {
 		return string.lastIndexOf(ch, fromIndex);
 	}
 
@@ -274,7 +277,7 @@ public class MutableString {
 	 * @param str
 	 * @return
 	 */
-	public int lastIndexOf(String str) {
+	public int lastIndexOf(final String str) {
 		return string.lastIndexOf(str);
 	}
 
@@ -283,7 +286,7 @@ public class MutableString {
 	 * @param fromIndex
 	 * @return
 	 */
-	public int lastIndexOf(String str, int fromIndex) {
+	public int lastIndexOf(final String str, final int fromIndex) {
 		return string.lastIndexOf(str, fromIndex);
 	}
 
@@ -298,7 +301,7 @@ public class MutableString {
 	 * @param regex
 	 * @return
 	 */
-	public boolean matches(String regex) {
+	public boolean matches(final String regex) {
 		return string.matches(regex);
 	}
 
@@ -310,8 +313,8 @@ public class MutableString {
 	 * @param len
 	 * @return
 	 */
-	public boolean regionMatches(boolean ignoreCase, int toffset, String other,
-			int ooffset, int len) {
+	public boolean regionMatches(final boolean ignoreCase, final int toffset,
+			final String other, final int ooffset, final int len) {
 		return string.regionMatches(ignoreCase, toffset, other, ooffset, len);
 	}
 
@@ -322,7 +325,8 @@ public class MutableString {
 	 * @param len
 	 * @return
 	 */
-	public boolean regionMatches(int toffset, String other, int ooffset, int len) {
+	public boolean regionMatches(final int toffset, final String other,
+			final int ooffset, final int len) {
 		return string.regionMatches(toffset, other, ooffset, len);
 	}
 
@@ -331,7 +335,7 @@ public class MutableString {
 	 * @param newChar
 	 * @return
 	 */
-	public String replace(char oldChar, char newChar) {
+	public String replace(final char oldChar, final char newChar) {
 		return string.replace(oldChar, newChar);
 	}
 
@@ -340,7 +344,7 @@ public class MutableString {
 	 * @param replacement
 	 * @return
 	 */
-	public String replaceAll(String regex, String replacement) {
+	public String replaceAll(final String regex, final String replacement) {
 		return string.replaceAll(regex, replacement);
 	}
 
@@ -349,7 +353,7 @@ public class MutableString {
 	 * @param replacement
 	 * @return
 	 */
-	public String replaceFirst(String regex, String replacement) {
+	public String replaceFirst(final String regex, final String replacement) {
 		return string.replaceFirst(regex, replacement);
 	}
 
@@ -357,7 +361,7 @@ public class MutableString {
 	 * @param regex
 	 * @return
 	 */
-	public String[] split(String regex) {
+	public String[] split(final String regex) {
 		return string.split(regex);
 	}
 
@@ -366,7 +370,7 @@ public class MutableString {
 	 * @param limit
 	 * @return
 	 */
-	public String[] split(String regex, int limit) {
+	public String[] split(final String regex, final int limit) {
 		return string.split(regex, limit);
 	}
 
@@ -374,7 +378,7 @@ public class MutableString {
 	 * @param prefix
 	 * @return
 	 */
-	public boolean startsWith(String prefix) {
+	public boolean startsWith(final String prefix) {
 		return string.startsWith(prefix);
 	}
 
@@ -383,7 +387,7 @@ public class MutableString {
 	 * @param toffset
 	 * @return
 	 */
-	public boolean startsWith(String prefix, int toffset) {
+	public boolean startsWith(final String prefix, final int toffset) {
 		return string.startsWith(prefix, toffset);
 	}
 
@@ -392,7 +396,7 @@ public class MutableString {
 	 * @param end
 	 * @return
 	 */
-	public CharSequence subSequence(int start, int end) {
+	public CharSequence subSequence(final int start, final int end) {
 		return string.subSequence(start, end);
 	}
 
@@ -400,7 +404,7 @@ public class MutableString {
 	 * @param beginIndex
 	 * @return
 	 */
-	public String substring(int beginIndex) {
+	public String substring(final int beginIndex) {
 		return string.substring(beginIndex);
 	}
 
@@ -409,7 +413,7 @@ public class MutableString {
 	 * @param endIndex
 	 * @return
 	 */
-	public String substring(int beginIndex, int endIndex) {
+	public String substring(final int beginIndex, final int endIndex) {
 		return string.substring(beginIndex, endIndex);
 	}
 
@@ -431,7 +435,7 @@ public class MutableString {
 	 * @param locale
 	 * @return
 	 */
-	public String toLowerCase(Locale locale) {
+	public String toLowerCase(final Locale locale) {
 		return string.toLowerCase(locale);
 	}
 
@@ -451,7 +455,7 @@ public class MutableString {
 	 * @param locale
 	 * @return
 	 */
-	public String toUpperCase(Locale locale) {
+	public String toUpperCase(final Locale locale) {
 		return string.toUpperCase(locale);
 	}
 
@@ -462,7 +466,7 @@ public class MutableString {
 		return string.trim();
 	}
 
-	public void setString(String string) {
+	public void setString(final String string) {
 		this.string = string;
 	}
 }

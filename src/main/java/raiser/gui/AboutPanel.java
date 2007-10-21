@@ -59,9 +59,10 @@ public class AboutPanel extends JPanel {
 	/**
 	 * This is the default constructor
 	 */
-	public AboutPanel(String productName, String productVersion,
-			String productBuild, String productDate, String productWebsite,
-			String copyright, String copyrightNotice, String licenceType) {
+	public AboutPanel(final String productName, final String productVersion,
+			final String productBuild, final String productDate,
+			final String productWebsite, final String copyright,
+			final String copyrightNotice, final String licenceType) {
 		super();
 		this.productName = productName;
 		this.productVersion = productVersion;
@@ -118,7 +119,7 @@ public class AboutPanel extends JPanel {
 				jPanel1.add(getProductVersionLabel(), null); // Generated
 				jPanel1.add(getProductBuildLabel(), null); // Generated
 				jPanel1.add(getProductDateLabel(), null); // Generated
-			} catch (java.lang.Throwable e) {
+			} catch (final java.lang.Throwable e) {
 				// TODO: Something
 			}
 		}
@@ -225,7 +226,7 @@ public class AboutPanel extends JPanel {
 				pictureLabel.setText(""); // Generated
 				pictureLabel.setIcon(UIManager
 						.getIcon("OptionPane.warningIcon"));
-			} catch (java.lang.Throwable e) {
+			} catch (final java.lang.Throwable e) {
 				// TODO: Something
 			}
 		}
@@ -251,7 +252,7 @@ public class AboutPanel extends JPanel {
 				jPanel.add(getCopyrightNoticeLabel(), null); // Generated
 				jPanel.add(getCopyrightLabel(), null); // Generated
 				jPanel.add(getLicenceTypeLabel(), null); // Generated
-			} catch (java.lang.Throwable e) {
+			} catch (final java.lang.Throwable e) {
 				// TODO: Something
 			}
 		}

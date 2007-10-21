@@ -27,11 +27,11 @@ public class Resources extends JApplet {
 	 * @param relativePath
 	 * @return
 	 */
-	public static URL getResource(String path) {
+	public static URL getResource(final String path) {
 		return getBaseDir(path);
 	}
 
-	private static URL getBaseDir(String path) {
+	private static URL getBaseDir(final String path) {
 		URL baseDir = null;
 		if (baseDir == null) {
 			baseDir = getBaseDirFromSystemResources(path);
@@ -56,13 +56,13 @@ public class Resources extends JApplet {
 				path = path.substring(1);
 			}
 			baseDir = new URL("file:/" + new File(path).getAbsolutePath());
-		} catch (java.security.AccessControlException e) {
-		} catch (MalformedURLException e) {
+		} catch (final java.security.AccessControlException e) {
+		} catch (final MalformedURLException e) {
 		}
 		return baseDir;
 	}
 
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 	}
 
 	@Override

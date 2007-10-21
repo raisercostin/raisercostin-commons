@@ -20,7 +20,7 @@ public class OptionCell {
 
 	public static final String VALUE_UNMODIFIED = "< unmodified >";
 
-	private EventListenerList listenerList;
+	private final EventListenerList listenerList;
 
 	private ChangeEvent changeEvent;
 
@@ -32,7 +32,8 @@ public class OptionCell {
 
 	private int selected;
 
-	public OptionCell(Object objects[], int selected, boolean acceptNewValues) {
+	public OptionCell(final Object objects[], final int selected,
+			final boolean acceptNewValues) {
 		this.objects = new ArrayList<Object>();
 		this.selected = selected;
 		editedValue = null;
@@ -41,7 +42,7 @@ public class OptionCell {
 		listenerList = new EventListenerList();
 	}
 
-	public OptionCell(Object objects[]) {
+	public OptionCell(final Object objects[]) {
 		this(objects, 0, false);
 	}
 
@@ -49,7 +50,7 @@ public class OptionCell {
 		this(new Object[0], 0, true);
 	}
 
-	public void setSelected(int index) {
+	public void setSelected(final int index) {
 		if (index < 0) {
 			throw new IndexOutOfBoundsException("Bad index=" + index + ".");
 		}
@@ -75,7 +76,7 @@ public class OptionCell {
 		return selected;
 	}
 
-	public void setEditable(boolean acceptNewValues) {
+	public void setEditable(final boolean acceptNewValues) {
 		editable = acceptNewValues;
 		editedValue = null;
 	}
@@ -84,11 +85,11 @@ public class OptionCell {
 		return editable;
 	}
 
-	public void setObjects(Object[] objects) {
+	public void setObjects(final Object[] objects) {
 		this.objects = new ArrayList<Object>(Arrays.asList(objects));
 	}
 
-	public void addAndSelect(Object value) {
+	public void addAndSelect(final Object value) {
 		if (isEditable()) {
 			if (value == null) {
 				return;
@@ -126,17 +127,17 @@ public class OptionCell {
 		return objects.get(selected).toString();
 	}
 
-	public void addChangeListener(ChangeListener changeListener) {
+	public void addChangeListener(final ChangeListener changeListener) {
 		listenerList.add(ChangeListener.class, changeListener);
 	}
 
-	public void removeFooListener(ChangeListener changeListener) {
+	public void removeFooListener(final ChangeListener changeListener) {
 		listenerList.remove(ChangeListener.class, changeListener);
 	}
 
 	protected void fireChangeListener() {
 		// Guaranteed to return a non-null array
-		Object[] listeners = listenerList.getListenerList();
+		final Object[] listeners = listenerList.getListenerList();
 		// Process the listeners last to first, notifying
 		// those that are interested in this event
 		for (int i = listeners.length - 2; i >= 0; i -= 2) {
@@ -158,7 +159,7 @@ public class OptionCell {
 	/**
 	 * @return
 	 */
-	public List getObjectsList() {
+	public List<Object> getObjectsList() {
 		return objects;
 	}
 
@@ -170,19 +171,19 @@ public class OptionCell {
 		editedValue = null;
 	}
 
-	public void add(OptionCell cell) {
+	public void add(final OptionCell cell) {
 		add(cell.objects);
 	}
 
-	private void add(Object value) {
+	private void add(final Object value) {
 		if (objects.indexOf(value) == -1) {
 			objects.add(value == null ? VALUE_NONE : value.toString().trim());
 		}
 	}
 
-	private void add(List values) {
-		for (Iterator iter = values.iterator(); iter.hasNext();) {
-			Object element = iter.next();
+	private void add(final List<Object> values) {
+		for (final Iterator<Object> iter = values.iterator(); iter.hasNext();) {
+			final Object element = iter.next();
 			add(element);
 		}
 	}
@@ -196,9 +197,9 @@ public class OptionCell {
 
 	private int getFirstNotEmptyIndex() {
 		int position = 0;
-		for (Iterator iter = objects.iterator(); iter.hasNext(); position++) {
-			Object element = iter.next();
-			String value = element.toString().trim();
+		for (final Iterator<Object> iter = objects.iterator(); iter.hasNext(); position++) {
+			final Object element = iter.next();
+			final String value = element.toString().trim();
 			if ((!VALUE_NONE.equals(value))
 					&& (!VALUE_UNMODIFIED.equals(value))) {
 				return position;

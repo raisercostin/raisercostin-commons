@@ -35,9 +35,9 @@ public class Console {
 		 */
 		private static final long serialVersionUID = 8919476322608024334L;
 
-		private raiser.gui.Console console;
+		private final raiser.gui.Console console;
 
-		MyPanel(JPanel panel) {
+		MyPanel(final JPanel panel) {
 			setLayout(new BorderLayout());
 			add(panel, BorderLayout.CENTER);
 			console = Console.this;
@@ -58,19 +58,19 @@ public class Console {
 		}
 	}
 
-	private static Point computeCentered(int width, int height) {
-		Point result = new Point();
-		Toolkit toolkit = Toolkit.getDefaultToolkit();
+	private static Point computeCentered(final int width, final int height) {
+		final Point result = new Point();
+		final Toolkit toolkit = Toolkit.getDefaultToolkit();
 		result.x = (int) ((toolkit.getScreenSize().getWidth() - width) / 2);
 		result.y = (int) ((toolkit.getScreenSize().getHeight() - height) / 2);
 		return result;
 	}
 
-	public static Console getConsole(JPanel panel) {
+	public static Console getConsole(final JPanel panel) {
 		return ((MyPanel) panel.getParent()).getConsole();
 	}
 
-	public static Frame getFrame(Object view) {
+	public static Frame getFrame(final Object view) {
 		if (view instanceof JFrame) {
 			return (Frame) view;
 		} else if (view instanceof JPanel) {
@@ -80,15 +80,15 @@ public class Console {
 		return null;
 	}
 
-	public static void makeCentred(JDialog dialog) {
+	public static void makeCentred(final JDialog dialog) {
 		dialog.setLocation(computeCentered(dialog.getWidth(), dialog
 				.getHeight()));
 	}
 
-	public static Thread run(JApplet applet, int left, int top, int width,
-			int height) {
-		JFrame frame = new JFrame(title(applet));
-		Thread result = setupClosing(frame);
+	public static Thread run(final JApplet applet, final int left,
+			final int top, final int width, final int height) {
+		final JFrame frame = new JFrame(title(applet));
+		final Thread result = setupClosing(frame);
 		frame.getContentPane().add(applet);
 		frame.setLocation(left, top);
 		frame.setSize(width, height);
@@ -98,50 +98,52 @@ public class Console {
 		return result;
 	}
 
-	public static Thread run(JFrame frame, int left, int top, int width,
-			int height) {
-		Thread result = setupClosing(frame);
+	public static Thread run(final JFrame frame, final int left, final int top,
+			final int width, final int height) {
+		final Thread result = setupClosing(frame);
 		frame.setLocation(left, top);
 		frame.setSize(width, height);
 		frame.setVisible(true);
 		return result;
 	}
 
-	public static Thread run(JFrame frame, int width, int height) {
-		Thread result = setupClosing(frame);
-		int maxWidth = (int) frame.getGraphicsConfiguration().getBounds()
+	public static Thread run(final JFrame frame, final int width,
+			final int height) {
+		final Thread result = setupClosing(frame);
+		final int maxWidth = (int) frame.getGraphicsConfiguration().getBounds()
 				.getWidth();
-		int maxHeight = (int) frame.getGraphicsConfiguration().getBounds()
-				.getHeight();
+		final int maxHeight = (int) frame.getGraphicsConfiguration()
+				.getBounds().getHeight();
 		frame.setSize(width, height);
 		frame.setLocation((maxWidth - width) / 2, (maxHeight - height) / 2);
 		frame.setVisible(true);
 		return result;
 	}
 
-	public static Thread run(JPanel panel) {
+	public static Thread run(final JPanel panel) {
 		return run(panel, (int) panel.getPreferredSize().getWidth(),
 				(int) panel.getPreferredSize().getHeight());
 	}
 
-	public static Thread run(JPanel panel, int width, int height) {
+	public static Thread run(final JPanel panel, final int width,
+			final int height) {
 		final JFrame frame = new JFrame(title(panel));
-		Thread result = setupClosing(frame);
+		final Thread result = setupClosing(frame);
 		frame.getContentPane().add(panel);
-		int maxWidth = (int) frame.getGraphicsConfiguration().getBounds()
+		final int maxWidth = (int) frame.getGraphicsConfiguration().getBounds()
 				.getWidth();
-		int maxHeight = (int) frame.getGraphicsConfiguration().getBounds()
-				.getHeight();
+		final int maxHeight = (int) frame.getGraphicsConfiguration()
+				.getBounds().getHeight();
 		frame.setSize(width, height);
 		frame.setLocation((maxWidth - width) / 2, (maxHeight - height) / 2);
 		frame.setVisible(true);
 		return result;
 	}
 
-	public static Thread run(JPanel panel, int left, int top, int width,
-			int height) {
-		JFrame frame = new JFrame(title(panel));
-		Thread result = setupClosing(frame);
+	public static Thread run(final JPanel panel, final int left, final int top,
+			final int width, final int height) {
+		final JFrame frame = new JFrame(title(panel));
+		final Thread result = setupClosing(frame);
 		frame.getContentPane().add(panel);
 		frame.setLocation(left, top);
 		frame.setSize(width, height);
@@ -149,16 +151,16 @@ public class Console {
 		return result;
 	}
 
-	public static Thread run(String title, JPanel panel) {
-		int width = (int) panel.getPreferredSize().getWidth();
-		int height = (int) panel.getPreferredSize().getHeight();
-		JFrame frame = new JFrame(title);
-		Thread result = setupClosing(frame);
+	public static Thread run(final String title, final JPanel panel) {
+		final int width = (int) panel.getPreferredSize().getWidth();
+		final int height = (int) panel.getPreferredSize().getHeight();
+		final JFrame frame = new JFrame(title);
+		final Thread result = setupClosing(frame);
 		frame.getContentPane().add(panel);
-		int maxWidth = (int) frame.getGraphicsConfiguration().getBounds()
+		final int maxWidth = (int) frame.getGraphicsConfiguration().getBounds()
 				.getWidth();
-		int maxHeight = (int) frame.getGraphicsConfiguration().getBounds()
-				.getHeight();
+		final int maxHeight = (int) frame.getGraphicsConfiguration()
+				.getBounds().getHeight();
 		if (panel instanceof Menuable) {
 			frame.setJMenuBar(((Menuable) panel).getJMenuBar());
 		}
@@ -189,7 +191,7 @@ public class Console {
 			 * @see java.awt.event.WindowAdapter#windowClosing(java.awt.event.WindowEvent)
 			 */
 			@Override
-			public void windowClosing(WindowEvent e) {
+			public void windowClosing(final WindowEvent e) {
 				frame.dispose();
 				super.windowClosing(e);
 				aThread.interrupt();
@@ -199,7 +201,7 @@ public class Console {
 	}
 
 	// Create a title string from the class name:
-	public static String title(Object o) {
+	public static String title(final Object o) {
 		String t = o.getClass().toString();
 		// Remove the word "class":
 		if (t.indexOf("class") != -1) {
@@ -212,21 +214,22 @@ public class Console {
 
 	private JFrame frame;
 
-	private int height;
+	private final int height;
 
-	private boolean resizable;
+	private final boolean resizable;
 
 	private boolean running;
 
-	private Object synchronizer = new byte[0];
+	private final Object synchronizer = new byte[0];
 
-	private String title;
+	private final String title;
 
-	private int width;
+	private final int width;
 
 	private boolean confirmOnExit;
 
-	public Console(String title, int width, int height, boolean resize) {
+	public Console(final String title, final int width, final int height,
+			final boolean resize) {
 		this.title = title;
 		this.width = width;
 		this.height = height;
@@ -237,8 +240,8 @@ public class Console {
 	public void exit() {
 		boolean exit = true;
 		if (confirmOnExit) {
-			Object[] options = { "Yes", "No" };
-			int n = JOptionPane.showOptionDialog(frame, "Exit ?",
+			final Object[] options = { "Yes", "No" };
+			final int n = JOptionPane.showOptionDialog(frame, "Exit ?",
 					"Confirm Exit", JOptionPane.YES_NO_OPTION,
 					JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
 			exit = (n == 0);
@@ -279,7 +282,7 @@ public class Console {
 		}
 	}
 
-	public Console show(Object view) {
+	public Console show(final Object view) {
 		if (view instanceof JPanel) {
 			return showPanel((JPanel) view);
 		}
@@ -289,7 +292,7 @@ public class Console {
 		throw new RuntimeException("Can't show object " + view + ".");
 	}
 
-	private Console showPanel(JPanel panel) {
+	private Console showPanel(final JPanel panel) {
 		setRunning(true);
 		frame = new JFrame();
 		setupClosing();
@@ -309,7 +312,7 @@ public class Console {
 		return this;
 	}
 
-	public void setRunning(boolean running) {
+	public void setRunning(final boolean running) {
 		synchronized (synchronizer) {
 			this.running = running;
 		}
@@ -321,7 +324,7 @@ public class Console {
 		frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
-			public void windowClosing(WindowEvent e) {
+			public void windowClosing(final WindowEvent e) {
 				exit();
 			}
 		});
@@ -330,8 +333,8 @@ public class Console {
 		// EXIT_ON_CLOSE);
 	}
 
-	public static Thread run(JComponent component) {
-		JPanel panel = new JPanel(new BorderLayout());
+	public static Thread run(final JComponent component) {
+		final JPanel panel = new JPanel(new BorderLayout());
 		panel.add(new JScrollPane(component,
 				ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS),
@@ -339,9 +342,9 @@ public class Console {
 		return run(panel);
 	}
 
-	public static void center(JDialog dialog) {
-		int width = dialog.getWidth();
-		int height = dialog.getHeight();
+	public static void center(final JDialog dialog) {
+		final int width = dialog.getWidth();
+		final int height = dialog.getHeight();
 		dialog.setLocation(computeCentered(width, height));
 	}
 
@@ -350,17 +353,17 @@ public class Console {
 	 * @param string
 	 * @return
 	 */
-	public static JWindow createSplash(Frame owner, String title,
-			String fileName) {
-		JWindow frame = new JWindow(owner);
-		URL url = Console.class.getClassLoader().getResource(fileName);
+	public static JWindow createSplash(final Frame owner, final String title,
+			final String fileName) {
+		final JWindow frame = new JWindow(owner);
+		final URL url = Console.class.getClassLoader().getResource(fileName);
 		if (url != null) {
 			frame.getContentPane().add(new JLabel(new ImageIcon(url)));
 		} else {
 			frame.getContentPane().add(new JLabel(title));
 		}
-		int width = 640;
-		int height = 213;
+		final int width = 640;
+		final int height = 213;
 		frame.setLocation(computeCentered(width, height));
 		// frame.setTitle(title);
 		frame.setSize(width, height);
@@ -368,7 +371,7 @@ public class Console {
 		return frame;
 	}
 
-	private Console showFrame(JFrame frame) {
+	private Console showFrame(final JFrame frame) {
 		setRunning(true);
 		this.frame = frame;
 		setupClosing();
@@ -384,15 +387,18 @@ public class Console {
 		return confirmOnExit;
 	}
 
-	public void setConfirmOnExit(boolean confirmOnExit) {
+	public void setConfirmOnExit(final boolean confirmOnExit) {
 		this.confirmOnExit = confirmOnExit;
 	}
 
-	public void runBlocked(JPanel view) {
+	public void runBlocked(final JPanel view) {
 		try {
 			run(view).join();
-		} catch (InterruptedException e) {
-			logger.warn("While waiting for panel to be closed an exception occured.",e);
+		} catch (final InterruptedException e) {
+			logger
+					.warn(
+							"While waiting for panel to be closed an exception occured.",
+							e);
 		}
 	}
 }

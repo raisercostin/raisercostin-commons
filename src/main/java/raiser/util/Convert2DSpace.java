@@ -11,9 +11,10 @@ package raiser.util;
  * @author cgrigore
  */
 public class Convert2DSpace {
-	public Convert2DSpace(double realxmin, double realymin, double realxmax,
-			double realymax, double devicexmin, double deviceymin,
-			double devicexmax, double deviceymax) {
+	public Convert2DSpace(final double realxmin, final double realymin,
+			final double realxmax, final double realymax,
+			final double devicexmin, final double deviceymin,
+			final double devicexmax, final double deviceymax) {
 		this.realxmin = realxmin;
 		this.realymin = realymin;
 		this.realxmax = realxmax;
@@ -29,7 +30,7 @@ public class Convert2DSpace {
 	 * 
 	 * @param d
 	 */
-	public double x2device(double realx) {
+	public double x2device(final double realx) {
 		return convert(realx, realxmin, realxmax, devicexmin, devicexmax);
 	}
 
@@ -38,7 +39,7 @@ public class Convert2DSpace {
 	 * 
 	 * @param d
 	 */
-	public double y2device(double realy) {
+	public double y2device(final double realy) {
 		return convert(realy, realymin, realymax, deviceymin, deviceymax);
 	}
 
@@ -52,8 +53,9 @@ public class Convert2DSpace {
 	 * @param devicexmax
 	 * @return double
 	 */
-	private double convert(double x, double x1, double x2, double y1, double y2) {
-		double y = y1 + (y2 - y1) * (x - x1) / (x2 - x1);
+	private double convert(final double x, final double x1, final double x2,
+			final double y1, final double y2) {
+		final double y = y1 + (y2 - y1) * (x - x1) / (x2 - x1);
 		return y;
 	}
 

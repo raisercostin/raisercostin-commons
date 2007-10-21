@@ -14,7 +14,7 @@ public class BlockedPipe extends java.lang.Thread {
 	PrintWriter writer;
 
 	/** Creates new Pipe */
-	public BlockedPipe(OutputStream os, InputStream is) {
+	public BlockedPipe(final OutputStream os, final InputStream is) {
 		reader = new BufferedReader(new InputStreamReader(is));
 		writer = new PrintWriter(
 				new BufferedWriter(new OutputStreamWriter(os)), true);
@@ -29,7 +29,7 @@ public class BlockedPipe extends java.lang.Thread {
 				writer.println(line);
 			}
 			writer.println("\n\n\n");
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 	}

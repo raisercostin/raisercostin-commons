@@ -25,18 +25,18 @@ public class ExtendedProperties extends Properties {
 	 */
 	private static final long serialVersionUID = 5759852499244438960L;
 
-	public void store(OutputStream out, String header, Valueable valueable,
-			Descriptable descriptable, DefaultValue defaultValue)
-			throws IOException {
+	public void store(final OutputStream out, final String header,
+			final Valueable valueable, final Descriptable descriptable,
+			final DefaultValue defaultValue) throws IOException {
 		BufferedWriter awriter;
 		awriter = new BufferedWriter(new OutputStreamWriter(out, "8859_1"));
 		if (header != null) {
 			writeln(awriter, "#" + header);
 		}
 		writeln(awriter, "#" + new Date().toString());
-		for (Enumeration e = keys(); e.hasMoreElements();) {
-			String key = (String) e.nextElement();
-			Object value = get(key);
+		for (final Enumeration<Object> e = keys(); e.hasMoreElements();) {
+			String key = (String)e.nextElement();
+			final Object value = get(key);
 
 			writeln(awriter, "#" + descriptable.getDescription(value));
 			String val = valueable.getValue(value);
@@ -57,7 +57,8 @@ public class ExtendedProperties extends Properties {
 		awriter.flush();
 	}
 
-	private static void writeln(BufferedWriter bw, String s) throws IOException {
+	private static void writeln(final BufferedWriter bw, final String s)
+			throws IOException {
 		bw.write(s);
 		bw.newLine();
 	}
@@ -66,15 +67,15 @@ public class ExtendedProperties extends Properties {
 	 * Converts unicodes to encoded &#92;uxxxx and writes out any of the
 	 * characters in specialSaveChars with a preceding slash
 	 */
-	private String saveConvert(String theString, boolean escapeSpace) {
+	private String saveConvert(final String theString, final boolean escapeSpace) {
 		if (theString == null) {
 			return "";
 		}
-		int len = theString.length();
-		StringBuffer outBuffer = new StringBuffer(len * 2);
+		final int len = theString.length();
+		final StringBuffer outBuffer = new StringBuffer(len * 2);
 
 		for (int x = 0; x < len; x++) {
-			char aChar = theString.charAt(x);
+			final char aChar = theString.charAt(x);
 			switch (aChar) {
 			case ' ':
 				if ((x == 0) || escapeSpace) {
@@ -128,7 +129,7 @@ public class ExtendedProperties extends Properties {
 	 * @param nibble
 	 *            the nibble to convert.
 	 */
-	private static char toHex(int nibble) {
+	private static char toHex(final int nibble) {
 		return hexDigit[(nibble & 0xF)];
 	}
 

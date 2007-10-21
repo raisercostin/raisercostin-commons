@@ -10,16 +10,17 @@ import javax.swing.Action;
  * @author raiser
  */
 public class FactoryUtils {
-	public static AbstractButton createAction(Class classType, Action action) {
+	public static AbstractButton createAction(final Class<?> classType,
+			final Action action) {
 		AbstractButton result;
 		try {
 			result = (AbstractButton) classType.newInstance();
 			result.setAction(action);
 			return result;
-		} catch (InstantiationException e) {
+		} catch (final InstantiationException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
-		} catch (IllegalAccessException e) {
+		} catch (final IllegalAccessException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}

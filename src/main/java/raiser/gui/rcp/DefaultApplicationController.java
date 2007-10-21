@@ -95,17 +95,17 @@ public class DefaultApplicationController implements ApplicationController {
 		}
 	}
 
-	public void setConsole(Console console) {
+	public void setConsole(final Console console) {
 		this.console = console;
 		console.setConfirmOnExit(true);
 	}
 
-	public void setModel(ApplicationModel model) {
+	public void setModel(final ApplicationModel model) {
 		this.model = model;
 		model.setController(this);
 	}
 
-	public void setView(ApplicationView view) {
+	public void setView(final ApplicationView view) {
 		this.view = view;
 		view.setController(this);
 	}
@@ -127,7 +127,7 @@ public class DefaultApplicationController implements ApplicationController {
 		return splash;
 	}
 
-	public void setSplashVisible(boolean visible) {
+	public void setSplashVisible(final boolean visible) {
 		if (visible) {
 			getSplash().setVisible(true);
 		} else {
@@ -150,7 +150,7 @@ public class DefaultApplicationController implements ApplicationController {
 	}
 
 	public void loadProperties() {
-		Thread t = new Thread() {
+		final Thread t = new Thread() {
 			@Override
 			public void run() {
 				try {
@@ -165,11 +165,11 @@ public class DefaultApplicationController implements ApplicationController {
 		t.start();
 	}
 
-	public void fireJobStart(String message) {
+	public void fireJobStart(final String message) {
 		view.onJobStart(message);
 	}
 
-	public void fireJobStart(int size) {
+	public void fireJobStart(final int size) {
 		view.onJobStart(size);
 	}
 
@@ -197,15 +197,15 @@ public class DefaultApplicationController implements ApplicationController {
 		view.init();
 	}
 
-	public void setStatusInfo(String message) {
+	public void setStatusInfo(final String message) {
 		view.setStatusInfo(message);
 	}
 
-	public void setStatusWarn(String message) {
+	public void setStatusWarn(final String message) {
 		view.setStatusWarn(message);
 	}
 
-	public void setStatusError(String message) {
+	public void setStatusError(final String message) {
 		view.setStatusError(message);
 	}
 }

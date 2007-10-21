@@ -17,17 +17,18 @@ public class Database {
 
 	boolean detailedExceptionMessages;
 
-	public Database(ConnectionPool cp) {
+	public Database(final ConnectionPool cp) {
 		this.cp = cp;
 		detailedExceptionMessages = true;
 	}
 
-	public Database(HashMap params) {
+	public Database(final HashMap<String,String> params) {
 		cp = new ConnectionPool(params);
 		detailedExceptionMessages = true;
 	}
 
-	public Database(HashMap params, boolean detailedExceptionMessages) {
+	public Database(final HashMap<String,String> params,
+			final boolean detailedExceptionMessages) {
 		cp = new ConnectionPool(params);
 		this.detailedExceptionMessages = detailedExceptionMessages;
 	}
@@ -36,31 +37,31 @@ public class Database {
 		return cp;
 	}
 
-	public synchronized ResultSet get(String sid, String rsname) {
+	public synchronized ResultSet get(final String sid, final String rsname) {
 		return ResultSetCache.get(sid, rsname);
 	}
 
-	public synchronized void set(String sid, ResultSet rs) {
+	public synchronized void set(final String sid, final ResultSet rs) {
 		ResultSetCache.set(sid, rs);
 	}
 
-	public synchronized static void remove(String sid) {
+	public synchronized static void remove(final String sid) {
 		ResultSetCache.remove(sid);
 	}
 
-	public synchronized void remove(String sid, String rsname) {
+	public synchronized void remove(final String sid, final String rsname) {
 		// System.out.println("Removed " + sid + "-" + rsname );
 		ResultSetCache.remove(sid, rsname);
 	}
 
-	public String getString(String sql, String field) {
+	public String getString(final String sql, final String field) {
 		try {
-			ResultSet rs = select(sql);
+			final ResultSet rs = select(sql);
 			if (rs.next()) {
 				return rs.getString(field);
 			}
 
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			System.out.println("Sql exception getString(sql=<" + sql
 					+ ">,field=<" + field + ">):" + e.getMessage());
 			e.printStackTrace();
@@ -68,13 +69,13 @@ public class Database {
 		return null;
 	}
 
-	public long getLong(String sql, String field) {
+	public long getLong(final String sql, final String field) {
 		try {
-			ResultSet rs = select(sql);
+			final ResultSet rs = select(sql);
 			if (rs.next()) {
 				return rs.getLong(field);
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			System.out.println("Sql exception getLong(sql=<" + sql
 					+ ">,field=<" + field + ">):" + e.getMessage());
 			e.printStackTrace();
@@ -82,31 +83,31 @@ public class Database {
 		return -1;
 	}
 
-	public ResultSet select(String sql) throws SQLException {
+	public ResultSet select(final String sql) throws SQLException {
 		return select(sql, ResultSet.TYPE_SCROLL_SENSITIVE,
 				ResultSet.CONCUR_READ_ONLY);
 	}
 
-	public ResultSet selectForUpdate(String sql) throws SQLException {
+	public ResultSet selectForUpdate(final String sql) throws SQLException {
 		return select(sql, ResultSet.TYPE_SCROLL_SENSITIVE,
 				ResultSet.CONCUR_UPDATABLE);
 	}
 
-	private ResultSet select(String sql, int type, int fetch)
+	private ResultSet select(final String sql, final int type, final int fetch)
 			throws SQLException {
-		java.sql.Connection con = getConnectionPool().getConnection();
+		final java.sql.Connection con = getConnectionPool().getConnection();
 
 		try {
-			Statement stmt = con.createStatement(type, fetch);
+			final Statement stmt = con.createStatement(type, fetch);
 
 			stmt.execute(sql);
 
-			ResultSet rs = stmt.getResultSet();
+			final ResultSet rs = stmt.getResultSet();
 
 			getConnectionPool().recycle(con, ConnectionPool.RECYCLE_OK);
 			return rs;
 
-		} catch (SQLException sqle) {
+		} catch (final SQLException sqle) {
 			getConnectionPool().recycle(con, ConnectionPool.RECYCLE_EX);
 			sqle.setNextException(new SQLException("Sql exception select(sql=<"
 					+ sql + ">,type=<" + type + ">,fetch=<" + fetch + ">)"));
@@ -118,19 +119,19 @@ public class Database {
 		}
 	}
 
-	public int update(String sql) throws SQLException {
-		java.sql.Connection con = getConnectionPool().getConnection();
+	public int update(final String sql) throws SQLException {
+		final java.sql.Connection con = getConnectionPool().getConnection();
 		try {
-			Statement stmt = con.createStatement();
+			final Statement stmt = con.createStatement();
 
-			int ret = stmt.executeUpdate(sql);
+			final int ret = stmt.executeUpdate(sql);
 
 			stmt.close();
 
 			getConnectionPool().recycle(con, ConnectionPool.RECYCLE_OK);
 			return ret;
 
-		} catch (SQLException sqle) {
+		} catch (final SQLException sqle) {
 			// System.out.println( "Sql exception: " + sql );
 			getConnectionPool().recycle(con, ConnectionPool.RECYCLE_EX);
 			sqle.setNextException(new SQLException("Sql exception update(sql=<"
@@ -143,23 +144,23 @@ public class Database {
 		}
 	}
 
-	public Object insertAndRetrieveIdentityColumn(String sql)
+	public Object insertAndRetrieveIdentityColumn(final String sql)
 			throws SQLException {
 		return insertAndRetrieveIdentityColumnForSQLServer(sql);
 	}
 
 	public Object insertAndRetrieveIdentityColumnForSQLServer(String sql)
 			throws SQLException {
-		java.sql.Connection con = getConnectionPool().getConnection();
+		final java.sql.Connection con = getConnectionPool().getConnection();
 		try {
-			Statement stmt = con.createStatement();
+			final Statement stmt = con.createStatement();
 
 			sql += ";SELECT SCOPE_IDENTITY();";
 
 			stmt.execute(sql);
 			Object result = null;
 			while (true) {
-				ResultSet rs = stmt.getResultSet();
+				final ResultSet rs = stmt.getResultSet();
 				if (rs != null) {
 					rs.next();
 					result = rs.getObject(1);
@@ -173,7 +174,7 @@ public class Database {
 			getConnectionPool().recycle(con, ConnectionPool.RECYCLE_OK);
 
 			return result;
-		} catch (SQLException sqle) {
+		} catch (final SQLException sqle) {
 			System.out.println("Sql exception: " + sql);
 			getConnectionPool().recycle(con, ConnectionPool.RECYCLE_EX);
 			sqle.setNextException(new SQLException(
@@ -188,7 +189,7 @@ public class Database {
 	}
 
 	public static String toString(SQLException e) {
-		StringBuffer result = new StringBuffer("java.sql.SQLException[\n");
+		final StringBuffer result = new StringBuffer("java.sql.SQLException[\n");
 		int i = 0;
 		while (e != null) {
 			addMessage(result, i, e.getErrorCode(), e.getMessage());
@@ -199,8 +200,8 @@ public class Database {
 		return result.toString();
 	}
 
-	private static void addMessage(StringBuffer result, int pos, int errorCode,
-			String message) {
+	private static void addMessage(final StringBuffer result, final int pos,
+			final int errorCode, final String message) {
 		result.append(Integer.toString(pos));
 		result.append(".\t#");
 		result.append(errorCode);
@@ -235,7 +236,7 @@ public class Database {
 	 *            the date
 	 * @return quoted string, always a string not a null object.
 	 */
-	public static String getQuotedDate(java.util.Date value) {
+	public static String getQuotedDate(final java.util.Date value) {
 		if (value == null) {
 			return "null";
 		}
@@ -253,7 +254,7 @@ public class Database {
 	 *            the date
 	 * @return quoted string, always a string not a null object.
 	 */
-	public static String getQuotedDate(java.sql.Date value) {
+	public static String getQuotedDate(final java.sql.Date value) {
 		if (value == null) {
 			return "null";
 		}
@@ -271,7 +272,7 @@ public class Database {
 	 *            the date
 	 * @return quoted string, always a string not a null object.
 	 */
-	public static String getQuotedDate(Calendar value) {
+	public static String getQuotedDate(final Calendar value) {
 		if (value == null) {
 			return "null";
 		}
@@ -288,7 +289,7 @@ public class Database {
 	 *            the date
 	 * @return quoted string, or null if date is null.
 	 */
-	public static String getDate(java.sql.Date d) {
+	public static String getDate(final java.sql.Date d) {
 		if (d == null) {
 			return null;
 		}
@@ -303,7 +304,7 @@ public class Database {
 	 *            the date
 	 * @return quoted string, or null if date is null.
 	 */
-	public static String getDate(java.util.Date d) {
+	public static String getDate(final java.util.Date d) {
 		if (d == null) {
 			return null;
 		}
@@ -318,14 +319,15 @@ public class Database {
 	 *            the date
 	 * @return quoted string, or null if date is null.
 	 */
-	public static String getDate(Calendar d) {
+	public static String getDate(final Calendar d) {
 		if (d == null) {
 			return null;
 		}
 		return sdf.format(d);
 	}
 
-	public static int exist(ResultSet rs, String colname, String valname) {
+	public static int exist(final ResultSet rs, final String colname,
+			final String valname) {
 		if ((rs != null) && (colname != null)) {
 			int oldRow = -1;
 			try {
@@ -334,12 +336,12 @@ public class Database {
 				rs.beforeFirst();
 
 				while (rs.next()) {
-					String cval = rs.getString(colname);
+					final String cval = rs.getString(colname);
 					if ((cval != null) && cval.equals(valname)) {
 						return rs.getRow();
 					}
 				}
-			} catch (SQLException sqle) {
+			} catch (final SQLException sqle) {
 				System.out.println(sqle.getMessage());
 			} finally {
 				// move back on the old row
@@ -352,7 +354,7 @@ public class Database {
 						}
 
 					}
-				} catch (SQLException s) {
+				} catch (final SQLException s) {
 					System.out.println(s.getMessage());
 				}
 			}
@@ -368,7 +370,7 @@ public class Database {
 	 * @param where
 	 * @return
 	 */
-	public static String getSafeWhere(String where) {
+	public static String getSafeWhere(final String where) {
 		// TODO make a safe where
 		return where;
 	}
@@ -377,11 +379,11 @@ public class Database {
 	 * @see java.lang.Object#equals(Object)
 	 */
 	@Override
-	public boolean equals(Object object) {
+	public boolean equals(final Object object) {
 		if (!(object instanceof Database)) {
 			return false;
 		}
-		Database rhs = (Database) object;
+		final Database rhs = (Database) object;
 		return new EqualsBuilder().appendSuper(super.equals(object)).append(cp,
 				rhs.cp).append(detailedExceptionMessages,
 				rhs.detailedExceptionMessages).isEquals();

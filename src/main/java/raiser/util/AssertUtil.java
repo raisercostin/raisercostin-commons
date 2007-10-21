@@ -21,30 +21,32 @@ import junit.framework.Assert;
 public class AssertUtil {
 	public static final int ALL_CHUNKS = -1;
 
-	public static void assertEquals(File file1, File file2, int from1,
-			int from2, int chunkSize) throws IOException {
+	public static void assertEquals(final File file1, final File file2,
+			final int from1, final int from2, final int chunkSize)
+			throws IOException {
 		assertEquals(file1, file2, from1, from2, chunkSize, -1);
 	}
 
-	public static void assertEquals(File file1, File file2, int from1,
-			int from2, int chunkSize, int chunks) throws IOException {
+	public static void assertEquals(final File file1, final File file2,
+			final int from1, final int from2, final int chunkSize,
+			final int chunks) throws IOException {
 		if (chunks == 0) {
 			throw new RuntimeException(
 					"Chunks must be greater or equal with 1.");
 		}
-		InputStream in1 = new FileInputStream(file1);
-		InputStream in2 = new FileInputStream(file2);
+		final InputStream in1 = new FileInputStream(file1);
+		final InputStream in2 = new FileInputStream(file2);
 		in1.skip(from1);
 		in2.skip(from2);
-		byte[] buffer1 = new byte[chunkSize];
-		byte[] buffer2 = new byte[chunkSize];
+		final byte[] buffer1 = new byte[chunkSize];
+		final byte[] buffer2 = new byte[chunkSize];
 		int len1 = 0;
 		int len2 = 0;
 		int index = 0;
 		int chunkIndex = 0;
 		while (((len1 = in1.read(buffer1)) != -1)
 				&& ((len2 = in2.read(buffer2)) != -1)) {
-			int len = Math.min(len1, len2);
+			final int len = Math.min(len1, len2);
 			for (int i = 0; i < len; i++) {
 				if (buffer1[i] != buffer2[i]) {
 					Assert.assertEquals("At index=" + (index + i), ArraysUtil
@@ -70,18 +72,18 @@ public class AssertUtil {
 		in2.close();
 	}
 
-	public static void assertEquals(File file1, File file2, int chunkSize)
-			throws IOException {
-		InputStream in1 = new FileInputStream(file1);
-		InputStream in2 = new FileInputStream(file2);
-		byte[] buffer1 = new byte[chunkSize];
-		byte[] buffer2 = new byte[chunkSize];
+	public static void assertEquals(final File file1, final File file2,
+			final int chunkSize) throws IOException {
+		final InputStream in1 = new FileInputStream(file1);
+		final InputStream in2 = new FileInputStream(file2);
+		final byte[] buffer1 = new byte[chunkSize];
+		final byte[] buffer2 = new byte[chunkSize];
 		int len1 = 0;
 		int len2 = 0;
 		int index = 0;
 		while (((len1 = in1.read(buffer1)) != -1)
 				&& ((len2 = in2.read(buffer2)) != -1)) {
-			int len = Math.min(len1, len2);
+			final int len = Math.min(len1, len2);
 			for (int i = 0; i < len; i++) {
 				if (buffer1[i] != buffer2[i]) {
 					Assert.assertEquals("At index=" + (index + i), ArraysUtil
@@ -101,12 +103,12 @@ public class AssertUtil {
 		in2.close();
 	}
 
-	public static void assertEquals(byte[] expected, byte[] result) {
-		int len1 = expected.length;
-		int len2 = result.length;
+	public static void assertEquals(final byte[] expected, final byte[] result) {
+		final int len1 = expected.length;
+		final int len2 = result.length;
 		int index = 0;
 
-		int len = Math.min(len1, len2);
+		final int len = Math.min(len1, len2);
 		for (int i = 0; i < len; i++) {
 			if (expected[i] != result[i]) {
 				Assert.assertEquals("At index=" + (index + i), ArraysUtil
@@ -119,12 +121,13 @@ public class AssertUtil {
 		index += len;
 	}
 
-	public static void assertEqualsFrom(byte[] expected, byte[] result) {
-		int len1 = expected.length;
-		int len2 = result.length;
+	public static void assertEqualsFrom(final byte[] expected,
+			final byte[] result) {
+		final int len1 = expected.length;
+		final int len2 = result.length;
 		int index = 0;
 
-		int len = Math.min(len1, len2);
+		final int len = Math.min(len1, len2);
 		for (int i = 0; i < len; i++) {
 			if (expected[i] != result[i]) {
 				Assert.assertEquals("At index=" + (index + i), ArraysUtil

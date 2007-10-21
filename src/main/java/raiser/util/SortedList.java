@@ -28,12 +28,12 @@ public class SortedList<T extends Comparable<? super T>> implements List<T> {
 		elements = new ArrayList<T>();
 	}
 
-	public SortedList(List<T> elements) {
+	public SortedList(final List<T> elements) {
 		this.elements = elements;
 		resort();
 	}
 
-	public SortedList(Comparator<T> comparator) {
+	public SortedList(final Comparator<T> comparator) {
 		this();
 		this.comparator = comparator;
 	}
@@ -54,28 +54,28 @@ public class SortedList<T extends Comparable<? super T>> implements List<T> {
 		}
 	}
 
-	public boolean add(T object) {
-		boolean answer = elements.add(object);
+	public boolean add(final T object) {
+		final boolean answer = elements.add(object);
 		resort();
 		return answer;
 	}
 
-	public boolean addAll(Collection<? extends T> collection) {
-		boolean answer = elements.addAll(collection);
+	public boolean addAll(final Collection<? extends T> collection) {
+		final boolean answer = elements.addAll(collection);
 		resort();
 		return answer;
 	}
 
-	public T get(int index) {
+	public T get(final int index) {
 		return elements.get(index);
 	}
 
-	public void add(int index, T element) {
+	public void add(final int index, final T element) {
 		elements.add(index, element);
 		resort();
 	}
 
-	public boolean addAll(int index, Collection<? extends T> c) {
+	public boolean addAll(final int index, final Collection<? extends T> c) {
 		final boolean result = elements.addAll(index, c);
 		resort();
 		return result;
@@ -86,32 +86,32 @@ public class SortedList<T extends Comparable<? super T>> implements List<T> {
 		resort();
 	}
 
-	public T remove(int index) {
-		T result = elements.remove(index);
+	public T remove(final int index) {
+		final T result = elements.remove(index);
 		resort();
 		return result;
 	}
 
-	public boolean remove(Object o) {
-		boolean result = elements.remove(o);
+	public boolean remove(final Object o) {
+		final boolean result = elements.remove(o);
 		resort();
 		return result;
 	}
 
-	public boolean removeAll(Collection<?> c) {
-		boolean result = elements.removeAll(c);
+	public boolean removeAll(final Collection<?> c) {
+		final boolean result = elements.removeAll(c);
 		resort();
 		return result;
 	}
 
-	public boolean retainAll(Collection<?> c) {
-		boolean result = elements.retainAll(c);
+	public boolean retainAll(final Collection<?> c) {
+		final boolean result = elements.retainAll(c);
 		resort();
 		return result;
 	}
 
-	public T set(int index, T element) {
-		T result = elements.set(index, element);
+	public T set(final int index, final T element) {
+		final T result = elements.set(index, element);
 		resort();
 		return result;
 	}
@@ -120,7 +120,7 @@ public class SortedList<T extends Comparable<? super T>> implements List<T> {
 	 * @param o
 	 * @return
 	 */
-	public boolean contains(Object o) {
+	public boolean contains(final Object o) {
 		return elements.contains(o);
 	}
 
@@ -128,12 +128,12 @@ public class SortedList<T extends Comparable<? super T>> implements List<T> {
 	 * @param c
 	 * @return
 	 */
-	public boolean containsAll(Collection c) {
+	public boolean containsAll(final Collection<?> c) {
 		return elements.containsAll(c);
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		return elements.equals(obj);
 	}
 
@@ -146,7 +146,7 @@ public class SortedList<T extends Comparable<? super T>> implements List<T> {
 	 * @param o
 	 * @return
 	 */
-	public int indexOf(Object o) {
+	public int indexOf(final Object o) {
 		return elements.indexOf(o);
 	}
 
@@ -161,7 +161,7 @@ public class SortedList<T extends Comparable<? super T>> implements List<T> {
 	 * @param o
 	 * @return
 	 */
-	public int lastIndexOf(Object o) {
+	public int lastIndexOf(final Object o) {
 		return elements.lastIndexOf(o);
 	}
 
@@ -176,7 +176,7 @@ public class SortedList<T extends Comparable<? super T>> implements List<T> {
 	 * @param index
 	 * @return
 	 */
-	public ListIterator<T> listIterator(int index) {
+	public ListIterator<T> listIterator(final int index) {
 		return elements.listIterator(index);
 	}
 
@@ -185,7 +185,7 @@ public class SortedList<T extends Comparable<? super T>> implements List<T> {
 	 * @param toIndex
 	 * @return
 	 */
-	public List<T> subList(int fromIndex, int toIndex) {
+	public List<T> subList(final int fromIndex, final int toIndex) {
 		return elements.subList(fromIndex, toIndex);
 	}
 
@@ -200,7 +200,7 @@ public class SortedList<T extends Comparable<? super T>> implements List<T> {
 	 * @param a
 	 * @return
 	 */
-	public <E> E[] toArray(E[] a) {
+	public <E> E[] toArray(final E[] a) {
 		return elements.toArray(a);
 	}
 

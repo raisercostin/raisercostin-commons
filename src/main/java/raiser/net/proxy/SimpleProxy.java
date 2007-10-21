@@ -27,16 +27,17 @@ public class SimpleProxy {
 		this(7777, "home.ro", 80);
 	}
 
-	public SimpleProxy(int proxyPort, String host, int port) throws IOException {
+	public SimpleProxy(final int proxyPort, final String host, final int port)
+			throws IOException {
 		socketFactory = new ServerSocket(proxyPort);
 		this.host = host;
 		this.port = port;
 	}
 
-	public String getContent(URL url) throws IOException {
-		StringBuffer buf = new StringBuffer();
-		InputStream is = url.openStream();
-		BufferedReader in = new BufferedReader(new InputStreamReader(is));
+	public String getContent(final URL url) throws IOException {
+		final StringBuffer buf = new StringBuffer();
+		final InputStream is = url.openStream();
+		final BufferedReader in = new BufferedReader(new InputStreamReader(is));
 		String line;
 		while ((line = in.readLine()) != null) {
 			buf.append(line + "\n");
@@ -69,9 +70,9 @@ public class SimpleProxy {
 				serverSocket = new Socket(host, port);
 				// formez doua pipe-uri
 
-				Pipe p1 = new Pipe("1", serverSocket.getOutputStream(),
+				final Pipe p1 = new Pipe("1", serverSocket.getOutputStream(),
 						clientSocket.getInputStream());
-				Pipe p2 = new Pipe("2", clientSocket.getOutputStream(),
+				final Pipe p2 = new Pipe("2", clientSocket.getOutputStream(),
 						serverSocket.getInputStream());
 				p1.start();
 				p2.start();
@@ -79,7 +80,7 @@ public class SimpleProxy {
 				try {
 					p1.join();
 					p2.join();
-				} catch (InterruptedException e) {
+				} catch (final InterruptedException e) {
 					e.printStackTrace();
 				}
 				clientSocket.shutdownInput();
@@ -95,19 +96,19 @@ public class SimpleProxy {
 				 * informatiile din cerere //par.list(System.out);
 				 * writer.println(getContent(new URL(host)));
 				 */
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				e.printStackTrace();
 			}
 		}
 	}
 
-	public static void main(String argv[]) {
+	public static void main(final String argv[]) {
 		try {
 			// initializez proxiul sa asculte pe portul 7777 si sa redirecteze
 			// traficul cu raiser.home.ro
-			SimpleProxy proxy = new SimpleProxy(7777, "home.ro", 80);
+			final SimpleProxy proxy = new SimpleProxy(7777, "home.ro", 80);
 			proxy.run();
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 	}

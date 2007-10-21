@@ -44,7 +44,7 @@ public class OptionCellEditor extends DefaultCellEditor implements CellEditor {
 			private static final long serialVersionUID = 5334088163029050512L;
 
 			@Override
-			public void setValue(Object value) {
+			public void setValue(final Object value) {
 				comboBox.setSelectedItem(value);
 			}
 
@@ -54,9 +54,9 @@ public class OptionCellEditor extends DefaultCellEditor implements CellEditor {
 			}
 
 			@Override
-			public boolean shouldSelectCell(EventObject anEvent) {
+			public boolean shouldSelectCell(final EventObject anEvent) {
 				if (anEvent instanceof MouseEvent) {
-					MouseEvent e = (MouseEvent) anEvent;
+					final MouseEvent e = (MouseEvent) anEvent;
 					return e.getID() != MouseEvent.MOUSE_DRAGGED;
 				}
 				return true;
@@ -77,7 +77,7 @@ public class OptionCellEditor extends DefaultCellEditor implements CellEditor {
 
 	@Override
 	protected void fireEditingStopped() {
-		int fire = getJComboBox().getSelectedIndex();
+		final int fire = getJComboBox().getSelectedIndex();
 		if (fire == -1) {
 			if ((getJComboBox().getSelectedItem() != null)
 					&& (!getJComboBox().getSelectedItem().equals(""))) {
@@ -99,12 +99,13 @@ public class OptionCellEditor extends DefaultCellEditor implements CellEditor {
 	}
 
 	@Override
-	public Component getTableCellEditorComponent(JTable table, Object value,
-			boolean isSelected, int row, int column) {
+	public Component getTableCellEditorComponent(final JTable table,
+			final Object value, final boolean isSelected, final int row,
+			final int column) {
 		this.row = row;
 		this.column = column;
 		currentValue = (OptionCell) value;
-		DynamicComboBoxModel model = (DynamicComboBoxModel) getJComboBox()
+		final DynamicComboBoxModel model = (DynamicComboBoxModel) getJComboBox()
 				.getModel();
 		model.removeAllElements();
 		model.insertElementsAt(currentValue.getObjectsList(), 0);

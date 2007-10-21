@@ -13,13 +13,13 @@ import java.io.Writer;
  * @author cgrigore
  */
 public class TextOutputStream {
-	public TextOutputStream(Writer writer) {
+	public TextOutputStream(final Writer writer) {
 		this.writer = writer;
 		separator = " ";
 		lineSeparator = computeLineSeparator();
 	}
 
-	public TextOutputStream(Writer w, String comment) {
+	public TextOutputStream(final Writer w, final String comment) {
 		this(w);
 		setComment(comment);
 	}
@@ -28,12 +28,12 @@ public class TextOutputStream {
 		writer.close();
 	}
 
-	public void writeLine(String line) throws IOException {
+	public void writeLine(final String line) throws IOException {
 		write(line);
 		newLine();
 	}
 
-	public void writeComment(String line) throws IOException {
+	public void writeComment(final String line) throws IOException {
 		if (withComments == true) {
 			write(comment);
 			write(line);
@@ -41,22 +41,22 @@ public class TextOutputStream {
 		}
 	}
 
-	public void writeWord(String word) throws IOException {
+	public void writeWord(final String word) throws IOException {
 		write(word);
 		write(separator);
 	}
 
-	public void writeInteger(int value) throws IOException {
+	public void writeInteger(final int value) throws IOException {
 		write(Integer.toString(value));
 		write(separator);
 	}
 
-	public void writeDouble(double value) throws IOException {
+	public void writeDouble(final double value) throws IOException {
 		write(Double.toString(value));
 		write(separator);
 	}
 
-	public void writeBoolean(boolean value) throws IOException {
+	public void writeBoolean(final boolean value) throws IOException {
 		if (value) {
 			write("true");
 		} else {
@@ -65,7 +65,7 @@ public class TextOutputStream {
 		write(separator);
 	}
 
-	public void setComment(String comment) {
+	public void setComment(final String comment) {
 		this.comment = comment;
 		withComments = true;
 	}
@@ -81,7 +81,7 @@ public class TextOutputStream {
 		writer.write(lineSeparator);
 	}
 
-	private void write(String line) throws IOException {
+	private void write(final String line) throws IOException {
 		writer.write(line);
 	}
 
@@ -93,9 +93,9 @@ public class TextOutputStream {
 		return result;
 	}
 
-	private String separator;
+	private final String separator;
 
-	private String lineSeparator;
+	private final String lineSeparator;
 
 	private String comment;
 

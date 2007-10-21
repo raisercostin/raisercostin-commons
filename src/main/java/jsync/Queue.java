@@ -19,7 +19,7 @@ public class Queue {
 	/**
 	 * Put object in queue. Notify data consumers.
 	 */
-	public synchronized void put(Object obj) {
+	public synchronized void put(final Object obj) {
 		if (first == null) {
 			first = last = createItem(obj);
 		} else {
@@ -42,7 +42,7 @@ public class Queue {
 					nBlocked += 1;
 					wait();
 					nBlocked -= 1;
-				} catch (InterruptedException ex) {
+				} catch (final InterruptedException ex) {
 					// It is possible for a thread to be interrupted after
 					// being notified but before returning from the wait()
 					// call. To prevent lost of notification notify()
@@ -53,8 +53,8 @@ public class Queue {
 				}
 			} while (first == null);
 		}
-		QueueItem item = first;
-		Object obj = item.obj;
+		final QueueItem item = first;
+		final Object obj = item.obj;
 		first = first.next;
 		freeItem(item);
 		if ((nBlocked != 0) && (first != null)) {
@@ -73,14 +73,14 @@ public class Queue {
 	 *            the maximum time to wait in milliseconds.
 	 * @return object if queue is not empty, <code>null</code> otherwise
 	 */
-	public synchronized Object get(long timeout) {
+	public synchronized Object get(final long timeout) {
 		if ((first == null) || (nBlocked != 0)) {
 			if (timeout == 0) {
 				return null;
 			}
-			long startTime = System.currentTimeMillis();
+			final long startTime = System.currentTimeMillis();
 			do {
-				long currentTime = System.currentTimeMillis();
+				final long currentTime = System.currentTimeMillis();
 				if (currentTime - startTime >= timeout) {
 					return null;
 				}
@@ -88,7 +88,7 @@ public class Queue {
 					nBlocked += 1;
 					wait(timeout - currentTime + startTime);
 					nBlocked -= 1;
-				} catch (InterruptedException ex) {
+				} catch (final InterruptedException ex) {
 					// It is possible for a thread to be interrupted after
 					// being notified but before returning from the wait()
 					// call. To prevent lost of notification notify()
@@ -99,8 +99,8 @@ public class Queue {
 				}
 			} while (first == null);
 		}
-		QueueItem item = first;
-		Object obj = item.obj;
+		final QueueItem item = first;
+		final Object obj = item.obj;
 		first = first.next;
 		freeItem(item);
 		if ((nBlocked != 0) && (first != null)) {
@@ -126,7 +126,7 @@ public class Queue {
 
 	protected static QueueItem freeItemChain;
 
-	protected synchronized final static QueueItem createItem(Object obj) {
+	protected synchronized final static QueueItem createItem(final Object obj) {
 		QueueItem item;
 		if (freeItemChain == null) {
 			item = new QueueItem();
@@ -139,7 +139,7 @@ public class Queue {
 		return item;
 	}
 
-	protected synchronized final static void freeItem(QueueItem item) {
+	protected synchronized final static void freeItem(final QueueItem item) {
 		item.next = freeItemChain;
 		freeItemChain = item;
 	}

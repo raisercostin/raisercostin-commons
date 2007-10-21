@@ -15,14 +15,14 @@ import java.io.FilenameFilter;
  * @author cgrigore
  */
 public class Others {
-	public static String getFileName(String path, String implicit,
-			String extension) {
-		FileDialog fd = new FileDialog(new Frame("Open"));
+	public static String getFileName(final String path, final String implicit,
+			final String extension) {
+		final FileDialog fd = new FileDialog(new Frame("Open"));
 		fd.setDirectory(path);
 		fd.setFile(implicit);
 		final String fileExtension = "." + extension;
 		fd.setFilenameFilter(new FilenameFilter() {
-			public boolean accept(File dir, String name) {
+			public boolean accept(final File dir, final String name) {
 				return name.endsWith(fileExtension);
 			}
 		});

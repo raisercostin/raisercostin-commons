@@ -10,15 +10,15 @@ public class ParseException extends Exception {
 		super();
 	}
 
-	public ParseException(String arg0) {
+	public ParseException(final String arg0) {
 		super(arg0);
 	}
 
-	public ParseException(String message, Exception detail) {
+	public ParseException(final String message, final Exception detail) {
 		super(message, detail);
 	}
 
-	public ParseException(Exception e) {
+	public ParseException(final Exception e) {
 		super(e);
 	}
 }

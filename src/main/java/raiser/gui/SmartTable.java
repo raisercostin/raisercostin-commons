@@ -25,20 +25,20 @@ public class SmartTable<T> extends JTable2 {
 		this(new Vector<T>());
 	}
 
-	public SmartTable(List<T> data) {
+	public SmartTable(final List<T> data) {
 		this(null, data);
 	}
 
-	public SmartTable(TableModel model) {
+	public SmartTable(final TableModel model) {
 		setModel(model);
 	}
 
-	public SmartTable(List columns, List<T> data) {
+	public SmartTable(final List<String> columns, final List<T> data) {
 		// setAutoCreateColumnsFromModel(true);
 		setModel(new PropertiesTableModel<T>(columns, data));
 	}
 
-	public void addData(T object) {
+	public void addData(final T object) {
 		getSmartTableModel().add(object);
 	}
 
@@ -51,15 +51,15 @@ public class SmartTable<T> extends JTable2 {
 		return (SmartTableModel) getModel();
 	}
 
-	public void setDefaultNewRow(Class<? extends T> defaultNewRow) {
+	public void setDefaultNewRow(final Class<? extends T> defaultNewRow) {
 		getSmartTableModel().setDefaultNewRow(defaultNewRow);
 	}
 
-	public void setColumns(List columns) {
+	public void setColumns(final List<String> columns) {
 		getSmartTableModel().setColumns(columns);
 	}
 
-	public void setData(List<T> data) {
+	public void setData(final List<T> data) {
 		getSmartTableModel().setData(data);
 	}
 
