@@ -1,7 +1,7 @@
 package raiser.io;
 
-import java.io.File;
+import java.io.IOException;
 
 public interface ResourceVisitor {
-	void visit(File file);
+	void visit(org.springframework.core.io.Resource file) throws IOException;
 }
