@@ -36,7 +36,7 @@ public class ResourceUtils {
 	}
 
 	public static void copy(Resource source,
-			FileSystemResource destination) throws IOException {
+			Resource destination) throws IOException {
 		FileUtils.copy(source,destination.getFile().getAbsolutePath());
 	}
 }
