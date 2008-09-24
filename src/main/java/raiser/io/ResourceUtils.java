@@ -7,8 +7,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 
 public class ResourceUtils {
-	public static void visit(File file, FileVisitor resourceVisitor)
-			throws IOException {
+	public static void visit(File file, FileVisitor resourceVisitor) throws IOException {
 		if (file.isDirectory()) {
 			for (File file2 : file.listFiles()) {
 				if (file.isDirectory()) {
@@ -20,14 +19,11 @@ public class ResourceUtils {
 		} else if (file.isFile()) {
 			resourceVisitor.visit(file);
 		} else {
-			throw new RuntimeException("The resource ["
-					+ file.getAbsoluteFile()
-					+ "] is nor a directory nor a file.");
+			throw new RuntimeException("The resource [" + file.getAbsoluteFile() + "] is nor a directory nor a file.");
 		}
 	}
 
-	public static void visit(Resource resource,
-			final ResourceVisitor resourceVisitor) throws IOException {
+	public static void visit(Resource resource, final ResourceVisitor resourceVisitor) throws IOException {
 		visit(resource.getFile(), new FileVisitor() {
 			public void visit(File file) throws IOException {
 				resourceVisitor.visit(new FileSystemResource(file));
@@ -35,8 +31,7 @@ public class ResourceUtils {
 		});
 	}
 
-	public static void copy(Resource source,
-			Resource destination) throws IOException {
-		FileUtils.copy(source,destination.getFile().getAbsolutePath());
+	public static void copy(Resource source, Resource destination) throws IOException {
+		org.apache.commons.io.FileUtils.copyURLToFile(source.getURL(), destination.getFile());
 	}
 }
