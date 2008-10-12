@@ -2,7 +2,10 @@ package raiser.io;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringWriter;
 
+import org.apache.commons.io.IOUtils;
+import org.raisercostin.util.RuntimeExceptionWrapper;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 
@@ -33,5 +36,23 @@ public class ResourceUtils {
 
 	public static void copy(Resource source, Resource destination) throws IOException {
 		org.apache.commons.io.FileUtils.copyURLToFile(source.getURL(), destination.getFile());
+	}
+
+	public static String toString(Resource resource, int maxSize) {
+		StringWriter sw = new StringWriter();
+		try {
+			try {
+				IOUtils.copy(resource.getInputStream(), sw, "UTF-8");
+			} finally {
+				IOUtils.closeQuietly(sw);
+			}
+		} catch (IOException e) {
+			throw new RuntimeExceptionWrapper(e);
+		}
+		if (sw.getBuffer().length() > maxSize) {
+			throw new RuntimeException("From resource [" + resource + "] more than [" + maxSize
+					+ "] bytes where read: " + sw.getBuffer().length());
+		}
+		return sw.toString();
 	}
 }
