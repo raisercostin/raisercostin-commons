@@ -11,8 +11,21 @@
 	<scm>
 		<connection>scm:svn:https://svn.raisercostin.dnsdojo.org/all/projects/projects/common/trunk</connection>
 		<developerConnection>scm:svn:https://svn.raisercostin.dnsdojo.org/all/projects/projects/common/trunk</developerConnection>
-	  <url>http://raisercostin.googlecode.com/svn/trunk/raisercostin/trunk/raisercostin-common/trunk/raisercostin-common</url>
-  </scm>
+    </scm>
+	<distributionManagement>
+		<!-- use the following if you're not using a snapshot version. -->
+		<repository>
+			<id>org.raisercostin.releases</id>
+			<name>org.raisercostin.releases</name>
+			<url>dav:https://svn.raisercostin.dnsdojo.org/maven2/releases/</url>
+		</repository>
+		<!-- use the following if you ARE using a snapshot version. -->
+		<snapshotRepository>
+			<id>org.raisercostin.snapshots</id>
+			<name>org.raisercostin.snapshots</name>
+			<url>dav:https://svn.raisercostin.dnsdojo.org/maven2/snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
 	<build>
 		<plugins>
 			<plugin>
