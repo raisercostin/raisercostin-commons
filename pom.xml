@@ -7,10 +7,10 @@
 	</parent>
 	<groupId>org.raisercostin</groupId>
 	<artifactId>raisercostin-common</artifactId>
-	<version>1.4</version>
+	<version>1.5-SNAPSHOT</version>
 	<scm>
-		<connection>scm:svn:https://svn.raisercostin.dnsdojo.org/all/projects/projects/common/tags/raisercostin-common-1.4</connection>
-		<developerConnection>scm:svn:https://svn.raisercostin.dnsdojo.org/all/projects/projects/common/tags/raisercostin-common-1.4</developerConnection>
+		<connection>scm:svn:https://svn.raisercostin.dnsdojo.org/all/projects/projects/common/trunk</connection>
+		<developerConnection>scm:svn:https://svn.raisercostin.dnsdojo.org/all/projects/projects/common/trunk</developerConnection>
     </scm>
 	<distributionManagement>
 		<!-- use the following if you're not using a snapshot version. -->
