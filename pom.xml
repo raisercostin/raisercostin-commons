@@ -9,8 +9,8 @@
 	<artifactId>raisercostin-common</artifactId>
 	<version>1.11-SNAPSHOT</version>
 	<scm>
-		<connection>scm:svn:https://svn.raisercostin.dnsdojo.org/all/projects/projects/common/tags/raisercostin-common-1.9</connection>
-		<developerConnection>scm:svn:https://svn.raisercostin.dnsdojo.org/all/projects/projects/common/tags/raisercostin-common-1.9</developerConnection>
+		<connection>scm:svn:https://svn.raisercostin.dnsdojo.org/all/projects/projects/common/trunk</connection>
+		<developerConnection>scm:svn:https://svn.raisercostin.dnsdojo.org/all/projects/projects/common/trunk</developerConnection>
     </scm>
 	<distributionManagement>
 		<repository>
