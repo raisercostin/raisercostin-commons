@@ -13,19 +13,27 @@
 		<developerConnection>scm:svn:https://svn.raisercostin.dnsdojo.org/all/projects/projects/common/trunk</developerConnection>
     </scm>
 	<distributionManagement>
-		<!-- use the following if you're not using a snapshot version. -->
 		<repository>
-			<id>org.raisercostin.releases</id>
-			<name>org.raisercostin.releases</name>
-			<url>dav:https://svn.raisercostin.dnsdojo.org/maven2-releases/</url>
+			<id>raisercostin-releases</id>
+			<name>Raisercostin Releases Repository</name>
+			<url>dav:http://nexus.raisercostin.dnsdojo.org/nexus/content/repositories/releases</url>
 		</repository>
-		<!-- use the following if you ARE using a snapshot version. -->
 		<snapshotRepository>
-			<id>org.raisercostin.snapshots</id>
-			<name>org.raisercostin.snapshots</name>
-			<url>dav:https://svn.raisercostin.dnsdojo.org/maven2-snapshots/</url>
+			<id>raisercostin-snapshots</id>
+			<name>Raisercostin Snapshots Repository</name>
+			<url>dav:http://nexus.raisercostin.dnsdojo.org/nexus/content/repositories/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
+    <repositories>
+        <repository>
+            <id>raisercostin-public</id>
+            <name>raisercostin-public</name>
+            <url>http://nexus.raisercostin.dnsdojo.org/nexus/content/groups/public</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 	<dependencies>
 		<dependency>
 			<groupId>log4j</groupId>
