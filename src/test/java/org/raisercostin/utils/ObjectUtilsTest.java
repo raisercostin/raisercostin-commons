@@ -40,7 +40,10 @@ public class ObjectUtilsTest {
 	}
 
 	private static class BTest {
+		private String value;
+
 		public BTest(String value) {
+			this.value= value;
 		}
 
 		@Override
