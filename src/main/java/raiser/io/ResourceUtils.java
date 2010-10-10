@@ -5,9 +5,10 @@ import java.io.IOException;
 import java.io.StringWriter;
 
 import org.apache.commons.io.IOUtils;
-import org.raisercostin.util.RuntimeExceptionWrapper;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+
+import raiser.util.RuntimeExceptionWrapper;
 
 public class ResourceUtils {
 	public static void visit(File file, FileVisitor resourceVisitor) throws IOException {
