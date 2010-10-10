@@ -7,6 +7,11 @@ import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 
 public abstract class DefaultAbstractAction extends AbstractAction {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5347665895354947197L;
+
 	public DefaultAbstractAction(final String text, final ImageIcon icon,
 			final String desc, final Integer mnemonic) {
 		super(text, icon);

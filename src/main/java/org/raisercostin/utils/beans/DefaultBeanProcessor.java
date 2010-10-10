@@ -144,7 +144,7 @@ public class DefaultBeanProcessor implements BeanProcessor {
         if (!translate && !truncate) {
             return;
         }
-        Class c = bean.getClass();
+        Class<?> c = bean.getClass();
         Method[] methods = c.getMethods();
         for (Method m : methods) {
             if ((m.getReturnType() == String.class) && isGetter(m)) {
@@ -212,7 +212,7 @@ public class DefaultBeanProcessor implements BeanProcessor {
      */
 
     public List<String> checkMandatory(Object bean) {
-        Class c = bean.getClass();
+        Class<?> c = bean.getClass();
         Method[] methods = c.getMethods();
         List<String> emptyMandatoryProperties = new ArrayList<String>();
 
@@ -238,7 +238,7 @@ public class DefaultBeanProcessor implements BeanProcessor {
     }
 
     public Map<String, String> checkLength(Object bean) {
-        Class c = bean.getClass();
+        Class<?> c = bean.getClass();
         Method[] methods = c.getMethods();
         Map<String, String> mapLengthPropertiesExceedMax = new HashMap<String, String>();
 
@@ -307,7 +307,8 @@ public class DefaultBeanProcessor implements BeanProcessor {
         /* && !isTransient(m) */;
     }
 
-    private boolean isTransient(Method m) {
+    @SuppressWarnings("unused")
+	private boolean isTransient(Method m) {
         Transient annotation = m.getAnnotation(Transient.class);
         return annotation != null;
     }
@@ -373,12 +374,14 @@ public class DefaultBeanProcessor implements BeanProcessor {
         return setValueInternal(rawType, object, value, path.split("\\/"), path, null);
     }
 
-    public <T> T getValue(Object object, String path, Class<T> returningClass,
+    @SuppressWarnings("unchecked")
+	public <T> T getValue(Object object, String path, Class<T> returningClass,
             OrderedIndexedMap<String, String> parameters) {
-        return (T) getValueInternal(object, path.split("\\/"), path, parameters);
+		return (T) getValueInternal(object, path.split("\\/"), path, parameters);
     }
 
-    public <T> T getValue(Object object, String path, Class<T> returningClass) {
+    @SuppressWarnings("unchecked")
+	public <T> T getValue(Object object, String path, Class<T> returningClass) {
         return (T) getValueInternal(object, path.split("\\/"), path, null);
     }
 
@@ -481,14 +484,16 @@ public class DefaultBeanProcessor implements BeanProcessor {
         return null;
     }
 
-    private Object invokeSetter(Object object, String attribute, Object value) throws SecurityException,
+    @SuppressWarnings("unchecked")
+	private Object invokeSetter(Object object, String attribute, Object value) throws SecurityException,
             NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException,
             ParseException {
         Object result = null;
         if (!ANY_EXPECTED_VALUE.equals(value)) {
             if (attribute.matches("[0-9]+")) {
                 if (List.class.isAssignableFrom(object.getClass())) {
-                    List list = (List) object;
+                    @SuppressWarnings("rawtypes")
+					List list = (List) object;
                     int index = Integer.parseInt(attribute) - 1;
                     list.add(index, value);
                 } else {
@@ -556,7 +561,8 @@ public class DefaultBeanProcessor implements BeanProcessor {
                     throw new IllegalArgumentException("Couldn't get rawType for [" + path + "] neither from a ["
                             + "hint:rawtype" + "] property neither from an [@" + GenericType.class + "] annotation.");
                 }
-                List<Object> list = (List<Object>) object;
+                @SuppressWarnings("unchecked")
+				List<Object> list = (List<Object>) object;
                 int size = list.size();
                 int index = Integer.parseInt(attribute) - 1;
                 if (index >= size) {
@@ -636,10 +642,6 @@ public class DefaultBeanProcessor implements BeanProcessor {
                                 + "() should have an @GenericType(<type>.class) annotation because returns a list with unknown(at runtime) raw type.");
             }
             return annotation;
-        }
-
-        public Method getMethod() {
-            return method;
         }
     }
 
@@ -863,7 +865,7 @@ public class DefaultBeanProcessor implements BeanProcessor {
         if (dtoClassName.equals("java.util.List")) {
             dto = new ArrayList<Object>();
         } else {
-            Class dtoClass = null;
+            Class<?> dtoClass = null;
             try {
                 dtoClass = Class.forName(dtoClassName);
             } catch (ClassNotFoundException e) {
@@ -871,11 +873,11 @@ public class DefaultBeanProcessor implements BeanProcessor {
             }
             try {
                 if (constructorArgs != null) {
-                    Class[] types = new Class[constructorArgs.length];
+                    Class<?>[] types = new Class[constructorArgs.length];
                     for (int i = 0; i < constructorArgs.length; i++) {
                         types[i] = String.class;
                     }
-                    dto = dtoClass.getConstructor(types).newInstance(constructorArgs);
+                    dto = dtoClass.getConstructor(types).newInstance((Object[])constructorArgs);
                 } else {
                     dto = dtoClass.newInstance();
                 }
@@ -930,7 +932,7 @@ public class DefaultBeanProcessor implements BeanProcessor {
             if ((excludeProperty != null) && excludeProperty.equals(paramName)) {
                 continue;
             }
-            Class paramType = getParameterType(object, paramName, exceptionContextMessage);
+            Class<?> paramType = getParameterType(object, paramName, exceptionContextMessage);
             Object convertedValue = null;
 
             // TODO: also when paramType is a List
@@ -943,10 +945,10 @@ public class DefaultBeanProcessor implements BeanProcessor {
         }
     }
 
-    private Object constructArray(Map<String, String> firstSet, String paramName, Class paramType,
+    private Object constructArray(Map<String, String> firstSet, String paramName, Class<?> paramType,
             String exceptionContextMessage) throws InstantiationException, IllegalAccessException, ParseException {
         Object convertedValue;
-        Class elementClass = paramType.getComponentType();
+        Class<?> elementClass = paramType.getComponentType();
         Object element = null;
         convertedValue = Array.newInstance(elementClass, getArraySize(paramName, firstSet));
         int elementIndex = 0;
@@ -977,7 +979,7 @@ public class DefaultBeanProcessor implements BeanProcessor {
                 elementIndex = index;
             }
             if (elementParamName != null) {
-                Class elementParamType = getParameterType(element, elementParamName, exceptionContextMessage);
+                Class<?> elementParamType = getParameterType(element, elementParamName, exceptionContextMessage);
                 Object elementParam = createFromString(elementParamType, firstSet.get(elementName));
                 invokeSetter(element, elementParam, elementParamName, elementParamType);
             } else {
@@ -995,7 +997,7 @@ public class DefaultBeanProcessor implements BeanProcessor {
      * @see com.xoom.integration.util.BeanProcessor#invokeSetter(java.lang.Object, java.lang.Object, java.lang.String,
      * java.lang.Class)
      */
-    public void invokeSetter(Object parent, Object value, String paramName, Class c) {
+    public void invokeSetter(Object parent, Object value, String paramName, Class<?> c) {
         String setterName = constructSetterName(paramName);
         Method setter = null;
         try {
@@ -1126,7 +1128,7 @@ public class DefaultBeanProcessor implements BeanProcessor {
                             checkField(value, actual, "dto:java.lang.String", false, exceptionContextMessage);
                         } else {
                             if (!paramName.contains(":")) {
-                                Class paramType = getParameterType(actual, paramName, exceptionContextMessage);
+                                Class<?> paramType = getParameterType(actual, paramName, exceptionContextMessage);
                                 Object expectedProperty = null;
                                 String getterName = "get" + StringUtils.capitalize(paramName);
                                 if (paramType.equals(boolean.class)) {
@@ -1173,10 +1175,10 @@ public class DefaultBeanProcessor implements BeanProcessor {
             if ((expected != null) && expected.containsKey(HAS_CONSTRUCTOR_FROM_STRING) && (expected.size() == 1)) {
                 if (expected.get(HAS_CONSTRUCTOR_FROM_STRING).equals("empty")) {
                     if (actualValue instanceof List) {
-                        int size = ((List) actualValue).size();
+                        int size = ((List<?>) actualValue).size();
                         if (size > 0) {
                             throw new RuntimeException("The returned list should be empty, but contained " + size
-                                    + " elements. First one was [" + ((List) actualValue).get(0)
+                                    + " elements. First one was [" + ((List<?>) actualValue).get(0)
                                     + exceptionContextMessage);
                         }
                     }
@@ -1233,7 +1235,7 @@ public class DefaultBeanProcessor implements BeanProcessor {
                                         paramName = paramName.substring(0, paramName.length() - "Contains".length());
                                         useContainsOperator = true;
                                     }
-                                    Class paramType = null;
+                                    Class<?> paramType = null;
                                     Object expectedValue = null;
                                     Object actualProperty = actualValue;
                                     String[] tokens = paramName.split("/");
@@ -1247,7 +1249,7 @@ public class DefaultBeanProcessor implements BeanProcessor {
                                         }
                                         if ((actualProperty instanceof List) && number.matcher(element).find()) {
                                             int index = Integer.parseInt(element) - 1;
-                                            List list = (List) actualProperty;
+                                            List<?> list = (List<?>) actualProperty;
                                             String assertMessage = "The value [" + expectedString + "] with index["
                                                     + path + "] could not be extracted from the list with size ["
                                                     + list.size() + "]" + exceptionContextMessage;
@@ -1316,7 +1318,7 @@ public class DefaultBeanProcessor implements BeanProcessor {
         }
     }
 
-    private Class getParameterType(Object object, String attribute, String exceptionContextMessage) {
+    private Class<?> getParameterType(Object object, String attribute, String exceptionContextMessage) {
         return findGetter(object, attribute, exceptionContextMessage).getReturnType();
     }
 
@@ -1523,7 +1525,8 @@ public class DefaultBeanProcessor implements BeanProcessor {
         return expectedValue.toString();
     }
 
-    public <T> T createObject(Class<T> class1, OrderedIndexedMap<String, String> parameters, String path,
+    @SuppressWarnings("unchecked")
+	public <T> T createObject(Class<T> class1, OrderedIndexedMap<String, String> parameters, String path,
             boolean allowNulls) {
         return (T) constructNewDto(parameters, path, class1.getName(), allowNulls);
     }
@@ -1755,7 +1758,6 @@ public class DefaultBeanProcessor implements BeanProcessor {
         return processedValue;
     }
 
-    @SuppressWarnings("unchecked")
     private <T> Object createObjectFromString(Class<T> setClass, String value) throws ParseException {
         Object converted = null;
         if (value == null) {
@@ -1790,7 +1792,7 @@ public class DefaultBeanProcessor implements BeanProcessor {
         } else if (Boolean.class.isAssignableFrom(setClass)) {
             converted = new Boolean(value);
         } else if (List.class.isAssignableFrom(setClass)) {
-            converted = new ArrayList();
+            converted = new ArrayList<Object>();
             if (!value.equals("empty")) {
                 throw new RuntimeException("Can't create a list from value [" + value + "].");
             }
@@ -1839,8 +1841,8 @@ public class DefaultBeanProcessor implements BeanProcessor {
         return result;
     }
 
-    private Object parseNumber(String value, Class fieldClass) {
-        Class[] arguments = new Class[1];
+    private Object parseNumber(String value, Class<?> fieldClass) {
+        Class<?>[] arguments = new Class[1];
         arguments[0] = String.class;
         Object[] callArguments = new Object[1];
         callArguments[0] = value;
@@ -1947,7 +1949,8 @@ public class DefaultBeanProcessor implements BeanProcessor {
     }
 
     public void validate(Object bean) {
-        ClassValidator<Object> classValidator = new ClassValidator<Object>((Class<Object>) bean.getClass());
+        @SuppressWarnings("unchecked")
+		ClassValidator<Object> classValidator = new ClassValidator<Object>((Class<Object>) bean.getClass());
         InvalidValue[] invalidValues = classValidator.getInvalidValues(bean);
         if (invalidValues.length > 0) {
             throw new RuntimeException("The bean " + bean + "\n-------- is invalid:\n"

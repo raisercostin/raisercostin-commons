@@ -182,7 +182,7 @@ public class ObjectUtils {
         return ExceptionUtils.getFullStackTrace((Throwable) object);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public static String customToStringInternal(Object object, boolean useOriginalToString,
             FieldDecorator fieldDecorator, MyStringStyle toStringStyle) {
         String value = null;
@@ -194,7 +194,7 @@ public class ObjectUtils {
             value = toIdentedString(mapToString((Map<Object, Object>) object));
         } else if (object instanceof Collection) {
             value = toIdentedString(collectionToString((Collection<Object>) object));
-        } else if ((object instanceof Class) && ((Class) object).isEnum()) {
+        } else if ((object instanceof Class) && ((Class<?>) object).isEnum()) {
             value = toIdentedString(enumToString((Class<Enum>) object));
         } else {
             if (useOriginalToString) {
@@ -206,11 +206,12 @@ public class ObjectUtils {
         return value;
     }
 
-    private static String enumToString(Class<Enum> object) {
-        Enum[] constants = object.getEnumConstants();
+    private static String enumToString(@SuppressWarnings("rawtypes") Class<Enum> object) {
+        @SuppressWarnings("rawtypes")
+		Enum[] constants = object.getEnumConstants();
         StringBuilder sb = new StringBuilder();
         sb.append(object.toString()).append(" enums=[\n");
-        for (Enum oneConstant : constants) {
+        for (@SuppressWarnings("rawtypes") Enum oneConstant : constants) {
             sb.append(oneConstant.name()).append("(").append(oneConstant.ordinal()).append(")=").append(
                     ObjectUtils.toStringWithExclusionsWithoutDecorators(oneConstant, "name,ordinal", true))
                     .append("\n");
@@ -234,7 +235,6 @@ public class ObjectUtils {
                 return super.accept(f) && fieldDecorator.accept(f);
             }
 
-            @SuppressWarnings("unchecked")
             @Override
             public ToStringBuilder append(String fieldName, Object object) {
                 if (firstTime) {

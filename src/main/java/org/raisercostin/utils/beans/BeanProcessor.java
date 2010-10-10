@@ -54,7 +54,7 @@ public interface BeanProcessor {
 
 	Method getClassMethod(Class<?> theClass, String methodName);
 
-	void invokeSetter(Object parent, Object value, String paramName, Class c);
+	void invokeSetter(Object parent, Object value, String paramName, Class<?> c);
 
 	void compareRequests(String expectedRequestName, OrderedIndexedMap<String, String> expected, Method method, Object[] actualArguments, String exceptionContextMessage);
 

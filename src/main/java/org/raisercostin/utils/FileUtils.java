@@ -217,6 +217,7 @@ public class FileUtils {
 	public static String readFromClasspathResourceToString(
 			ClassPathResource resource, String encoding, String lineEnding)
 			throws IOException {
+		@SuppressWarnings("unchecked")
 		List<String> lines = org.apache.commons.io.IOUtils.readLines(
 				resource.getInputStream(), encoding);
 		String result = "";

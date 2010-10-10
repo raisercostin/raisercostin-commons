@@ -125,7 +125,7 @@ public class BeanUtils {
 		return defaultBeanProcessor.getValue(object, path);
 	}
 
-	public static void invokeSetter(Object parent, Object value, String paramName, Class c) {
+	public static void invokeSetter(Object parent, Object value, String paramName, Class<?> c) {
 		defaultBeanProcessor.invokeSetter(parent, value, paramName, c);
 	}
 

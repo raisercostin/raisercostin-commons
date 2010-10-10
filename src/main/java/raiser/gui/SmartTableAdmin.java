@@ -7,7 +7,12 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
 public class SmartTableAdmin<T> extends JPanel {
-	public SmartTableAdmin(SmartTable smartTable) {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5859327718732448580L;
+
+	public SmartTableAdmin(SmartTable<?> smartTable) {
 		super(new BorderLayout());
 		add(new JScrollPane(smartTable,
 				ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
@@ -15,7 +20,7 @@ public class SmartTableAdmin<T> extends JPanel {
 				BorderLayout.CENTER);
 	}
 
-	public <T> SmartTableAdmin(T... objects) throws InstantiationException, IllegalAccessException {
-		this(new SmartTable<T>(objects));
+	public <T2> SmartTableAdmin(T2... objects) throws InstantiationException, IllegalAccessException {
+		this(new SmartTable<T2>(objects));
 	}
 }

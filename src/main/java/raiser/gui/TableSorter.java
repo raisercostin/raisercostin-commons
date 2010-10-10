@@ -52,7 +52,7 @@ public class TableSorter extends TableMap {
 
 	public TableSorter() {
 		indexes = new int[0]; // for consistency
-		ascending = true ? ORDER_ASCENDING : ORDER_DESCENDING;
+		ascending = ORDER_ASCENDING;
 	}
 
 	public TableSorter(final TableModel model) {

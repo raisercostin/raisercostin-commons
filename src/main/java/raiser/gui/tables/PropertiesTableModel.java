@@ -53,7 +53,8 @@ public class PropertiesTableModel<T> extends AbstractTableModel implements
 		fireTableStructureChanged();
 	}
 
-	public <T> PropertiesTableModel(final T[] data) {
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public <T2> PropertiesTableModel(final T2[] data) {
 		super();
 		List asList = Arrays.asList(data);
 		setData(new ArrayList(asList));

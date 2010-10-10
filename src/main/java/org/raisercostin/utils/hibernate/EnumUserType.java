@@ -14,7 +14,8 @@ import org.hibernate.usertype.UserType;
 public class EnumUserType implements UserType, ParameterizedType {
 
     private static final int[] SQL_TYPES = { Types.VARCHAR };
-    private Class clazz = null;
+    @SuppressWarnings("rawtypes")
+	private Class clazz = null;
 
     public EnumUserType() {
     }
@@ -32,11 +33,12 @@ public class EnumUserType implements UserType, ParameterizedType {
         return SQL_TYPES;
     }
 
-    public Class returnedClass() {
+    public Class<?> returnedClass() {
         return clazz;
     }
 
-    public Object nullSafeGet(ResultSet resultSet, String[] names, Object owner) throws HibernateException,
+    @SuppressWarnings("unchecked")
+	public Object nullSafeGet(ResultSet resultSet, String[] names, Object owner) throws HibernateException,
             SQLException {
         String name = resultSet.getString(names[0]);
         Object result = null;
@@ -51,7 +53,7 @@ public class EnumUserType implements UserType, ParameterizedType {
         if (null == value) {
             preparedStatement.setNull(index, Types.VARCHAR);
         } else {
-            preparedStatement.setString(index, ((Enum) value).name());
+            preparedStatement.setString(index, ((Enum<?>) value).name());
         }
     }
 

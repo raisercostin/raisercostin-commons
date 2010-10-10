@@ -11,7 +11,6 @@ public class ArrayedMap<Key, Value> extends HashMap<Key, Value> implements Order
 
 	private final List<Key> allKeys;
 
-	private boolean allowSetIterator;
 
 	public ArrayedMap() {
 		super();
@@ -35,7 +34,6 @@ public class ArrayedMap<Key, Value> extends HashMap<Key, Value> implements Order
 
 	private ArrayedMap(ArrayedMap<Key, Value> arrayedMap, boolean allowSetIterator) {
 		this(arrayedMap);
-		this.allowSetIterator = true;
 	}
 
 	public Key getKeyAt(int index) {
@@ -90,7 +88,7 @@ public class ArrayedMap<Key, Value> extends HashMap<Key, Value> implements Order
 	}
 
 	public Map<Key, Value> lightMapClone() {
-		return new ArrayedMap(this, true);
+		return new ArrayedMap<Key, Value>(this, true);
 	}
 
 	public void replaceKey(Key key, Key newKey) {

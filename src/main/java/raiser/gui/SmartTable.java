@@ -4,7 +4,6 @@
  ******************************************************************************/
 package raiser.gui;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 
@@ -51,11 +50,12 @@ public class SmartTable<T> extends JTable2 {
 		setModel(new PropertiesTableModel<T>(theClass, data));
 	}
 
-	public <T> SmartTable(T... objects) throws InstantiationException, IllegalAccessException {
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public <T2> SmartTable(T2... objects) throws InstantiationException, IllegalAccessException {
 		if (objects.length == 1 && objects[0] instanceof Class) {
 			createUsingClass((Class) objects[0]);
 		} else {
-			setModel(new PropertiesTableModel<T>(objects));
+			setModel(new PropertiesTableModel<T2>(objects));
 		}
 	}
 
@@ -69,7 +69,7 @@ public class SmartTable<T> extends JTable2 {
 
 	@SuppressWarnings("unchecked")
 	private SmartTableModel<T> getSmartTableModel() {
-		return (SmartTableModel) getModel();
+		return (SmartTableModel<T>) getModel();
 	}
 
 	public void setDefaultNewRow(final Class<? extends T> defaultNewRow) {

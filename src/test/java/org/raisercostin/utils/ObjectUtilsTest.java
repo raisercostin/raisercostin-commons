@@ -18,7 +18,9 @@ public class ObjectUtilsTest {
 	}
 
 	private static class ATest {
+		@SuppressWarnings("unused")
 		private final BTest testInside1;
+		@SuppressWarnings("unused")
 		private final BTest testInside2;
 		private final Map<String, String> map;
 
@@ -38,10 +40,7 @@ public class ObjectUtilsTest {
 	}
 
 	private static class BTest {
-		private final String value;
-
 		public BTest(String value) {
-			this.value = value;
 		}
 
 		@Override
@@ -57,6 +56,11 @@ public class ObjectUtilsTest {
 	}
 
 	private static class SomeException extends RuntimeException {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -6830122091326715468L;
+
 		@Override
 		public String toString() {
 			return ObjectUtils.toString(this);

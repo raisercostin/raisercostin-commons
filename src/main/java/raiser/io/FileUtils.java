@@ -277,10 +277,6 @@ public class FileUtils {
 					+ Integer.toString(unique) + ".tmp");
 		} while (tempFile.exists());
 		new java.io.FileOutputStream(tempFile).close();
-		// debugging peek at the name generated.
-		if (false) {
-			System.out.println(tempFile.getCanonicalPath());
-		}
 		return tempFile;
 	}
 

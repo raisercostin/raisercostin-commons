@@ -99,7 +99,7 @@ public class AdapterUtils {
      * @param map a map
      * @return a string containing the map keys, values, and types
      */
-    public static String getDebugString(final Map map) {
+    public static String getDebugString(final Map<?, ?> map) {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
         final PrintStream printStream = new PrintStream(out);
         try {
