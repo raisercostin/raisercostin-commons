@@ -10,7 +10,8 @@
 
 package jsync;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class initiating parallel execution of several threads and collecting their
@@ -26,8 +27,8 @@ public class Concurrent {
 	 */
 	// private static final Logger logger = Logger.getLogger(Concurrent.class);
 	/**
-	 * Constructor of <code>Concurrent</code> class. This constructor creates
-	 * a thread object for each activity.
+	 * Constructor of <code>Concurrent</code> class. This constructor creates a
+	 * thread object for each activity.
 	 * 
 	 * @param activities
 	 *            array of activities to be done.
@@ -85,8 +86,8 @@ public class Concurrent {
 	 * @param timeout
 	 *            the maximum time to wait in milliseconds.
 	 * @return result returned by thread first finished it's execution or
-	 *         <code>null</code> if timeout is expired before any thread
-	 *         finish it's execution.
+	 *         <code>null</code> if timeout is expired before any thread finish
+	 *         it's execution.
 	 */
 	public final synchronized Object waitOne(final long timeout) {
 		Object result = null;
@@ -131,8 +132,8 @@ public class Concurrent {
 	 * @param timeout
 	 *            the maximum time to wait in milliseconds.
 	 * @return array containing results returned by each of the threads or
-	 *         <code>null</code> if timeout is expired before all threads
-	 *         finish execution.
+	 *         <code>null</code> if timeout is expired before all threads finish
+	 *         execution.
 	 */
 	public synchronized Object[] waitAll(final long timeout) {
 		final long startTime = System.currentTimeMillis();
@@ -174,7 +175,7 @@ class Task extends Thread {
 	/**
 	 * Logger for this class
 	 */
-	private static final Logger logger = Logger.getLogger(Task.class);
+	private static final Logger logger = LoggerFactory.getLogger(Task.class);
 
 	Activity activity;
 
@@ -188,7 +189,7 @@ class Task extends Thread {
 		try {
 			result = activity.run();
 		} catch (final Exception ex) {
-			logger.error(ex);
+			logger.error("", ex);
 			result = null;
 		}
 		referee.setResult(id, result);

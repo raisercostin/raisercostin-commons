@@ -11,6 +11,7 @@ package raiser.gui.tables;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -37,11 +38,11 @@ public class PropertiesTableModel<T> extends AbstractTableModel implements
 	private Class<? extends T> defaultNewRow;
 
 	public PropertiesTableModel() {
-		this(null, new ArrayList<T>());
+		this((List<String>)null, new ArrayList<T>());
 	};
 
 	public PropertiesTableModel(final List<T> data) {
-		this(null, data);
+		this((List<String>)null, data);
 	};
 
 	public PropertiesTableModel(final List<String> columnNames,
@@ -49,6 +50,21 @@ public class PropertiesTableModel<T> extends AbstractTableModel implements
 		super();
 		setData(data);
 		setColumns(columnNames);
+		fireTableStructureChanged();
+	}
+
+	public <T> PropertiesTableModel(final T[] data) {
+		super();
+		List asList = Arrays.asList(data);
+		setData(new ArrayList(asList));
+		setColumns(null);
+		fireTableStructureChanged();
+	};
+
+	public PropertiesTableModel(final Class<T> defaultNewRow, final List<T> data) {
+		super();
+		setData(data);
+		setDefaultNewRow(defaultNewRow);
 		fireTableStructureChanged();
 	}
 
@@ -121,9 +137,9 @@ public class PropertiesTableModel<T> extends AbstractTableModel implements
 	}
 
 	private void computeDescriptors() {
-		System.out.println("computeDescriptors");
 		final Class<?> infoClass = data.size() == 0 ? getDefaultNewRow() : data
 				.get(0).getClass();
+		System.out.println("computeDescriptors infoClass="+infoClass+" default="+getDefaultNewRow());
 		columns = null;
 		descriptors = getColumns(infoClass, initialColumns);
 	}
@@ -146,8 +162,8 @@ public class PropertiesTableModel<T> extends AbstractTableModel implements
 		try {
 			PropertyUtils.setProperty(object, name, value);
 		} catch (final IllegalArgumentException e) {
-			System.err.println("Can't set property '" + name + "' with value '"
-					+ value + "'.");
+			throw new RuntimeException("Can't set property '" + name + "' with value '"
+					+ value + "'.",e);
 		} catch (final IllegalAccessException e) {
 			e.printStackTrace();
 		} catch (final InvocationTargetException e) {
@@ -188,6 +204,9 @@ public class PropertiesTableModel<T> extends AbstractTableModel implements
 						columns.add(element);
 					}
 				}
+			}
+			if(columns.size()==0){
+				throw new RuntimeException("No public property was discovered to the class ["+infoClass+"].");
 			}
 			Collections.sort(columns, new Comparator<PropertyDescriptor>() {
 				public int compare(final PropertyDescriptor o1,

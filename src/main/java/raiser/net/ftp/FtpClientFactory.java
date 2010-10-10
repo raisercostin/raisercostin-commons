@@ -16,10 +16,6 @@ public class FtpClientFactory {
 		return createApacheFtpClient();
 	}
 
-	public static FtpClient createSunFtpClient() {
-		return new SunFtpClient();
-	}
-
 	public static FtpClient createApacheFtpClient() {
 		return new ApacheFtpClient();
 	}

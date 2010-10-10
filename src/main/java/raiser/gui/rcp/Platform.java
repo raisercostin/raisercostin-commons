@@ -11,8 +11,6 @@ import javax.swing.plaf.metal.MetalLookAndFeel;
 
 import raiser.gui.Console;
 
-import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
-
 public class Platform {
 	public static void start(final ApplicationController controller,
 			final ApplicationModel model, final ApplicationView view) {
@@ -42,7 +40,7 @@ public class Platform {
 	public static void setWindowsLookAndFeel() throws ClassNotFoundException,
 			InstantiationException, IllegalAccessException,
 			UnsupportedLookAndFeelException {
-		UIManager.setLookAndFeel(WindowsLookAndFeel.class.getName());
+		UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 	}
 
 	public static void setDefaultLookAndFeel() throws ClassNotFoundException,

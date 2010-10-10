@@ -17,7 +17,8 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Configuration implements Serializable {
 	/**
@@ -28,7 +29,7 @@ public class Configuration implements Serializable {
 	/**
 	 * Logger for this class
 	 */
-	private static final Logger logger = Logger.getLogger(Configuration.class);
+	private static final Logger logger = LoggerFactory.getLogger(Configuration.class);
 
 	public Configuration() {
 		setData(new HashMap<String, Object>());
@@ -58,7 +59,7 @@ public class Configuration implements Serializable {
 		final XMLDecoder d = new XMLDecoder(new BufferedInputStream(in));
 		d.setExceptionListener(new ExceptionListener() {
 			public void exceptionThrown(final Exception e) {
-				logger.error(e);
+				logger.error("",e);
 			}
 		});
 		final Configuration result = (Configuration) d.readObject();
@@ -79,7 +80,7 @@ public class Configuration implements Serializable {
 		final XMLEncoder e = new XMLEncoder(new BufferedOutputStream(os));
 		e.setExceptionListener(new ExceptionListener() {
 			public void exceptionThrown(final Exception e) {
-				logger.error(e);
+				logger.error("",e);
 			}
 		});
 		e.writeObject(props);

@@ -11,12 +11,13 @@ import javax.swing.JLabel;
 import javax.swing.JWindow;
 import javax.swing.WindowConstants;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import raiser.gui.Console;
 
 public class DefaultApplicationController implements ApplicationController {
-	private static final Logger logger = Logger
+	private static final Logger logger = LoggerFactory
 			.getLogger(DefaultApplicationController.class);
 
 	public JDialog aboutDialog;

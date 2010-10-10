@@ -12,7 +12,8 @@ import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author raiser
@@ -21,7 +22,7 @@ public class Formatter {
 	/**
 	 * Logger for this class
 	 */
-	private static final Logger logger = Logger.getLogger(Formatter.class);
+	private static final Logger logger = LoggerFactory.getLogger(Formatter.class);
 
 	public static String toHexString(int number, final int digits) {
 		boolean possitive = true;

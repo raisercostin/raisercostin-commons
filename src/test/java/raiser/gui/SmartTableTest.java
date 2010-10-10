@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import uk.org.lidalia.sysoutslf4j.context.SysOutOverSLF4J;
+
 import junit.framework.TestCase;
 
 /**
@@ -19,14 +21,14 @@ public class SmartTableTest extends TestCase {
 	 */
 	@Override
 	protected void setUp() throws Exception {
-		table = new SmartTable<Task>(new ArrayList<Task>(Arrays
-				.asList(new Task[] { new Task(false, "Task 0", "?", 0),
+		SysOutOverSLF4J.sendSystemOutAndErrToSLF4J();
+		table = new SmartTable<Task>(new Task(false, "Task 0", "?", 0),
 						new Task(true, "Task 1", "gigel", 20),
 						new Task(false, "Task 2", "?", 0),
 						new Task(false, "Task 3", "costin", 40),
 						new Task(true, "Task 4", "?", 50),
 						new Task(false, "Task 5", "nana", 0),
-						new Task(false, "Task 6", "baby", 100), })));
+						new Task(false, "Task 6", "baby", 100));
 
 		final List<Task> data = new ArrayList<Task>();
 		data.add(new Task(false, "Task 0", "?", 0));

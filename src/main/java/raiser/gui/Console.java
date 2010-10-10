@@ -1,7 +1,5 @@
 package raiser.gui;
 
-import org.apache.log4j.Logger;
-
 import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.awt.Point;
@@ -23,11 +21,14 @@ import javax.swing.JWindow;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.WindowConstants;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Console {
 	/**
 	 * Logger for this class
 	 */
-	private static final Logger logger = Logger.getLogger(Console.class);
+	private static final Logger logger = LoggerFactory.getLogger(Console.class);
 
 	class MyPanel extends JPanel {
 		/**

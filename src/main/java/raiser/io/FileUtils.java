@@ -17,7 +17,8 @@ import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author raiser
@@ -26,7 +27,7 @@ public class FileUtils {
 	/**
 	 * Logger for this class
 	 */
-	private static final Logger logger = Logger.getLogger(FileUtils.class);
+	private static final Logger logger = LoggerFactory.getLogger(FileUtils.class);
 
 	/** File separator ("/" on Unix). */
 	public static String getFileSeparator() {

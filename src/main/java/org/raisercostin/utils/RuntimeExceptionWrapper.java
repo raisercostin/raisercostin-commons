@@ -1,4 +1,4 @@
-package org.raisercostin.util;
+package org.raisercostin.utils;
 
 /**
 The ExceptionConverter changes a checked exception into an
