@@ -40,6 +40,7 @@ public class ObjectUtilsTest {
 	}
 
 	private static class BTest {
+		@SuppressWarnings("unused")
 		private String value;
 
 		public BTest(String value) {

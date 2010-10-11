@@ -44,6 +44,7 @@ public class DaoUtilities {
         /* Schema export */
         SchemaExport schemaExport = new SchemaExport(cfg);
         schemaExport.setDelimiter(";");
+        schemaExport.setFormat(true);
         schemaExport.setOutputFile(schemaExportFileName);
         schemaExport.create(true, false);
     }
