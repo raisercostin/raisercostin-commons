@@ -59,8 +59,7 @@ public class FileUtils {
 
 	public static File forceMkdir(File directory) throws IOException {
 		if (logger.isDebugEnabled()) {
-			logger.debug("Create folder [" + directory.getAbsolutePath()
-					+ "] if doesn't exists.");
+			logger.debug("Create folder [" + directory.getAbsolutePath() + "] if doesn't exists.");
 		}
 		org.apache.commons.io.FileUtils.forceMkdir(directory);
 		return directory;
@@ -74,8 +73,7 @@ public class FileUtils {
 	 * @return the list of files moved into destinationFolder
 	 * @throws IOException
 	 */
-	public static List<File> moveContent(Resource sourceFolder,
-			Resource destinationFolder) throws IOException {
+	public static List<File> moveContent(Resource sourceFolder, Resource destinationFolder) throws IOException {
 		File[] files = sourceFolder.getFile().listFiles();
 		return moveContent(Arrays.asList(files), destinationFolder);
 	}
@@ -88,23 +86,21 @@ public class FileUtils {
 	// }
 
 	/**
-	 * Moves all files to destinationFolder, by renaming them. If it fails on
-	 * some point, tries to revert the change, and move back the files.
+	 * Moves all files to destinationFolder, by renaming them. If it fails on some point, tries to revert the change,
+	 * and move back the files.
 	 * 
 	 * @param sourceFolder
 	 * @param destinationFolder
 	 * @return the list of files moved into destinationFolder
 	 * @throws IOException
 	 */
-	public static List<File> moveContent(List<File> files,
-			Resource destinationFolder) throws IOException {
+	public static List<File> moveContent(List<File> files, Resource destinationFolder) throws IOException {
 		List<File> result = new ArrayList<File>();
 		Map<File, File> movedFiles = new HashMap<File, File>();
 		try {
 			for (File file : files) {
 				if (file.isFile()) {
-					File destFile = new File(getFileName(destinationFolder,
-							file));
+					File destFile = new File(getFileName(destinationFolder, file));
 					if (forceRename(file, destFile)) {
 						result.add(destFile);
 						movedFiles.put(destFile, file);
@@ -131,8 +127,7 @@ public class FileUtils {
 			try {
 				forceRename(entryFile.getKey(), entryFile.getValue());
 			} catch (IOException e) {
-				logger.warn("Couldn't rename from ["
-						+ entryFile.getKey().getAbsolutePath() + "] to ["
+				logger.warn("Couldn't rename from [" + entryFile.getKey().getAbsolutePath() + "] to ["
 						+ entryFile.getValue().getAbsolutePath() + "].", e);
 			}
 		}
@@ -143,13 +138,11 @@ public class FileUtils {
 	 * 
 	 * @param movedFiles
 	 */
-	public static void archiveContent(Set<File> archiveFiles, File destFolder)
-			throws IOException {
+	public static void archiveContent(Set<File> archiveFiles, File destFolder) throws IOException {
 		byte[] b = new byte[512];
 		for (File file : archiveFiles) {
 			String archiveName = file.getName() + ".zip";
-			ZipOutputStream zout = new ZipOutputStream(new FileOutputStream(
-					new File(destFolder, archiveName)));
+			ZipOutputStream zout = new ZipOutputStream(new FileOutputStream(new File(destFolder, archiveName)));
 			InputStream in = new FileInputStream(file);
 			ZipEntry e = new ZipEntry(file.getName());
 			zout.putNextEntry(e);
@@ -171,30 +164,24 @@ public class FileUtils {
 			try {
 				org.apache.commons.io.FileUtils.forceDelete(file);
 			} catch (IOException e) {
-				logger.warn(
-						"Couldn't remove [" + file.getAbsolutePath() + "].", e);
+				logger.warn("Couldn't remove [" + file.getAbsolutePath() + "].", e);
 			}
 		}
 	}
 
-	public static String getFileName(Resource folder, File file)
-			throws IOException {
-		return folder.getFile().getAbsolutePath() + File.separatorChar
-				+ file.getName();
+	public static String getFileName(Resource folder, File file) throws IOException {
+		return folder.getFile().getAbsolutePath() + File.separatorChar + file.getName();
 	}
 
-	public static String readToString(Resource resource, String encoding)
-			throws IOException {
+	public static String readToString(Resource resource, String encoding) throws IOException {
 		if (resource instanceof UrlResource) {
 			return getUrlResourceAsString((UrlResource) resource, encoding);
 		} else {
-			return org.apache.commons.io.FileUtils.readFileToString(
-					resource.getFile(), encoding);
+			return org.apache.commons.io.FileUtils.readFileToString(resource.getFile(), encoding);
 		}
 	}
 
-	private static String getUrlResourceAsString(UrlResource urlRes,
-			String encoding) throws IOException {
+	private static String getUrlResourceAsString(UrlResource urlRes, String encoding) throws IOException {
 		StringBuffer sb = new StringBuffer();
 		InputStream in = null;
 		try {
@@ -205,21 +192,22 @@ public class FileUtils {
 				sb.append((char) c);
 			}
 		} finally {
-			try {
-				in.close();
-			} catch (Exception exc) {
+			if (in != null) {
+				try {
+					in.close();
+				} catch (Exception exc) {
+					logger.warn("Couldn't close a stream on url " + urlRes + " with encoding " + encoding + ".", exc);
+				}
 			}
 		}
 
 		return sb.toString();
 	}
 
-	public static String readFromClasspathResourceToString(
-			ClassPathResource resource, String encoding, String lineEnding)
-			throws IOException {
+	public static String readFromClasspathResourceToString(ClassPathResource resource, String encoding,
+			String lineEnding) throws IOException {
 		@SuppressWarnings("unchecked")
-		List<String> lines = org.apache.commons.io.IOUtils.readLines(
-				resource.getInputStream(), encoding);
+		List<String> lines = org.apache.commons.io.IOUtils.readLines(resource.getInputStream(), encoding);
 		String result = "";
 		for (String line : lines) {
 			result += line + lineEnding;
@@ -227,15 +215,12 @@ public class FileUtils {
 		return result;
 	}
 
-	public static void writeFromString(Resource resource, String data,
-			String encoding) throws IOException {
+	public static void writeFromString(Resource resource, String data, String encoding) throws IOException {
 		getParentFile(resource.getFile()).mkdirs();
-		org.apache.commons.io.FileUtils.writeStringToFile(resource.getFile(),
-				data, encoding);
+		org.apache.commons.io.FileUtils.writeStringToFile(resource.getFile(), data, encoding);
 	}
 
-	public static void copyResourceToFolder(Resource srcResource, File destFile)
-			throws IOException {
+	public static void copyResourceToFolder(Resource srcResource, File destFile) throws IOException {
 		if (srcResource.getURL().getProtocol().equals("file")) {
 			org.apache.commons.io.FileUtils.copyFile(srcResource.getFile(),
 					new File(destFile, srcResource.getFilename()));
@@ -245,13 +230,10 @@ public class FileUtils {
 	}
 
 	/**/
-	private static void copyResourceFromJar(Resource res, File destinationFolder)
-			throws IOException {
+	private static void copyResourceFromJar(Resource res, File destinationFolder) throws IOException {
 		BufferedInputStream in = new BufferedInputStream(res.getInputStream());
-		File f = new File(destinationFolder.getCanonicalFile() + "/"
-				+ res.getFilename());
-		BufferedOutputStream out = new BufferedOutputStream(
-				new FileOutputStream(f));
+		File f = new File(destinationFolder.getCanonicalFile() + "/" + res.getFilename());
+		BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(f));
 
 		int b;
 		while ((b = in.read()) != -1) {
@@ -274,29 +256,23 @@ public class FileUtils {
 		return new File(path.substring(0, lastIndexOf));
 	}
 
-	public static boolean forceRename(File srcFile, File destFile)
-			throws IOException {
+	public static boolean forceRename(File srcFile, File destFile) throws IOException {
 		boolean renamed = srcFile.renameTo(destFile);
 		if (!renamed) {
 			org.apache.commons.io.FileUtils.copyFile(srcFile, destFile);
 			renamed = srcFile.delete();
-			throw new IOException("Couldn't rename ["
-					+ srcFile.getAbsolutePath() + "] to ["
+			throw new IOException("Couldn't rename [" + srcFile.getAbsolutePath() + "] to ["
 					+ destFile.getAbsolutePath() + "].");
 		}
 		return renamed;
 	}
 
-	public static void renameFolder(File srcFolder, File destFolder)
-			throws IOException {
-		org.apache.commons.io.FileUtils.moveDirectoryToDirectory(srcFolder,
-				destFolder, true);
+	public static void renameFolder(File srcFolder, File destFolder) throws IOException {
+		org.apache.commons.io.FileUtils.moveDirectoryToDirectory(srcFolder, destFolder, true);
 	}
 
-	public static String readLine(Resource resource, int lineNumber)
-			throws IOException {
-		BufferedReader reader = new BufferedReader(new InputStreamReader(
-				resource.getInputStream()));
+	public static String readLine(Resource resource, int lineNumber) throws IOException {
+		BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream()));
 		List<String> list = new ArrayList<String>();
 		String line = reader.readLine();
 		int i = 0;

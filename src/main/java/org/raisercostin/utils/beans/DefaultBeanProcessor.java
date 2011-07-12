@@ -75,7 +75,8 @@ public class DefaultBeanProcessor implements BeanProcessor {
      * (non-Javadoc)
      * @see com.xoom.integration.util.BeanProcessor#setBeanFactory(org.springframework .beans.factory.BeanFactory)
      */
-    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+    @Override
+	public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
         this.beanFactory = beanFactory;
     }
 
@@ -87,7 +88,8 @@ public class DefaultBeanProcessor implements BeanProcessor {
      * (non-Javadoc)
      * @see com.xoom.integration.util.BeanProcessor#validateFields(java.lang.Object, java.lang.String)
      */
-    public List<String> validateFields(Object bean, String pattern) {
+    @Override
+	public List<String> validateFields(Object bean, String pattern) {
         Method[] methods = bean.getClass().getMethods();
         List<String> result = new ArrayList<String>();
         Pattern p = Pattern.compile(pattern);
@@ -100,7 +102,8 @@ public class DefaultBeanProcessor implements BeanProcessor {
                         result.add(name.substring(3, name.length()));
                     }
                 } catch (ClassCastException e) {
-                    ; // can get this when field is not String
+					// can get this when field is not String
+					logger.warn("Exception occured during validating field: " + m.getName() + " of object " + bean, e);
                 } catch (Exception e) {
                     logger.warn("Exception occured during validating field: " + m.getName() + " of object " + bean, e);
                 }
@@ -114,7 +117,8 @@ public class DefaultBeanProcessor implements BeanProcessor {
      * @see com.xoom.integration.util.BeanProcessor#fixBean(java.lang.Object,
      * com.xoom.integration.util.StringTranslator)
      */
-    public void fixBean(Object bean, StringTranslator stringTranslator,
+    @Override
+	public void fixBean(Object bean, StringTranslator stringTranslator,
             ExceptionNotificationHandler exceptionNotificationHandler) {
         fixBeanCustom(bean, stringTranslator, true, true, exceptionNotificationHandler);
     }
@@ -124,7 +128,8 @@ public class DefaultBeanProcessor implements BeanProcessor {
      * @see com.xoom.integration.util.BeanProcessor#fixBeanOnlyTruncate(java.lang .Object,
      * com.xoom.integration.util.StringTranslator)
      */
-    public void fixBeanOnlyTruncate(Object bean, StringTranslator stringTranslator,
+    @Override
+	public void fixBeanOnlyTruncate(Object bean, StringTranslator stringTranslator,
             ExceptionNotificationHandler exceptionNotificationHandler) {
         fixBeanCustom(bean, stringTranslator, false, true, exceptionNotificationHandler);
     }
@@ -134,7 +139,8 @@ public class DefaultBeanProcessor implements BeanProcessor {
      * @see com.xoom.integration.util.BeanProcessor#fixBeanOnlyTranslate(java.lang .Object,
      * com.xoom.integration.util.StringTranslator)
      */
-    public void fixBeanOnlyTranslate(Object bean, StringTranslator stringTranslator,
+    @Override
+	public void fixBeanOnlyTranslate(Object bean, StringTranslator stringTranslator,
             ExceptionNotificationHandler exceptionNotificationHandler) {
         fixBeanCustom(bean, stringTranslator, true, false, exceptionNotificationHandler);
     }
@@ -194,7 +200,7 @@ public class DefaultBeanProcessor implements BeanProcessor {
                         method.invoke(bean, fixed);
                     }
                 } catch (ClassCastException e) {
-                    ; // can get this when field is not String
+					logger.warn("Exception occured during fixing field: " + m.getName() + " of object " + bean, e);
                 } catch (Exception e) {
                     if (exceptionNotificationHandler != null) {
                         exceptionNotificationHandler.notifyException(e);
@@ -211,7 +217,8 @@ public class DefaultBeanProcessor implements BeanProcessor {
      * @see com.xoom.integration.util.BeanProcessor#checkMandatory(java.lang.Object)
      */
 
-    public List<String> checkMandatory(Object bean) {
+    @Override
+	public List<String> checkMandatory(Object bean) {
         Class<?> c = bean.getClass();
         Method[] methods = c.getMethods();
         List<String> emptyMandatoryProperties = new ArrayList<String>();
@@ -228,7 +235,7 @@ public class DefaultBeanProcessor implements BeanProcessor {
                         }
                     }
                 } catch (ClassCastException e) {
-                    ; // can get this when field is not String
+					logger.warn("Exception occured during fixing field: " + m.getName() + " of object " + bean, e);
                 } catch (Exception e) {
                     logger.warn("Exception occured during fixing field: " + m.getName() + " of object " + bean, e);
                 }
@@ -237,7 +244,8 @@ public class DefaultBeanProcessor implements BeanProcessor {
         return emptyMandatoryProperties;
     }
 
-    public Map<String, String> checkLength(Object bean) {
+    @Override
+	public Map<String, String> checkLength(Object bean) {
         Class<?> c = bean.getClass();
         Method[] methods = c.getMethods();
         Map<String, String> mapLengthPropertiesExceedMax = new HashMap<String, String>();
@@ -263,7 +271,7 @@ public class DefaultBeanProcessor implements BeanProcessor {
                         }
                     }
                 } catch (ClassCastException e) {
-                    ; // can get this when field is not String
+					logger.warn("Exception occured during fixing field: " + m.getName() + " of object " + bean, e);
                 } catch (Exception e) {
                     logger.warn("Exception occured during fixing field: " + m.getName() + " of object " + bean, e);
                 }
@@ -272,7 +280,8 @@ public class DefaultBeanProcessor implements BeanProcessor {
         return mapLengthPropertiesExceedMax;
     }
     
-    public String checkLength(Object bean, String fieldName) {    	        
+    @Override
+	public String checkLength(Object bean, String fieldName) {    	        
         try {
         	Method getter = bean.getClass().getMethod("get" + StringUtils.capitalize(fieldName));
             String initial = (String) getter.invoke(bean);
@@ -293,7 +302,7 @@ public class DefaultBeanProcessor implements BeanProcessor {
                 }
             }
         } catch (ClassCastException e) {
-            ; // can get this when field is not String
+			logger.warn("Exception occured during checking field length: " + fieldName + " of object " + bean, e);
         } catch (Exception e) {
             logger.warn("Exception occured during checking field length: " + fieldName + " of object " + bean, e);
         }
@@ -325,7 +334,8 @@ public class DefaultBeanProcessor implements BeanProcessor {
      * (non-Javadoc)
      * @see com.xoom.integration.util.BeanProcessor#getValue(java.lang.Object, java.lang.String)
      */
-    public Object getValue(Object object, String path) {
+    @Override
+	public Object getValue(Object object, String path) {
         return getValueInternal(object, path.split("\\/"), path, null);
     }
 
@@ -334,7 +344,8 @@ public class DefaultBeanProcessor implements BeanProcessor {
      * @see com.xoom.integration.util.BeanProcessor#getValue(java.lang.Object, java.lang.String,
      * com.xoom.integration.util.OrderedIndexedMap)
      */
-    public Object getValue(Object object, String path, OrderedIndexedMap<String, String> parameters) {
+    @Override
+	public Object getValue(Object object, String path, OrderedIndexedMap<String, String> parameters) {
         return getValueInternal(object, path.split("\\/"), path, parameters);
     }
 
@@ -342,7 +353,8 @@ public class DefaultBeanProcessor implements BeanProcessor {
      * (non-Javadoc)
      * @see com.xoom.integration.util.BeanProcessor#setValue(java.lang.Object, java.lang.String, java.lang.Object)
      */
-    public Object setValue(Object object, String path, Object value) {
+    @Override
+	public Object setValue(Object object, String path, Object value) {
         return setValueInternal(object, value, path.split("\\/"), path, null);
     }
 
@@ -351,7 +363,8 @@ public class DefaultBeanProcessor implements BeanProcessor {
      * @see com.xoom.integration.util.BeanProcessor#setValue(java.lang.Object, java.lang.String, java.lang.Object,
      * com.xoom.integration.util.OrderedIndexedMap)
      */
-    public Object setValue(Object object, String path, Object value, OrderedIndexedMap<String, String> parameters) {
+    @Override
+	public Object setValue(Object object, String path, Object value, OrderedIndexedMap<String, String> parameters) {
         return setValueInternal(object, value, path.split("\\/"), path, parameters);
     }
 
@@ -360,7 +373,8 @@ public class DefaultBeanProcessor implements BeanProcessor {
      * @see com.xoom.integration.util.BeanProcessor#setValue(java.lang.Class, java.lang.Object, java.lang.String,
      * java.lang.Object, com.xoom.integration.util.OrderedIndexedMap)
      */
-    public Object setValue(Class<?> rawType, Object object, String path, Object value,
+    @Override
+	public Object setValue(Class<?> rawType, Object object, String path, Object value,
             OrderedIndexedMap<String, String> parameters) {
         return setValueInternal(rawType, object, value, path.split("\\/"), path, parameters);
     }
@@ -370,22 +384,26 @@ public class DefaultBeanProcessor implements BeanProcessor {
      * @see com.xoom.integration.util.BeanProcessor#setValue(java.lang.Class, java.lang.Object, java.lang.String,
      * java.lang.Object)
      */
-    public Object setValue(Class<?> rawType, Object object, String path, Object value) {
+    @Override
+	public Object setValue(Class<?> rawType, Object object, String path, Object value) {
         return setValueInternal(rawType, object, value, path.split("\\/"), path, null);
     }
 
-    @SuppressWarnings("unchecked")
+    @Override
+	@SuppressWarnings("unchecked")
 	public <T> T getValue(Object object, String path, Class<T> returningClass,
             OrderedIndexedMap<String, String> parameters) {
 		return (T) getValueInternal(object, path.split("\\/"), path, parameters);
     }
 
-    @SuppressWarnings("unchecked")
+    @Override
+	@SuppressWarnings("unchecked")
 	public <T> T getValue(Object object, String path, Class<T> returningClass) {
         return (T) getValueInternal(object, path.split("\\/"), path, null);
     }
 
-    public List<String> describeObject(Class<?> objectClass) {
+    @Override
+	public List<String> describeObject(Class<?> objectClass) {
         List<String> result = new ArrayList<String>();
         describeObject("", result, objectClass, 5, null);
         return result;
@@ -903,7 +921,8 @@ public class DefaultBeanProcessor implements BeanProcessor {
      * (non-Javadoc)
      * @see com.xoom.integration.util.BeanProcessor#getClassMethod(java.lang.Class, java.lang.String)
      */
-    public Method getClassMethod(Class<?> theClass, String methodName) {
+    @Override
+	public Method getClassMethod(Class<?> theClass, String methodName) {
         int counter = 0;
         Method result = null;
         for (Method method : theClass.getMethods()) {
@@ -997,7 +1016,8 @@ public class DefaultBeanProcessor implements BeanProcessor {
      * @see com.xoom.integration.util.BeanProcessor#invokeSetter(java.lang.Object, java.lang.Object, java.lang.String,
      * java.lang.Class)
      */
-    public void invokeSetter(Object parent, Object value, String paramName, Class<?> c) {
+    @Override
+	public void invokeSetter(Object parent, Object value, String paramName, Class<?> c) {
         String setterName = constructSetterName(paramName);
         Method setter = null;
         try {
@@ -1005,6 +1025,7 @@ public class DefaultBeanProcessor implements BeanProcessor {
             if (setter == null) {
                 if (parent instanceof ConfigurableByParameters) {
                     ((ConfigurableByParameters) parent).addParameter(paramName, value);
+					return;
                 } else {
                     throw new RuntimeException("No setter [" + setterName + "] found in class ["
                             + parent.getClass().getName() + "]");
@@ -1066,7 +1087,8 @@ public class DefaultBeanProcessor implements BeanProcessor {
      * @see com.xoom.integration.util.BeanProcessor#compareRequests(java.lang.String,
      * com.xoom.integration.util.OrderedIndexedMap, java.lang.reflect.Method, java.lang.Object[], java.lang.String)
      */
-    public void compareRequests(String expectedRequestName, OrderedIndexedMap<String, String> expected, Method method,
+    @Override
+	public void compareRequests(String expectedRequestName, OrderedIndexedMap<String, String> expected, Method method,
             Object[] actualArguments, String exceptionContextMessage) {
         if (expected != null) {
             String requestName = expectedRequestName;
@@ -1108,7 +1130,8 @@ public class DefaultBeanProcessor implements BeanProcessor {
      * @see com.xoom.integration.util.BeanProcessor#compareBeans(com.xoom.integration .util.OrderedIndexedMap,
      * java.lang.Object, java.lang.String)
      */
-    public void compareBeans(OrderedIndexedMap<String, String> expected, Object actual, String exceptionContextMessage) {
+    @Override
+	public void compareBeans(OrderedIndexedMap<String, String> expected, Object actual, String exceptionContextMessage) {
         if (expected == null) {
             Assert.assertNull("Comparing expected=[" + expected + "], actual=[" + actual + "] "
                     + exceptionContextMessage, actual);
@@ -1169,7 +1192,8 @@ public class DefaultBeanProcessor implements BeanProcessor {
      * (non-Javadoc) @seecom.xoom.integration.util.BeanProcessor#compareParameters(com.xoom.
      * integration.util.OrderedIndexedMap, java.lang.String, java.lang.Class, java.lang.Object, java.lang.String)
      */
-    public void compareParameters(OrderedIndexedMap<String, String> expected, String parameterPrefix,
+    @Override
+	public void compareParameters(OrderedIndexedMap<String, String> expected, String parameterPrefix,
             Class<?> expectedType, Object actualValue, String exceptionContextMessage) {
         try {
             if ((expected != null) && expected.containsKey(HAS_CONSTRUCTOR_FROM_STRING) && (expected.size() == 1)) {
@@ -1195,7 +1219,7 @@ public class DefaultBeanProcessor implements BeanProcessor {
                 if (parameterPrefix.equals(REQUEST_NAME)) {
                     return;
                 }
-                if ((parameterPrefix.length() > 0) && expected.containsKey(parameterPrefix)) {
+				if ((parameterPrefix.length() > 0) && (expected != null) && expected.containsKey(parameterPrefix)) {
                     try {
                         compareParameter(expectedType, expected.get(parameterPrefix), actualValue, parameterPrefix,
                                 false, exceptionContextMessage);
@@ -1409,7 +1433,8 @@ public class DefaultBeanProcessor implements BeanProcessor {
      * @see com.xoom.integration.util.BeanProcessor#checkStringContains(java.lang .String, java.lang.String,
      * java.lang.StringBuilder, java.lang.String)
      */
-    public boolean checkStringContains(String expectedContainedSubstrings, String actualTargetString,
+    @Override
+	public boolean checkStringContains(String expectedContainedSubstrings, String actualTargetString,
             StringBuilder errorMessage, String message) {
         if ((expectedContainedSubstrings == null) && (actualTargetString == null)) {
             return true;
@@ -1439,11 +1464,13 @@ public class DefaultBeanProcessor implements BeanProcessor {
      * @see com.xoom.integration.util.BeanProcessor#assertStringContains(java.lang .String, java.lang.String,
      * java.lang.String)
      */
-    public void assertStringContains(String message, String expectedContainedSubstrings, String actualTargetString) {
+    @Override
+	public void assertStringContains(String message, String expectedContainedSubstrings, String actualTargetString) {
         assertStringContainsCaseInsensitive(message, expectedContainedSubstrings, actualTargetString, true);
     }
 
-    public void assertStringContainsCaseInsensitive(String message, String expectedContainedSubstrings,
+    @Override
+	public void assertStringContainsCaseInsensitive(String message, String expectedContainedSubstrings,
             String actualTargetString) {
         assertStringContainsCaseInsensitive(message, expectedContainedSubstrings, actualTargetString, false);
     }
@@ -1473,7 +1500,8 @@ public class DefaultBeanProcessor implements BeanProcessor {
      * (non-Javadoc)
      * @see com.xoom.integration.util.BeanProcessor#extractParameterNames(com.xoom .integration.util.OrderedIndexedMap)
      */
-    public List<String> extractParameterNames(OrderedIndexedMap<String, String> map) {
+    @Override
+	public List<String> extractParameterNames(OrderedIndexedMap<String, String> map) {
         List<String> parameterNames = new ArrayList<String>();
         String oldPrefix = null;
         for (int i = 0, maxi = map.size(); i < maxi; i++) {
@@ -1495,7 +1523,8 @@ public class DefaultBeanProcessor implements BeanProcessor {
      * (non-Javadoc)
      * @see com.xoom.integration.util.BeanProcessor#toString(java.lang.Object)
      */
-    public String toString(Object value) {
+    @Override
+	public String toString(Object value) {
         if (value == null) {
             return null;
         }
@@ -1525,7 +1554,8 @@ public class DefaultBeanProcessor implements BeanProcessor {
         return expectedValue.toString();
     }
 
-    @SuppressWarnings("unchecked")
+    @Override
+	@SuppressWarnings("unchecked")
 	public <T> T createObject(Class<T> class1, OrderedIndexedMap<String, String> parameters, String path,
             boolean allowNulls) {
         return (T) constructNewDto(parameters, path, class1.getName(), allowNulls);
@@ -1536,7 +1566,8 @@ public class DefaultBeanProcessor implements BeanProcessor {
      * @see com.xoom.integration.util.BeanProcessor#canCreateObject(com.xoom.integration .util.OrderedIndexedMap,
      * java.lang.Class)
      */
-    public boolean canCreateObject(OrderedIndexedMap<String, String> parameters, Class<?> returnClass) {
+    @Override
+	public boolean canCreateObject(OrderedIndexedMap<String, String> parameters, Class<?> returnClass) {
         if (isNewStyle(parameters)) {
             return !returnClass.equals(void.class) || isExceptionDeclaredToBeThrwon(parameters);
         }
@@ -1550,7 +1581,8 @@ public class DefaultBeanProcessor implements BeanProcessor {
         return parameters.get(RESPONSE_EXCEPTION_TYPE) != null;
     }
 
-    public Object createObject(OrderedIndexedMap<String, String> parameters, Method method,
+    @Override
+	public Object createObject(OrderedIndexedMap<String, String> parameters, Method method,
             String exceptionContextMessage) {
         if (parameters == null) {
             return null;
@@ -1682,7 +1714,8 @@ public class DefaultBeanProcessor implements BeanProcessor {
      * @see com.xoom.integration.util.BeanProcessor#setObjectValues(java.lang.Object,
      * com.xoom.integration.util.OrderedIndexedMap, java.lang.Class)
      */
-    public void setObjectValues3(String path, Object object, OrderedIndexedMap<String, String> parameters,
+    @Override
+	public void setObjectValues3(String path, Object object, OrderedIndexedMap<String, String> parameters,
             Class<?> outerType) {
         if (parameters == null) {
             return;
@@ -1735,7 +1768,8 @@ public class DefaultBeanProcessor implements BeanProcessor {
      * @see com.xoom.integration.util.BeanProcessor#createFromString(java.lang.Class, java.lang.String)
      */
 
-    @SuppressWarnings("unchecked")
+    @Override
+	@SuppressWarnings("unchecked")
     public <T> T createFromString(Class<T> setClass, String value) throws ParseException {
         String processedValue = preProcessString(value);
         return (T) createObjectFromString(setClass, processedValue);
@@ -1861,7 +1895,8 @@ public class DefaultBeanProcessor implements BeanProcessor {
      * (non-Javadoc)
      * @see com.xoom.integration.util.BeanProcessor#getLocalhost()
      */
-    public String getLocalhost() {
+    @Override
+	public String getLocalhost() {
         synchronized (localhostLock) {
             if (localhost == null) {
                 try {
@@ -1879,7 +1914,8 @@ public class DefaultBeanProcessor implements BeanProcessor {
      * (non-Javadoc)
      * @see com.xoom.integration.util.BeanProcessor#createList(java.util.List, int, java.lang.Class)
      */
-    public <T> List<T> createList(List<OrderedIndexedMap<String, String>> parameterSets, int transactionType,
+    @Override
+	public <T> List<T> createList(List<OrderedIndexedMap<String, String>> parameterSets, int transactionType,
             Class<T> classT, boolean allowNulls) {
         List<T> result = new ArrayList<T>();
         int index = 1;
@@ -1897,7 +1933,8 @@ public class DefaultBeanProcessor implements BeanProcessor {
      * @see com.xoom.integration.util.BeanProcessor#getAsRequestParameters(java.lang .reflect.Method,
      * com.xoom.integration.util.OrderedIndexedMap)
      */
-    public Object[] getAsRequestParameters(Method method, OrderedIndexedMap<String, String> requestParameters)
+    @Override
+	public Object[] getAsRequestParameters(Method method, OrderedIndexedMap<String, String> requestParameters)
             throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         int expectedSize = method.getParameterTypes().length;
         if (requestParameters == null) {
@@ -1948,7 +1985,8 @@ public class DefaultBeanProcessor implements BeanProcessor {
         return null;
     }
 
-    public void validate(Object bean) {
+    @Override
+	public void validate(Object bean) {
         @SuppressWarnings("unchecked")
 		ClassValidator<Object> classValidator = new ClassValidator<Object>((Class<Object>) bean.getClass());
         InvalidValue[] invalidValues = classValidator.getInvalidValues(bean);

@@ -20,7 +20,7 @@ package jsync;
  */
 public final class Assert {
 	private Assert() {
-	};
+	}
 
 	/**
 	 * Check specified condition and raise <code>AssertionFailed</code>
