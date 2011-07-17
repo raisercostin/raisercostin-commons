@@ -6,7 +6,6 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.raisercostin.utils.ObjectUtils;
 
 public class ObjectUtilsTest {
 
@@ -15,6 +14,19 @@ public class ObjectUtilsTest {
 		ATest a = new ATest();
 		Assert.assertEquals("ObjectUtilsTest.ATest[\n" + ".   testInside1=ObjectUtilsTest.BTest[\n" + ".   .   value=value1]\n" + ".   testInside2=ObjectUtilsTest.BTest[\n"
 				+ ".   .   value=value2]\n" + ".   map=Map{\n.   .   key1=value 1\n.   .   key2=value 2\n.   .   key3=value 3}]".replaceAll("[\n\r]+", "\n"), a.toString().replaceAll("[\n\r]+", "\n"));
+	}
+
+	@Test
+	public void testToStringDump() {
+		ATest a = new ATest();
+		Assert.assertEquals(
+				"ObjectUtilsTest.ATest[\n"
+						+ ".   testInside1=ObjectUtilsTest.BTest[\n"
+						+ ".   .   value=value1]\n"
+						+ ".   testInside2=ObjectUtilsTest.BTest[\n"
+						+ ".   .   value=value2]\n"
+						+ ".   map=Map{\n.   .   key1=value 1\n.   .   key2=value 2\n.   .   key3=value 3}]"
+								.replaceAll("[\n\r]+", "\n"), ObjectUtils.toStringDump(a).replaceAll("[\n\r]+", "\n"));
 	}
 
 	private static class ATest {
@@ -41,7 +53,7 @@ public class ObjectUtilsTest {
 
 	private static class BTest {
 		@SuppressWarnings("unused")
-		private String value;
+		private final String value;
 
 		public BTest(String value) {
 			this.value= value;
