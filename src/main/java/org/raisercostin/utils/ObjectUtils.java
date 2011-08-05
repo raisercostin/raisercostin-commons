@@ -1,13 +1,33 @@
 package org.raisercostin.utils;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.sql.SQLException;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.lang.SystemUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -16,287 +36,43 @@ import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.apache.commons.lang.exception.ExceptionUtils;
-import org.apache.commons.lang.mutable.MutableInt;
+import org.apache.commons.lang.exception.Nestable;
 import org.raisercostin.utils.beans.BeanUtils;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
+import com.sun.org.apache.xml.internal.serialize.OutputFormat;
+import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 
 public class ObjectUtils {
 	// private static final MyStringStyle myStringStyle = new MyStringStyle();
 
+	private static final String TO_STRING_METHOD = "toString";
 	private static final int STEP = 4;
 	private static final String all = ".   .   .   .   .   .   .   .   .   .   .   .   .   .   ";
-	private static final Set<Class<?>> categories = new HashSet<Class<?>>();
-	private static final Map<Object, String> used = new HashMap<Object, String>();
-	private static int id = 0;
-	// Thread local is needed because multiple toStrings could be invoked.
-	private static final ThreadLocal<MutableInt> identationThreadLocal = new ThreadLocal<MutableInt>();
-
-	public static boolean shouldUseGenericToString(Object object) {
-		return categories.contains(object.getClass());
-	}
-
 	private static final boolean DEFAULT_TRANSIENTS = false;
+	// Thread local is needed because multiple cascaded toStrings could be invoked.
+	private static final ThreadLocal<ObjectUtilsContext> contextOnThread = new ThreadLocal<ObjectUtilsContext>();
 
-	public static void registerForGenericToString(Class<?> theClass) {
-		categories.add(theClass);
-	}
-
-	public static String toString(Object object, String supplementalMessage, boolean singleLine) {
-		return toString(object, singleLine, true) + " - " + supplementalMessage;
-	}
-
-	public static String toString(Object object, String supplementalMessage) {
-		return toString(object) + " - " + supplementalMessage;
-	}
-
-	public static String toStringDump(Object object) {
-		return toString(object, false, false);
-	}
-
-	public static String toString(Object object) {
-		return toString(object, false, true);
-	}
-
-	public static String toString(Object object, FieldDecorator fieldDecorator) {
-		return toString(object, false, true, fieldDecorator);
-	}
-
-	private static String toString(Object object, boolean singleLine, boolean useToString, FieldDecorator fieldDecorator) {
-		return toString(object, useToString, fieldDecorator, new MyStringStyle(singleLine, useToString, true));
-	}
-
-	public static String toString(Object object, boolean singleLine, boolean useToString) {
-		return toString(object, singleLine, useToString, new FieldDecorator() {
-			@Override
-			public boolean accept(Field f) {
-				return !f.getName().contains("password") && !f.getName().contains("IBAN");
-			}
-
-			@Override
-			public void addSupplementalFields(Map<String, Object> supplementalFields) {
-			}
-		});
-	}
-
-	private static class MyStringStyle extends ToStringStyle {
-		private static final long serialVersionUID = -3053031248321811775L;
-		private final boolean useToString;
-
-		public MyStringStyle(boolean singleLine, boolean useToString, boolean classDecorators) {
-			super();
-			this.useToString = useToString;
-			this.setUseShortClassName(true);
-			this.setUseClassName(classDecorators);
-			this.setUseIdentityHashCode(false);
-			this.setContentStart("[");
-			if (!singleLine) {
-				this.setFieldSeparator(SystemUtils.LINE_SEPARATOR + all.substring(0, getIdentation(0)));
-				this.setFieldSeparatorAtStart(true);
-			}
-			// this.setContentEnd(SystemUtils.LINE_SEPARATOR + all.substring(0, getIdentation(-STEP)) + "]");
-			this.setContentEnd("]");
-		}
-
-		@Override
-		public void appendStart(StringBuffer buffer, Object object) {
-			super.appendStart(buffer, object);
-			ident(STEP);
-		}
-
-		@Override
-		public void appendEnd(StringBuffer buffer, Object object) {
-			super.appendEnd(buffer, object);
-			ident(-STEP);
-		}
-
-		@Override
-		protected void appendDetail(StringBuffer buffer, String fieldName, Object value) {
-			if (shouldUseGenericToString(value)) {
-				super.appendDetail(buffer, fieldName, ObjectUtils.toString(value));
-			} else {
-				super.appendDetail(buffer, fieldName, value);
-			}
-		}
-
-		public String customToString(Object object) {
-			if (object == null) {
-				return null;
-			}
-			return customToStringInternal(object, useToString, null, null);
-		}
-	}
-
-	private static void ident(int diff) {
-		ObjectUtils.getIdentation().add(diff);
-	}
-
-	private static int getIdentation(int diff) {
-		int intValue = getIdentation().intValue();
-		return Math.min(intValue + diff, all.length());
-	}
-
-	private static MutableInt getIdentation() {
-		MutableInt mutableInt = identationThreadLocal.get();
-		if (mutableInt == null) {
-			mutableInt = new MutableInt(STEP);
-			identationThreadLocal.set(mutableInt);
-		}
-		return mutableInt;
-	}
-
-	public static interface FieldDecorator {
-		boolean accept(Field f);
-
-		void addSupplementalFields(Map<String, Object> supplementalFields);
-	}
-
-	public static String toIdentedString(String text, int diff) {
-		// text = text.replaceAll("[\n\r]+", "\n");
-		text = text.replaceAll("[\n\r]+", SystemUtils.LINE_SEPARATOR + all.substring(0, getIdentation(diff)));
-		return text;
-	}
-
-	private static String toIdentedString(String text) {
-		return toIdentedString(text, 0);
-	}
-
-	private static String collectionToString(Collection<Object> object) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(object.getClass().getName()).append("[").append(object.size()).append("]{");
-		int max = 10;
-		int i = 0;
-		for (Object object2 : object) {
-			sb.append("\n").append(object2);
-			if (i == max) {
-				break;
-			}
-		}
-		if (object.size() > max) {
-			sb.append("\n...");
-		}
-		sb.append("}");
-		return sb.toString();
-	}
-
-	private static String mapToString(Map<Object, Object> object) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("Map{");
-		for (Map.Entry<Object, Object> entry : object.entrySet()) {
-			sb.append("\n" + entry.getKey() + "=" + entry.getValue());
-		}
-		sb.append("}");
-		return sb.toString();
-	}
-
-	private static String throwableToString(Object object) {
-		return ExceptionUtils.getFullStackTrace((Throwable) object);
-	}
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static String customToStringInternal(Object object, boolean useToString, FieldDecorator fieldDecorator,
-			MyStringStyle toStringStyle) {
-		String value = null;
-		if (object == null) {
-			value = null;
-		} else if (object instanceof Throwable) {
-			value = toIdentedString(throwableToString(object));
-		} else if (object instanceof Map) {
-			value = toIdentedString(mapToString((Map<Object, Object>) object));
-		} else if (object instanceof Collection) {
-			value = toIdentedString(collectionToString((Collection<Object>) object));
-		} else if ((object instanceof Class) && ((Class<?>) object).isEnum()) {
-			value = toIdentedString(enumToString((Class<Enum>) object));
-		} else {
-			if (useToString) {
-				value = toOriginalString(object);
-			} else {
-				value = toStringUsingReflection(object, fieldDecorator, toStringStyle);
-			}
-		}
-		return value;
-	}
-
-	private static String toOriginalString(Object object) {
-		if (object == null) {
-			return null;
-		}
-		String id = used.get(object);
-		if (id == null) {
-			id = createNewId();
-			used.put(object, id);
-			return id + ":" + object.toString();
-		} else {
-			return "@" + id;
-		}
-	}
-
-	private static String createNewId() {
-		return id + "";
-	}
-
-	private static String enumToString(@SuppressWarnings("rawtypes") Class<Enum> object) {
-		@SuppressWarnings("rawtypes")
-		Enum[] constants = object.getEnumConstants();
-		StringBuilder sb = new StringBuilder();
-		sb.append(toOriginalString(object)).append(" enums=[\n");
-		for (@SuppressWarnings("rawtypes")
-		Enum oneConstant : constants) {
-			sb.append(oneConstant.name()).append("(").append(oneConstant.ordinal()).append(")=")
-					.append(ObjectUtils.toStringWithExclusionsWithoutDecorators(oneConstant, "name,ordinal", true))
-					.append("\n");
-		}
-		sb.append("]");
-		return sb.toString();
-	}
-
-	private static String toString(Object object, boolean useToString, final FieldDecorator fieldDecorator,
-			final MyStringStyle toStringStyle) {
-		return customToStringInternal(object, useToString, fieldDecorator, toStringStyle);
-	}
-
-	private static String toStringUsingReflection(Object object, final FieldDecorator fieldDecorator,
-			final MyStringStyle toStringStyle) {
-		ReflectionToStringBuilder builder = new ReflectionToStringBuilder(object, toStringStyle, null, null,
-				DEFAULT_TRANSIENTS, false) {
-			boolean firstTime = true;
-
-			@Override
-			protected boolean accept(Field f) {
-				return super.accept(f) && (fieldDecorator == null || fieldDecorator.accept(f));
-			}
-
-			@Override
-			public ToStringBuilder append(String fieldName, Object object) {
-				if (firstTime) {
-					firstTime = false;
-					Map<String, Object> map = new LinkedHashMap<String, Object>();
-					if (fieldDecorator != null) {
-						fieldDecorator.addSupplementalFields(map);
-					}
-					for (Map.Entry<String, Object> field : map.entrySet()) {
-						super.append(field.getKey(), field.getValue());
-					}
-				}
-				String value = toStringStyle.customToString(object);
-				return super.append(fieldName, value);
-			}
-		};
-		return builder.toString();
-	}
-
-	public static String toString(Object object, String[] excludes, boolean singleLine, boolean classDecorators) {
-		ReflectionToStringBuilder builder = new ReflectionToStringBuilder(object, new MyStringStyle(singleLine, true,
-				classDecorators), null, null, false, false);
-		builder.setExcludeFieldNames(excludes);
-		return builder.toString();
-	}
-
-	public static String toString(Object object, String[] excludes) {
-		return toString(object, excludes, false, true);
+	// UTILITIES
+	public static void copy(Object destination, Object source) {
+		CloneBuilder.reflectionCopy(destination, source);
 	}
 
 	public static boolean equals(Object object1, Object object2) {
 		return EqualsBuilder.reflectionEquals(object1, object2, false, Object.class, null);
+	}
+
+	public static int hashCode(Object object) {
+		return HashCodeBuilder.reflectionHashCode(object, DEFAULT_TRANSIENTS);
+	}
+
+	public static int hashCode(Object object, String commaSeparatedExceptedFields) {
+		return HashCodeBuilder.reflectionHashCode(17, 37, object, DEFAULT_TRANSIENTS, null,
+				StringUtils.tokenizeToStringArray(commaSeparatedExceptedFields, ",", true, true));
 	}
 
 	public static BigDecimal normalize(BigDecimal rate) {
@@ -304,30 +80,6 @@ public class ObjectUtils {
 			return rate.stripTrailingZeros();
 		}
 		return null;
-	}
-
-	public static void copy(Object destination, Object source) {
-		CloneBuilder.reflectionCopy(destination, source);
-	}
-
-	public static String toSingleLineString(Object object) {
-		return toString(object, true, true);
-	}
-
-	public static String toStringWithExclusions(Object object, String commaSeparatedExceptedFields, boolean singleLine) {
-		return toString(object, StringUtils.tokenizeToStringArray(commaSeparatedExceptedFields, ",", true, true),
-				singleLine, true);
-	}
-
-	public static String toStringWithExclusionsWithoutDecorators(Object object, String commaSeparatedExceptedFields,
-			boolean singleLine) {
-		return toString(object, StringUtils.tokenizeToStringArray(commaSeparatedExceptedFields, ",", true, true),
-				singleLine, false);
-	}
-
-	public static String toStringWithExclusions(Object object, String commaSeparatedExceptedFields) {
-		return toString(object, StringUtils.tokenizeToStringArray(commaSeparatedExceptedFields, ",", true, true),
-				false, true);
 	}
 
 	public static Object rethrow(Throwable e) {
@@ -344,12 +96,595 @@ public class ObjectUtils {
 		BeanUtils.validate(object);
 	}
 
-	public static int hashCode(Object object) {
-		return HashCodeBuilder.reflectionHashCode(object, DEFAULT_TRANSIENTS);
+	@SuppressWarnings("restriction")
+	public static String formatXml(String unformattedXml) {
+		try {
+			final Document document = parseXmlFile(unformattedXml);
+			OutputFormat format = new OutputFormat(document);
+			format.setLineWidth(120);
+			format.setIndenting(true);
+			format.setIndent(2);
+			format.setOmitXMLDeclaration(!unformattedXml.startsWith("<?xml"));
+			format.setOmitComments(false);
+			format.setPreserveEmptyAttributes(true);
+			Writer out = new StringWriter();
+			XMLSerializer serializer = new XMLSerializer(out, format);
+			serializer.serialize(document);
+			return out.toString();
+		} catch (ParserConfigurationException e) {
+			return "!xmlFormatingFailed " + e + " xml=[" + unformattedXml + "]";
+		} catch (SAXException e) {
+			return "!xmlFormatingFailed " + e + " xml=[" + unformattedXml + "]";
+		} catch (IOException e) {
+			return "!xmlFormatingFailed " + e + " xml=[" + unformattedXml + "]";
+		}
 	}
 
-	public static int hashCode(Object object, String commaSeparatedExceptedFields) {
-		return HashCodeBuilder.reflectionHashCode(17, 37, object, DEFAULT_TRANSIENTS, null,
+	private static Document parseXmlFile(String in) throws ParserConfigurationException, SAXException, IOException {
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		DocumentBuilder db = dbf.newDocumentBuilder();
+		InputSource is = new InputSource(new StringReader(in));
+		return db.parse(is);
+	}
+
+	// TO STRING UTILITIES
+	public static String toStringDump(Object object) {
+		return internalToStringWithContext(object, false, false, false);
+	}
+
+	public static String toString(Object object) {
+		return internalToStringWithContext(object, false, true, false);
+	}
+
+	public static String toString(Object object, boolean singleLine, boolean useToString, boolean displayTypes) {
+		return internalToStringWithContext(object, singleLine, useToString, displayTypes);
+	}
+
+	// TO STRING SPECIALS
+
+	public static String throwableToString(Throwable throwable) {
+		return getFullStackTrace(throwable);
+	}
+
+	// TOSTRING WITH EXCLUDES - should be implemented in another way
+	@Deprecated
+	private static String toString(Object object, boolean singleLine, boolean classDecorators, String[] excludes) {
+		ReflectionToStringBuilder builder = new ReflectionToStringBuilder(object, new MyStringStyle(singleLine, true,
+				classDecorators, false), null, null, false, false);
+		builder.setExcludeFieldNames(excludes);
+		return builder.toString();
+	}
+
+	@Deprecated
+	private static String toStringWithExclusions(Object object, boolean singleLine, boolean classDecorators,
+			String commaSeparatedExceptedFields) {
+		return toStringWithExclusions(object, singleLine, classDecorators,
 				StringUtils.tokenizeToStringArray(commaSeparatedExceptedFields, ",", true, true));
+	}
+
+	@Deprecated
+	public static String toStringWithExclusions(Object object, boolean singleLine, boolean classDecorators,
+			String... excludes) {
+		return toString(object, singleLine, classDecorators, excludes);
+	}
+
+	// IMPLEMENTATION
+	private static String internalToStringWithContext(Object object, boolean singleLine, boolean useToString,
+			boolean displayTypes) {
+		createContext();
+		try {
+			return internalToString(object, useToString, new MyStringStyle(singleLine, useToString, true, displayTypes));
+		} finally {
+			removeContext();
+		}
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private static String internalToString(Object object, boolean useToString, MyStringStyle toStringStyle) {
+		if (object == null) {
+			return null;
+		}
+		String old = getContext().find(object);
+		if (old != null) {
+			if (!getContext().isOriginalToStringCalled(object)) {
+				return old;
+			}
+		}
+		String value = null;
+		String id = getContext().save(object);
+		if (isStandardType(object.getClass())) {
+			return declaredToString(id, object);
+		}
+		if (object instanceof Throwable) {
+			((Throwable) object).fillInStackTrace();
+		}
+		// value = toIdentedString(throwableToString((Throwable) object));
+		// } else
+		if (object instanceof Map) {
+			value = mapToString((Map<Object, Object>) object, useToString, toStringStyle);
+		} else if (object instanceof Collection) {
+			value = collectionToString((Collection<Object>) object, useToString, toStringStyle);
+		} else if (object.getClass().isArray()) {
+			value = arrayToString(object, useToString, toStringStyle);
+		} else if ((object instanceof Class) && ((Class<?>) object).isEnum()) {
+			value = enumToString((Class<Enum>) object, useToString, toStringStyle);
+		} else {
+			if (useToString && !getContext().isOriginalToStringCalled(object)
+					&& !hasBadToStringImplementation(object.getClass())) {
+				value = declaredToString(id, object);
+			} else {
+				value = reflectedToString(object, useToString, toStringStyle);
+			}
+		}
+		return value;
+	}
+
+	private static boolean isXml(Object object) {
+		if (!(object instanceof String)) {
+			return false;
+		}
+		String xml = (String) object;
+		if (xml.startsWith("<?xml")) {
+			return true;
+		}
+		if (xml.matches("<(\\S+).+</\\1>")) {
+			return true;
+		}
+		return false;
+	}
+
+	private static String declaredToString(String id, Object object) {
+		if (isXml(object)) {
+			return formatXml((String) object);
+		}
+		getContext().callOriginalToString(object);
+		// return id + ":" +
+		return callToString(object);
+	}
+
+	private static String callToString(Object object) {
+		try {
+			return (String) object.getClass().getMethod(TO_STRING_METHOD).invoke(object);
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException(e);
+		} catch (SecurityException e) {
+			throw new RuntimeException(e);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
+		} catch (InvocationTargetException e) {
+			throw new RuntimeException(e);
+		} catch (NoSuchMethodException e) {
+			return object.toString();
+		}
+	}
+
+	private static String enumToString(@SuppressWarnings("rawtypes") Class<Enum> object, boolean useToString,
+			MyStringStyle toStringStyle) {
+		@SuppressWarnings("rawtypes")
+		Enum[] constants = object.getEnumConstants();
+		StringBuilder sb = new StringBuilder();
+		sb.append(declaredToString("", object)).append(" enums=[");
+		for (@SuppressWarnings("rawtypes")
+		Enum oneConstant : constants) {
+			sb.append(getContext().getRowEnd()).append(oneConstant.name()).append("(").append(oneConstant.ordinal())
+					.append(")=")
+					.append(ObjectUtils.toStringWithExclusions(oneConstant, true, false, "name", "ordinal"));
+		}
+		sb.append("]");
+		return sb.toString();
+	}
+
+	// others
+
+	private static void createContext() {
+		if (contextOnThread.get() == null) {
+			contextOnThread.set(new ObjectUtilsContext(STEP));
+		}
+		contextOnThread.get().incrementToStringCalls();
+	}
+
+	private static void removeContext() {
+		ObjectUtilsContext context = contextOnThread.get();
+		if (context == null) {
+			throw new RuntimeException("Too many removeContext.");
+		}
+		if (context.decrementToStringCalls()) {
+			contextOnThread.set(null);
+		}
+	}
+
+	private static ObjectUtilsContext getContext() {
+		return contextOnThread.get();
+	}
+
+	private static final Set<Class> SPECIAL_TYPES = new HashSet(Arrays.asList(String.class, Character.class,
+			Byte.class, Short.class, Integer.class, Long.class, Float.class, Double.class, Void.class, Timestamp.class,
+			Date.class, java.sql.Date.class, Time.class));
+
+	private static boolean isStandardType(Class clazz) {
+		return SPECIAL_TYPES.contains(clazz);
+		// return clazz.getName().startsWith("java.lang");
+		// || clazz.getName().startsWith("java") && hasOriginalToString(clazz) && !clazz.isAssignableFrom(Map.class)
+		// && !clazz.isAssignableFrom(Collection.class) && !clazz.isAssignableFrom(Throwable.class);
+	}
+
+	private static boolean hasBadToStringImplementation(Class clazz) {
+		try {
+			return Throwable.class.isAssignableFrom(clazz)
+					|| clazz.getMethod("toString").getDeclaringClass().equals(Object.class);
+		} catch (NoSuchMethodException e) {
+			return false;
+		}
+	}
+
+	private static class ObjectUtilsContext {
+		private int identation = 0;
+		private final Map<Object, String> objects = new HashMap<Object, String>();
+		private final Set<Object> toStringForSelf = new HashSet<Object>();
+		private int toStringCallsCounter;
+		private final int step;
+
+		public ObjectUtilsContext(int step) {
+			this.step = step;
+			identation = 0;
+			toStringCallsCounter = 0;
+		}
+
+		public void incrementToStringCalls() {
+			toStringCallsCounter++;
+		}
+
+		public boolean decrementToStringCalls() {
+			toStringCallsCounter--;
+			if (toStringCallsCounter < 0) {
+				throw new RuntimeException("Too many removeContext [" + toStringCallsCounter + "].");
+			}
+			return toStringCallsCounter == 0;
+		}
+
+		public void deident() {
+			identation -= step;
+			if (identation < 0) {
+				throw new RuntimeException("Too many deidents [" + identation + "].");
+			}
+		}
+
+		public void ident() {
+			identation += step;
+		}
+
+		public String find(Object key) {
+			return objects.get(key);
+		}
+
+		public String save(Object object) {
+			String value = objects.get(object);
+			if (value != null) {
+				return value;
+			}
+			String id = Integer.toString(objects.size());
+			objects.put(object, "@" + id);
+			return id;
+		}
+
+		public void callOriginalToString(Object object) {
+			toStringForSelf.add(object);
+		}
+
+		public boolean isOriginalToStringCalled(Object object) {
+			return toStringForSelf.contains(object);
+		}
+
+		public String getRowStart() {
+			return all.substring(0, getIdentation());
+		}
+
+		public String getRowEnd() {
+			return SystemUtils.LINE_SEPARATOR;
+		}
+
+		private int getIdentation() {
+			return Math.min(identation, all.length());
+		}
+
+	}
+
+	private static String reflectedToString(Object object, final boolean useToString, final MyStringStyle toStringStyle) {
+		ReflectionToStringBuilder builder = new ReflectionToStringBuilder(object, toStringStyle, null, null,
+				DEFAULT_TRANSIENTS, false) {
+			@Override
+			protected boolean accept(Field f) {
+				return super.accept(f);
+			}
+
+			@Override
+			public ToStringBuilder append(String fieldName, Object object) {
+				String value = internalToString(object, useToString, toStringStyle);
+				return super.append(fieldName, value);
+			}
+		};
+		return builder.toString();
+	}
+
+	private static class MyStringStyle extends ToStringStyle {
+		private static final long serialVersionUID = -3053031248321811775L;
+		private final boolean useToString;
+		private final boolean displayTypes;
+
+		public MyStringStyle(boolean singleLine, boolean useToString, boolean classDecorators, boolean displayTypes) {
+			super();
+			this.displayTypes = displayTypes;
+			this.useToString = useToString;
+			this.setUseShortClassName(true);
+			this.setUseClassName(classDecorators);
+			this.setUseIdentityHashCode(false);
+			this.setFieldSeparatorAtEnd(false);
+			if (!singleLine) {
+				this.setFieldSeparatorAtStart(true);
+				this.setContentStart("");
+				this.setContentEnd("");
+			} else {
+				this.setContentStart("[");
+				this.setContentEnd("]");
+			}
+		}
+
+		@Override
+		public void appendStart(StringBuffer buffer, Object object) {
+			super.appendStart(buffer, object);
+			getContext().ident();
+			buffer.append(getContext().getRowEnd());
+		}
+
+		@Override
+		public void appendEnd(StringBuffer buffer, Object object) {
+			getContext().deident();
+		}
+
+		@Override
+		protected void appendFieldStart(StringBuffer buffer, String fieldName) {
+			buffer.append(getContext().getRowStart());
+			super.appendFieldStart(buffer, fieldName);
+		}
+
+		@Override
+		protected void appendFieldEnd(StringBuffer buffer, String fieldName) {
+			buffer.append(getContext().getRowEnd());
+		}
+
+		@Override
+		protected void appendFieldSeparator(StringBuffer buffer) {
+		}
+
+		@Override
+		protected void appendDetail(StringBuffer buffer, String fieldName, Object value) {
+			if (useToString) {
+				super.appendDetail(buffer, fieldName, (displayTypes ? value.getClass().getName() + ":" : "") + value);
+			} else {
+				super.appendDetail(buffer, fieldName, (displayTypes ? value.getClass().getName() + ":" : "")
+						+ ObjectUtils.toString(value));
+			}
+		}
+	}
+
+	private static String mapToString(Map<Object, Object> map, final boolean useToString,
+			final MyStringStyle toStringStyle) {
+		return collectionToDelimitedString(map.getClass(), map.entrySet(), "", "", "",
+				new Mapper<Map.Entry<Object, Object>>() {
+					@Override
+					public String map(Entry<Object, Object> element) {
+						if (element.getKey().toString().contains("pass")) {
+							return element.getKey() + "=*****";
+						}
+						return element.getKey() + "="
+								+ internalToString(element.getValue(), useToString, toStringStyle);
+					}
+				});
+	}
+
+	private static String arrayToString(Object array, boolean useToString, MyStringStyle toStringStyle) {
+		int length = Array.getLength(array);
+		StringBuilder sb = new StringBuilder();
+		sb.append("array[").append(array.getClass().getComponentType().getName()).append("]");
+		getContext().ident();
+		try {
+			for (int i = 0; i < length; i++) {
+				Object item = Array.get(array, i);
+				sb.append(getContext().getRowEnd()).append(getContext().getRowStart())
+						.append(internalToString(item, useToString, toStringStyle));
+			}
+			return sb.toString();
+		} finally {
+			getContext().deident();
+		}
+	}
+
+	private static String collectionToString(Collection<Object> collection, final boolean useToString,
+			final MyStringStyle toStringStyle) {
+		return collectionToDelimitedString(collection.getClass(), collection, "", "", "", new Mapper<Object>() {
+			@Override
+			public String map(Object element) {
+				return internalToString(element, useToString, toStringStyle);
+			}
+		});
+	}
+
+	private static <T> String collectionToDelimitedString(Class clazz, Collection<T> coll, String delim,
+			String elementPrefix, String elementSuffix, Mapper<T> mapper) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(clazz.getName());
+		getContext().ident();
+		try {
+			if (CollectionUtils.isEmpty(coll)) {
+				return sb.toString();
+			}
+			Iterator<T> it = coll.iterator();
+			while (it.hasNext()) {
+				sb.append(getContext().getRowEnd()).append(getContext().getRowStart()).append(elementPrefix)
+						.append(mapper.map(it.next())).append(elementSuffix);
+				if (it.hasNext()) {
+					sb.append(delim);
+				}
+			}
+			return sb.toString();
+		} finally {
+			getContext().deident();
+		}
+	}
+
+	static interface Mapper<T> {
+		public String map(T element);
+	}
+
+	private static String getFullStackTrace(Throwable throwable) {
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw, true);
+		Throwable[] ts = getThrowables(throwable);
+		for (int i = 0; i < ts.length; i++) {
+			_printStackTrace(ts[i], pw);
+			if (isNestedThrowable(ts[i])) {
+				break;
+			}
+		}
+		return sw.getBuffer().toString();
+	}
+
+	private static void _printStackTrace(Throwable t, PrintWriter printwriter) {
+		synchronized (printwriter) {
+			printwriter.println(t);
+			StackTraceElement astacktraceelement[] = t.getStackTrace();
+			for (int i = 0; i < astacktraceelement.length; i++)
+				printwriter.println((new StringBuilder()).append("\tat ").append(astacktraceelement[i]).toString());
+
+			Throwable throwable = t.getCause();
+			if (throwable != null)
+				_printStackTraceAsCause(throwable, printwriter, astacktraceelement);
+		}
+	}
+
+	private static void _printStackTraceAsCause(Throwable throwable, PrintWriter printstream,
+			StackTraceElement[] astacktraceelement) {
+		StackTraceElement astacktraceelement1[] = throwable.getStackTrace();
+		int i = astacktraceelement1.length - 1;
+		for (int j = astacktraceelement.length - 1; i >= 0 && j >= 0
+				&& astacktraceelement1[i].equals(astacktraceelement[j]); j--)
+			i--;
+
+		int k = astacktraceelement1.length - 1 - i;
+		printstream.println((new StringBuilder()).append("Caused by: ").append(throwable).toString());
+		for (int l = 0; l <= i; l++)
+			printstream.println((new StringBuilder()).append("\tat ").append(astacktraceelement1[l]).toString());
+
+		if (k != 0)
+			printstream.println((new StringBuilder()).append("\t... ").append(k).append(" more").toString());
+		Throwable throwable2 = throwable.getCause();
+		if (throwable2 != null)
+			_printStackTraceAsCause(throwable2, printstream, astacktraceelement1);
+	}
+
+	private static Throwable[] getThrowables(Throwable throwable) {
+		List list = getThrowableList(throwable);
+		return (Throwable[]) list.toArray(new Throwable[list.size()]);
+	}
+
+	private static List getThrowableList(Throwable throwable) {
+		List list = new ArrayList();
+		while (throwable != null && list.contains(throwable) == false) {
+			list.add(throwable);
+			throwable = ExceptionUtils.getCause(throwable);
+		}
+		return list;
+	}
+
+	private static boolean isNestedThrowable(Throwable throwable) {
+		if (throwable == null) {
+			return false;
+		}
+
+		if (throwable instanceof Nestable) {
+			return true;
+		} else if (throwable instanceof SQLException) {
+			return true;
+		} else if (throwable instanceof InvocationTargetException) {
+			return true;
+		} else if (isThrowableNested()) {
+			return true;
+		}
+
+		Class cls = throwable.getClass();
+		synchronized (CAUSE_METHOD_NAMES_LOCK) {
+			for (int i = 0, isize = CAUSE_METHOD_NAMES.length; i < isize; i++) {
+				try {
+					Method method = cls.getMethod(CAUSE_METHOD_NAMES[i]);
+					if (method != null && Throwable.class.isAssignableFrom(method.getReturnType())) {
+						return true;
+					}
+				} catch (NoSuchMethodException ignored) {
+					// exception ignored
+				} catch (SecurityException ignored) {
+					// exception ignored
+				}
+			}
+		}
+
+		try {
+			Field field = cls.getField("detail");
+			if (field != null) {
+				return true;
+			}
+		} catch (NoSuchFieldException ignored) {
+			// exception ignored
+		} catch (SecurityException ignored) {
+			// exception ignored
+		}
+
+		return false;
+	}
+
+	/**
+	 * <p>
+	 * The names of methods commonly used to access a wrapped exception.
+	 * </p>
+	 */
+	private static String[] CAUSE_METHOD_NAMES = { "getCause", "getNextException", "getTargetException",
+			"getException", "getSourceException", "getRootCause", "getCausedByException", "getNested",
+			"getLinkedException", "getNestedException", "getLinkedCause", "getThrowable",
+			// costin: added for batch sql exceptions
+			"getNextException" };
+
+	private static boolean isThrowableNested() {
+		return THROWABLE_CAUSE_METHOD != null;
+	}
+
+	/**
+	 * <p>
+	 * The Method object for Java 1.4 getCause.
+	 * </p>
+	 */
+	private static final Method THROWABLE_CAUSE_METHOD;
+
+	/**
+	 * <p>
+	 * The Method object for Java 1.4 initCause.
+	 * </p>
+	 */
+	private static final Method THROWABLE_INITCAUSE_METHOD;
+
+	// Lock object for CAUSE_METHOD_NAMES
+	private static final Object CAUSE_METHOD_NAMES_LOCK = new Object();
+	static {
+		Method causeMethod;
+		try {
+			causeMethod = Throwable.class.getMethod("getCause", (Class[]) null);
+		} catch (Exception e) {
+			causeMethod = null;
+		}
+		THROWABLE_CAUSE_METHOD = causeMethod;
+		try {
+			causeMethod = Throwable.class.getMethod("initCause", new Class[] { Throwable.class });
+		} catch (Exception e) {
+			causeMethod = null;
+		}
+		THROWABLE_INITCAUSE_METHOD = causeMethod;
 	}
 }
