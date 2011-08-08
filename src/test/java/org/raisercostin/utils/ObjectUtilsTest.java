@@ -13,31 +13,20 @@ import org.junit.Test;
 public class ObjectUtilsTest {
 
 	@Test
-	public void testToStringDump() {
-		BTest b = new BTest("a");
-		assertStringEquals("", ObjectUtils.toStringDump(b));
-		ATest a = new ATest();
-		assertStringEquals(
-				"ObjectUtilsTest.ATest\n.   testInside1=ObjectUtilsTest.BTest\n.   .   value=value1\n.   testInside2=ObjectUtilsTest.BTest\n.   .   value=value2\n.   map=java.util.LinkedHashMap\n.   .   key1=value 1\n.   .   key2=value 2\n.   .   key3=value 3\n.   .   key4pass=*****\n.   .   key4=ObjectUtilsTest.DTest\n.   .   .   value=value4\n.   prop=java.util.Properties\n.   .   pass2=*****\n.   .   p4=v4\n.   .   p3=v3\n.   .   p1=v1\n"
-						+ ".   list=java.util.ArrayList\n.   .   field1\n.   .   ObjectUtilsTest.BTest\n.   .   .   value=value3\n.   .   field2\n.   .   @1\n.   .   field3\n",
-				ObjectUtils.toStringDump(a));
-	}
-
-	@Test
 	public void testSimpleTypes() {
+		Assert.assertTrue(ObjectUtils.toString(new RuntimeException("mesaj"), false, false, true).contains(
+				"detailMessage=java.lang.String:mesaj"));
+		Assert.assertTrue(ObjectUtils.toString(new RuntimeException("mesaj")).contains("detailMessage=mesaj"));
 		Assert.assertEquals("aa", ObjectUtils.toString("aa"));
 		Assert.assertEquals("2", ObjectUtils.toString(new Integer(2)));
-		Assert.assertEquals("", ObjectUtils.toString(new RuntimeException("mesaj"), false, false, true));
-		Assert.assertEquals("", ObjectUtils.toString(new RuntimeException("mesaj")));
 	}
-
 	@Test
 	public void testException() {
-		RuntimeException r = new RuntimeException("dfdsafa");
-		Assert.assertEquals("", ObjectUtils.toString(new SomeException2()));
-		Assert.assertEquals("", ObjectUtils.toString(new SomeException2("mesaj original 1", r)));
-		Assert.assertEquals("", ObjectUtils.toString(new SomeException1()));
-		Assert.assertEquals("", ObjectUtils.toString(new SomeException1("mesaj original 1", r)));
+		RuntimeException e0 = new RuntimeException("exception0");
+		RuntimeException e1 = new RuntimeException("exception1", e0);
+		RuntimeException e2 = new RuntimeException("exception2", e1);
+		SomeException2 e3 = new SomeException2("exception3", e2);
+		Assert.assertTrue(ObjectUtils.toString(e3).contains("detailMessage=exception0"));
 	}
 
 	@Test
@@ -70,21 +59,22 @@ public class ObjectUtilsTest {
 	public void testToStringFromEnum() {
 		EnumTest a = new EnumTest(SomeEnum.VALUE1);
 		assertStringEquals(
-				"ObjectUtilsTest.EnumTest\n.   theenum=ObjectUtilsTest.SomeEnum\n.   .   field=a\n.   .   dtest=ObjectUtilsTest.DTest\n.   .   .   value=1\n.   .   name=VALUE1\n.   .   ordinal=0\n",
+				"org.raisercostin.utils.ObjectUtilsTest$EnumTest\n.   theenum=org.raisercostin.utils.ObjectUtilsTest$SomeEnum\n.   .   field=a\n.   .   dtest=org.raisercostin.utils.ObjectUtilsTest$DTest\n.   .   .   value=1\n.   .   name=VALUE1\n.   .   ordinal=0",
 				ObjectUtils.toStringDump(a));
 		assertStringEquals(
-				"java.util.Arrays$ArrayList\n.   ObjectUtilsTest.EnumTest\n.   .   theenum=ObjectUtilsTest.SomeEnum\n.   .   .   field=a\n.   .   .   dtest=ObjectUtilsTest.DTest\n.   .   .   .   value=1\n.   .   .   name=VALUE1\n.   .   .   ordinal=0\n",
+				"java.util.Arrays$ArrayList\n.   org.raisercostin.utils.ObjectUtilsTest$EnumTest\n.   .   theenum=org.raisercostin.utils.ObjectUtilsTest$SomeEnum\n.   .   .   field=a\n.   .   .   dtest=org.raisercostin.utils.ObjectUtilsTest$DTest\n.   .   .   .   value=1\n.   .   .   name=VALUE1\n.   .   .   ordinal=0",
 				ObjectUtils.toStringDump(Arrays.asList(new Object[] { a })));
 	}
 
 	@Test
 	public void testSelfReferenced() {
 		assertStringEquals("aa", ObjectUtils.toStringDump("aa"));
-		assertStringEquals("ObjectUtilsTest.ETest\n.   value=value_e\n", ObjectUtils.toStringDump(new ETest("value_e")));
+		assertStringEquals("org.raisercostin.utils.ObjectUtilsTest$ETest\n.   value=value_e",
+				ObjectUtils.toStringDump(new ETest("value_e")));
 		CTest c = new CTest("aha", new BTest("value_b"), new DTest("value_d"), new ETest("value_e"));
 		// Assert.assertEquals("", ReflectionToStringBuilder.toString(c));
 		assertStringEquals(
-				"ObjectUtilsTest.CTest\n.   value=aha\n.   me=@0\n.   b=ObjectUtilsTest.BTest\n.   .   value=value_b\n.   d=ObjectUtilsTest.DTest\n.   .   value=value_d\n.   e=ObjectUtilsTest.ETest\n.   .   value=value_e\n",
+				"org.raisercostin.utils.ObjectUtilsTest$CTest\n.   value=aha\n.   me=@0\n.   b=org.raisercostin.utils.ObjectUtilsTest$BTest\n.   .   value=value_b\n.   d=org.raisercostin.utils.ObjectUtilsTest$DTest\n.   .   value=value_d\n.   e=org.raisercostin.utils.ObjectUtilsTest$ETest\n.   .   value=value_e",
 				ObjectUtils.toStringDump(c));
 	}
 
@@ -92,23 +82,33 @@ public class ObjectUtilsTest {
 	public void testToStringUsingToString() {
 		ATest a = new ATest();
 		assertStringEquals(
-				"ObjectUtilsTest.ATest\n.   testInside1=ObjectUtilsTest.BTest\n.   .   value=value1\n.   testInside2=ObjectUtilsTest.BTest\n.   .   value=value2\n.   map=java.util.LinkedHashMap\n.   .   key1=value 1\n.   .   key2=value 2\n.   .   key3=value 3\n.   .   key4pass=*****\n.   .   key4=noToString\n.   prop=java.util.Properties\n.   .   pass2=*****\n.   .   p4=v4\n.   .   p3=v3\n.   .   p1=v1\n"
-						+ ".   list=java.util.ArrayList\n.   .   field1\n.   .   ObjectUtilsTest.BTest\n.   .   .   value=value3\n.   .   field2\n.   .   ObjectUtilsTest.BTest\n.   .   .   value=value1\n.   .   field3\n",
+				"org.raisercostin.utils.ObjectUtilsTest$ATest\n.   testInside1=org.raisercostin.utils.ObjectUtilsTest$BTest\n.   .   value=value1\n.   testInside2=org.raisercostin.utils.ObjectUtilsTest$BTest\n.   .   value=value2\n.   map=java.util.LinkedHashMap\n.   .   key1=value 1\n.   .   key2=value 2\n.   .   key3=value 3\n.   .   key4pass=*****\n.   .   key4=noToString\n.   prop=java.util.Properties\n.   .   pass2=*****\n.   .   p4=v4\n.   .   p3=v3\n.   .   p1=v1\n"
+						+ ".   list=java.util.ArrayList\n.   .   field1\n.   .   org.raisercostin.utils.ObjectUtilsTest$BTest\n.   .   .   value=value3\n.   .   field2\n.   .   org.raisercostin.utils.ObjectUtilsTest$BTest\n.   .   .   value=value1\n.   .   field3",
 				ObjectUtils.toString(a));
 	}
 
 	@Test
 	public void testToStringArrays() {
 		EnumTest a = new EnumTest(SomeEnum.VALUE1);
-		assertStringEquals("array[int]\n.   1\n.   2\n.   3\n.   4",
-				ObjectUtils.toStringDump(new int[] { 1, 2, 3, 4 }));
+		assertStringEquals("array[int]\n.   1\n.   2\n.   3\n.   4", ObjectUtils.toStringDump(new int[] { 1, 2, 3, 4 }));
 		assertStringEquals("array[double]\n.   1.3\n.   2.1\n.   3.0\n.   4.0",
 				ObjectUtils.toStringDump(new double[] { 1.3, 2.1, 3, 4 }));
 		assertStringEquals("array[java.lang.Integer]\n.   1\n.   2\n.   3\n.   4",
 				ObjectUtils.toStringDump(new Integer[] { 1, 2, 3, 4 }));
 		assertStringEquals(
-				"array[java.lang.Object]\n.   ObjectUtilsTest.EnumTest\n.   .   theenum=ObjectUtilsTest.SomeEnum\n.   .   .   field=a\n.   .   .   dtest=ObjectUtilsTest.DTest\n.   .   .   .   value=1\n.   .   .   name=VALUE1\n.   .   .   ordinal=0",
+				"array[java.lang.Object]\n.   org.raisercostin.utils.ObjectUtilsTest$EnumTest\n.   .   theenum=org.raisercostin.utils.ObjectUtilsTest$SomeEnum\n.   .   .   field=a\n.   .   .   dtest=org.raisercostin.utils.ObjectUtilsTest$DTest\n.   .   .   .   value=1\n.   .   .   name=VALUE1\n.   .   .   ordinal=0",
 				ObjectUtils.toStringDump(new Object[] { a }));
+	}
+
+	@Test
+	public void testToStringDump() {
+		BTest b = new BTest("a");
+		assertStringEquals("org.raisercostin.utils.ObjectUtilsTest$BTest\n.   value=a", ObjectUtils.toStringDump(b));
+		ATest a = new ATest();
+		assertStringEquals(
+				"org.raisercostin.utils.ObjectUtilsTest$ATest\n.   testInside1=org.raisercostin.utils.ObjectUtilsTest$BTest\n.   .   value=value1\n.   testInside2=org.raisercostin.utils.ObjectUtilsTest$BTest\n.   .   value=value2\n.   map=java.util.LinkedHashMap\n.   .   key1=value 1\n.   .   key2=value 2\n.   .   key3=value 3\n.   .   key4pass=*****\n.   .   key4=org.raisercostin.utils.ObjectUtilsTest$DTest\n.   .   .   value=value4\n.   prop=java.util.Properties\n.   .   pass2=*****\n.   .   p4=v4\n.   .   p3=v3\n.   .   p1=v1\n"
+						+ ".   list=java.util.ArrayList\n.   .   field1\n.   .   org.raisercostin.utils.ObjectUtilsTest$BTest\n.   .   .   value=value3\n.   .   field2\n.   .   @1\n.   .   field3",
+				ObjectUtils.toStringDump(a));
 	}
 
 	private static class ATest {

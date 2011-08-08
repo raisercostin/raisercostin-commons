@@ -140,12 +140,6 @@ public class ObjectUtils {
 		return internalToStringWithContext(object, singleLine, useToString, displayTypes);
 	}
 
-	// TO STRING SPECIALS
-
-	public static String throwableToString(Throwable throwable) {
-		return getFullStackTrace(throwable);
-	}
-
 	// TOSTRING WITH EXCLUDES - should be implemented in another way
 	@Deprecated
 	private static String toString(Object object, boolean singleLine, boolean classDecorators, String[] excludes) {
@@ -196,11 +190,8 @@ public class ObjectUtils {
 			return declaredToString(id, object);
 		}
 		if (object instanceof Throwable) {
-			((Throwable) object).fillInStackTrace();
-		}
-		// value = toIdentedString(throwableToString((Throwable) object));
-		// } else
-		if (object instanceof Map) {
+			value = throwableToString((Throwable) object, useToString, toStringStyle);
+		} else if (object instanceof Map) {
 			value = mapToString((Map<Object, Object>) object, useToString, toStringStyle);
 		} else if (object instanceof Collection) {
 			value = collectionToString((Collection<Object>) object, useToString, toStringStyle);
@@ -217,6 +208,11 @@ public class ObjectUtils {
 			}
 		}
 		return value;
+	}
+
+	private static String toIdentedString(String text) {
+		text = text.replaceAll("\r\n|\n|\r", getContext().getRowEnd() + getContext().getRowStart());
+		return text;
 	}
 
 	private static boolean isXml(Object object) {
@@ -394,6 +390,12 @@ public class ObjectUtils {
 				DEFAULT_TRANSIENTS, false) {
 			@Override
 			protected boolean accept(Field f) {
+				if (f.getName().equals("stackTrace")) {
+					return false;
+				}
+				if (f.getName().equals("cause") && f.getType().isAssignableFrom(Throwable.class)) {
+					return false;
+				}
 				return super.accept(f);
 			}
 
@@ -415,7 +417,7 @@ public class ObjectUtils {
 			super();
 			this.displayTypes = displayTypes;
 			this.useToString = useToString;
-			this.setUseShortClassName(true);
+			this.setUseShortClassName(false);
 			this.setUseClassName(classDecorators);
 			this.setUseIdentityHashCode(false);
 			this.setFieldSeparatorAtEnd(false);
@@ -433,7 +435,6 @@ public class ObjectUtils {
 		public void appendStart(StringBuffer buffer, Object object) {
 			super.appendStart(buffer, object);
 			getContext().ident();
-			buffer.append(getContext().getRowEnd());
 		}
 
 		@Override
@@ -443,13 +444,13 @@ public class ObjectUtils {
 
 		@Override
 		protected void appendFieldStart(StringBuffer buffer, String fieldName) {
-			buffer.append(getContext().getRowStart());
+			buffer.append(getContext().getRowEnd()).append(getContext().getRowStart());
 			super.appendFieldStart(buffer, fieldName);
 		}
 
 		@Override
 		protected void appendFieldEnd(StringBuffer buffer, String fieldName) {
-			buffer.append(getContext().getRowEnd());
+			// buffer.append(getContext().getRowEnd());
 		}
 
 		@Override
@@ -536,12 +537,18 @@ public class ObjectUtils {
 		public String map(T element);
 	}
 
-	private static String getFullStackTrace(Throwable throwable) {
+	// TO STRING SPECIALS
+
+	private static String throwableToString(Throwable throwable, boolean useToString, MyStringStyle toStringStyle) {
+		return getFullStackTrace(throwable, useToString, toStringStyle);
+	}
+
+	private static String getFullStackTrace(Throwable throwable, boolean useToString, MyStringStyle toStringStyle) {
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw, true);
 		Throwable[] ts = getThrowables(throwable);
 		for (int i = 0; i < ts.length; i++) {
-			_printStackTrace(ts[i], pw);
+			_printStackTrace(ts[i], pw, useToString, toStringStyle);
 			if (isNestedThrowable(ts[i])) {
 				break;
 			}
@@ -549,21 +556,31 @@ public class ObjectUtils {
 		return sw.getBuffer().toString();
 	}
 
-	private static void _printStackTrace(Throwable t, PrintWriter printwriter) {
-		synchronized (printwriter) {
-			printwriter.println(t);
-			StackTraceElement astacktraceelement[] = t.getStackTrace();
-			for (int i = 0; i < astacktraceelement.length; i++)
-				printwriter.println((new StringBuilder()).append("\tat ").append(astacktraceelement[i]).toString());
-
-			Throwable throwable = t.getCause();
-			if (throwable != null)
-				_printStackTraceAsCause(throwable, printwriter, astacktraceelement);
+	private static void _printStackTrace(Throwable t, PrintWriter printwriter, boolean useToString,
+			MyStringStyle toStringStyle) {
+		printwriter.print(reflectedToString(t, useToString, toStringStyle));
+		printwriter.print(getContext().getRowEnd());
+		getContext().ident();
+		printwriter.print(getContext().getRowStart());
+		printwriter.print("Stacktrace:");
+		StackTraceElement astacktraceelement[] = t.getStackTrace();
+		getContext().ident();
+		for (int i = 0; i < astacktraceelement.length; i++) {
+			printwriter.print(getContext().getRowEnd());
+			printwriter.print(getContext().getRowStart());
+			printwriter.print("at ");
+			printwriter.print(astacktraceelement[i]);
 		}
+		getContext().deident();
+		getContext().deident();
+
+		Throwable throwable = t.getCause();
+		if (throwable != null)
+			_printStackTraceAsCause(throwable, printwriter, astacktraceelement, useToString, toStringStyle);
 	}
 
 	private static void _printStackTraceAsCause(Throwable throwable, PrintWriter printstream,
-			StackTraceElement[] astacktraceelement) {
+			StackTraceElement[] astacktraceelement, boolean useToString, MyStringStyle toStringStyle) {
 		StackTraceElement astacktraceelement1[] = throwable.getStackTrace();
 		int i = astacktraceelement1.length - 1;
 		for (int j = astacktraceelement.length - 1; i >= 0 && j >= 0
@@ -571,15 +588,37 @@ public class ObjectUtils {
 			i--;
 
 		int k = astacktraceelement1.length - 1 - i;
-		printstream.println((new StringBuilder()).append("Caused by: ").append(throwable).toString());
-		for (int l = 0; l <= i; l++)
-			printstream.println((new StringBuilder()).append("\tat ").append(astacktraceelement1[l]).toString());
+		printstream.print(getContext().getRowEnd());
+		getContext().ident();
+		printstream.print(getContext().getRowStart());
+		printstream.print("Caused by: ");
+		printstream.print(reflectedToString(throwable, useToString, toStringStyle));
+		printstream.print(getContext().getRowEnd());
+		getContext().ident();
+		printstream.print(getContext().getRowStart());
+		printstream.print("Stacktrace:");
+		getContext().ident();
+		for (int l = 0; l <= i; l++) {
+			printstream.print(getContext().getRowEnd());
+			printstream.print(getContext().getRowStart());
+			printstream.print("at ");
+			printstream.print(astacktraceelement1[l]);
+		}
 
-		if (k != 0)
-			printstream.println((new StringBuilder()).append("\t... ").append(k).append(" more").toString());
+		if (k != 0) {
+			printstream.print(getContext().getRowEnd());
+			printstream.print(getContext().getRowStart());
+			printstream.print("... ");
+			printstream.print(k);
+			printstream.print(" more");
+		}
+		getContext().deident();
+		getContext().deident();
+		getContext().deident();
+
 		Throwable throwable2 = throwable.getCause();
 		if (throwable2 != null)
-			_printStackTraceAsCause(throwable2, printstream, astacktraceelement1);
+			_printStackTraceAsCause(throwable2, printstream, astacktraceelement1, useToString, toStringStyle);
 	}
 
 	private static Throwable[] getThrowables(Throwable throwable) {
