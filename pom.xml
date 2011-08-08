@@ -15,14 +15,26 @@
 		<connection>scm:svn:https://svn.raisercostin.dnsdojo.org/all/projects/projects/common/trunk</connection>
 		<developerConnection>scm:svn:https://svn.raisercostin.dnsdojo.org/all/projects/projects/common/trunk</developerConnection>
 	</scm>
+	<!--
 	<distributionManagement>
 		<repository>
 			<id>org.raisercostin.public.releases</id>
-			<url>svn:https://raisercostin.googlecode.com/svn/maven2</url>
+			<url>dav:https://raisercostin.googlecode.com/svn/maven2</url>
 		</repository>
 		<snapshotRepository>
 			<id>org.raisercostin.public.snapshots</id>
-			<url>svn:https://raisercostin.googlecode.com/svn/maven2-snapshots</url>
+			<url>dav:https://raisercostin.googlecode.com/svn/maven2-snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+	-->
+	<distributionManagement>
+		<repository>
+			<id>org.raisercostin.private.releases</id>
+			<url>dav:http://nexus.raisercostin.dnsdojo.org/nexus/content/repositories/releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>org.raisercostin.private.snapshots</id>
+			<url>dav:http://nexus.raisercostin.dnsdojo.org/nexus/content/repositories/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
 	<repositories>
