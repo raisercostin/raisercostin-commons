@@ -11,6 +11,24 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class ObjectUtilsTest {
+	@Test
+	public void testXml2() {
+		Assert.assertEquals(
+				"<SedEnvelope>\n  <sedHeader>\n    <ackIssue>false</ackIssue>\n  </sedHeader>\n  <sed>\n    <sedData>&lt;?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?&gt;\n"
+						+ "&lt;ns2:ack xmlns:ns2=\"http://messages.system.eessi.dgempl.ec.eu/\"&gt;\n"
+						+ "    &lt;type&gt;1&lt;/type&gt;\n"
+						+ "    &lt;code&gt;43&lt;/code&gt;\n"
+						+ "    &lt;ackMessage&gt;LocalSEDID does not exist&lt;/ackMessage&gt;\n"
+						+ "&lt;/ns2:ack&gt;\n"
+						+ "</sedData>\n  </sed>\n</SedEnvelope>",
+				ObjectUtils
+						.toString("<SedEnvelope><sedHeader><ackIssue>false</ackIssue></sedHeader><sed><sedData>&lt;?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?&gt;\n"
+								+ "&lt;ns2:ack xmlns:ns2=\"http://messages.system.eessi.dgempl.ec.eu/\"&gt;\n"
+								+ "    &lt;type&gt;1&lt;/type&gt;\n"
+								+ "    &lt;code&gt;43&lt;/code&gt;\n"
+								+ "    &lt;ackMessage&gt;LocalSEDID does not exist&lt;/ackMessage&gt;\n"
+								+ "&lt;/ns2:ack&gt;\n" + "</sedData></sed></SedEnvelope>"));
+	}
 
 	@Test
 	public void testSimpleTypes() {
@@ -20,6 +38,7 @@ public class ObjectUtilsTest {
 		Assert.assertEquals("aa", ObjectUtils.toString("aa"));
 		Assert.assertEquals("2", ObjectUtils.toString(new Integer(2)));
 	}
+
 	@Test
 	public void testException() {
 		RuntimeException e0 = new RuntimeException("exception0");
@@ -46,14 +65,15 @@ public class ObjectUtilsTest {
 				ObjectUtils
 						.toString("<?xml version=\"1.0\"?><catalog><book id=\"bk101\"><author>Gambardella, Matthew</author><title>XML Developer's Guide</title><genre>Computer</genre>"));
 		Assert.assertEquals(
-				"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<catalog>\n  <book id=\"bk101\">\n    <author>Gambardella, Matthew</author>\n    <title>XML Developer's Guide</title>\n    <genre>Computer</genre>\n  </book>\n</catalog>\n",
+				"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<catalog>\n  <book id=\"bk101\">\n    <author>Gambardella, Matthew</author>\n    <title>XML Developer's Guide</title>\n    <genre>Computer</genre>\n  </book>\n</catalog>",
 				ObjectUtils
 						.toString("<?xml version=\"1.0\"?><catalog><book id=\"bk101\"><author>Gambardella, Matthew</author><title>XML Developer's Guide</title><genre>Computer</genre></book></catalog>"));
 		Assert.assertEquals("<casa><etaj>1</etaj><etaj>2</etaj><etaj>3</etaj></casa2>",
 				ObjectUtils.toString("<casa><etaj>1</etaj><etaj>2</etaj><etaj>3</etaj></casa2>"));
-		Assert.assertEquals("<casa>\n  <etaj>1</etaj>\n  <etaj>2</etaj>\n  <etaj>3</etaj>\n</casa>\n",
+		Assert.assertEquals("<casa>\n  <etaj>1</etaj>\n  <etaj>2</etaj>\n  <etaj>3</etaj>\n</casa>",
 				ObjectUtils.toString("<casa><etaj>1</etaj><etaj>2</etaj><etaj>3</etaj></casa>"));
 	}
+
 
 	@Test
 	public void testToStringFromEnum() {

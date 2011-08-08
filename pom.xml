@@ -15,25 +15,28 @@
 		<connection>scm:svn:https://svn.raisercostin.dnsdojo.org/all/projects/projects/common/trunk</connection>
 		<developerConnection>scm:svn:https://svn.raisercostin.dnsdojo.org/all/projects/projects/common/trunk</developerConnection>
 	</scm>
-	<!--
 	<distributionManagement>
 		<repository>
-			<id>raisercostin-releases</id>
-			<name>Raisercostin Releases Repository</name>
-			<url>dav:http://nexus.raisercostin.dnsdojo.org/nexus/content/repositories/releases</url>
+			<id>org.raisercostin.public.releases</id>
+			<url>svn:https://raisercostin.googlecode.com/svn/maven2</url>
 		</repository>
 		<snapshotRepository>
-			<id>raisercostin-snapshots</id>
-			<name>Raisercostin Snapshots Repository</name>
-			<url>dav:http://nexus.raisercostin.dnsdojo.org/nexus/content/repositories/snapshots</url>
+			<id>org.raisercostin.public.snapshots</id>
+			<url>svn:https://raisercostin.googlecode.com/svn/maven2-snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
-	-->
 	<repositories>
 		<repository>
 			<id>org.raisercostin.maven.group.releases</id>
 			<name>raisercostin-public</name>
 			<url>http://nexus.raisercostin.dnsdojo.org/nexus/content/groups/public</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>org.raisercostin.public.releases</id>
+			<url>http://raisercostin.googlecode.com/svn/maven2</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>

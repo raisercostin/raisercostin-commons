@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -54,6 +55,7 @@ public class ObjectUtils {
 	private static final int STEP = 4;
 	private static final String all = ".   .   .   .   .   .   .   .   .   .   .   .   .   .   ";
 	private static final boolean DEFAULT_TRANSIENTS = false;
+	private static final Pattern XML_STRING_PATTERN = Pattern.compile("^<(\\w+)>.+</\\1>$", Pattern.DOTALL);
 	// Thread local is needed because multiple cascaded toStrings could be invoked.
 	private static final ThreadLocal<ObjectUtilsContext> contextOnThread = new ThreadLocal<ObjectUtilsContext>();
 
@@ -110,7 +112,14 @@ public class ObjectUtils {
 			Writer out = new StringWriter();
 			XMLSerializer serializer = new XMLSerializer(out, format);
 			serializer.serialize(document);
-			return out.toString();
+			String result = out.toString();
+			if (result.endsWith("\r\n")) {
+				result = result.substring(0, result.length() - "\r\n".length());
+			}
+			if (result.endsWith("\n")) {
+				result = result.substring(0, result.length() - "\n".length());
+			}
+			return result;
 		} catch (ParserConfigurationException e) {
 			return "!xmlFormatingFailed " + e + " xml=[" + unformattedXml + "]";
 		} catch (SAXException e) {
@@ -223,7 +232,7 @@ public class ObjectUtils {
 		if (xml.startsWith("<?xml")) {
 			return true;
 		}
-		if (xml.matches("<(\\S+).+</\\1>")) {
+		if (XML_STRING_PATTERN.matcher(xml).matches()) {
 			return true;
 		}
 		return false;
