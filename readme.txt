@@ -1,0 +1,1 @@
+mvn release:prepare release:perform -Prelease -Darguments="-Prelease"
