@@ -26,6 +26,9 @@ import org.springframework.util.StringValueResolver;
  */
 public class AdapterPropertyPlaceholderConfigurer extends PropertyPlaceholderConfigurer implements InitializingBean,
 		BeanFactoryAware {
+	private static final String SEARCHED_RESOURCE_PREFIX = "searched-resource:";
+
+
 	/**
 	 * Logger for this class
 	 */
@@ -68,22 +71,25 @@ public class AdapterPropertyPlaceholderConfigurer extends PropertyPlaceholderCon
 	}
 
 	@Override
-	public void afterPropertiesSet() throws Exception {
+	public void afterPropertiesSet() {
+	}
+
+	private void beforeAfterPropertiesSet() {
 		List<Resource> findResources = new ArrayList<Resource>();
 		for (Resource resource : myLocations) {
 			Resource resolvedResource = resource;
 			String name = resource.getFilename();
-			if (name.startsWith("resource:")) {
-				String withoutProtocol = name.substring("resource:".length());
+			if (name.startsWith(SEARCHED_RESOURCE_PREFIX)) {
+				String withoutProtocol = name.substring(SEARCHED_RESOURCE_PREFIX.length());
 				int index = withoutProtocol.indexOf(":");
 				if (index == 0) {
 					throw new RuntimeException(
-							"The resource should have the format: [resource:<resourceFinderBeanId>:<fileName>] and is defined as ["
+							"The resource should have the format: ["+SEARCHED_RESOURCE_PREFIX+"<resourceFinderBeanId>:<fileName>] and is defined as ["
 									+ name + "].");
 				}
 				if (index < 0) {
 					throw new RuntimeException(
-							"The resource should have the format: [resource:<resourceFinderBeanId>:<fileName>] and is defined as ["
+							"The resource should have the format: ["+SEARCHED_RESOURCE_PREFIX+"<resourceFinderBeanId>:<fileName>] and is defined as ["
 									+ name + "].");
 				}
 				String resourceFinderBeanId = withoutProtocol.substring(0, index);
@@ -200,5 +206,12 @@ public class AdapterPropertyPlaceholderConfigurer extends PropertyPlaceholderCon
 	@Required
 	public void setBuildDatePropertyName(String buildDatePropertyName) {
 		this.buildDatePropertyName = buildDatePropertyName;
+	}
+	
+	@Override
+	public void postProcessBeanFactory(
+			ConfigurableListableBeanFactory beanFactory) throws BeansException {
+		beforeAfterPropertiesSet();
+		super.postProcessBeanFactory(beanFactory);
 	}
 }
