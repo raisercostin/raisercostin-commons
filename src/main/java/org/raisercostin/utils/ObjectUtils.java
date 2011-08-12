@@ -49,6 +49,7 @@ import com.sun.org.apache.xml.internal.serialize.OutputFormat;
 import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 
 public class ObjectUtils {
+	private static final String IGNORED_VALUE = "*****";
 	// private static final MyStringStyle myStringStyle = new MyStringStyle();
 
 	private static final String TO_STRING_METHOD = "toString";
@@ -138,15 +139,27 @@ public class ObjectUtils {
 
 	// TO STRING UTILITIES
 	public static String toStringDump(Object object) {
-		return internalToStringWithContext(object, false, false, false);
+		return internalToStringWithContext(object, false, false, false, "", "");
+	}
+
+	public static String toStringDump(Object object, String ignores) {
+		return internalToStringWithContext(object, false, false, false, ignores, "");
+	}
+
+	public static String toStringDump(Object object, String ignores, String excludes) {
+		return internalToStringWithContext(object, false, false, false, ignores, excludes);
 	}
 
 	public static String toString(Object object) {
-		return internalToStringWithContext(object, false, true, false);
+		return internalToStringWithContext(object, false, true, false, "", "");
+	}
+
+	public static String toString(Object object, String ignores) {
+		return internalToStringWithContext(object, false, true, false, ignores, "");
 	}
 
 	public static String toString(Object object, boolean singleLine, boolean useToString, boolean displayTypes) {
-		return internalToStringWithContext(object, singleLine, useToString, displayTypes);
+		return internalToStringWithContext(object, singleLine, useToString, displayTypes, "", "");
 	}
 
 	// TOSTRING WITH EXCLUDES - should be implemented in another way
@@ -173,8 +186,8 @@ public class ObjectUtils {
 
 	// IMPLEMENTATION
 	private static String internalToStringWithContext(Object object, boolean singleLine, boolean useToString,
-			boolean displayTypes) {
-		createContext();
+			boolean displayTypes, String ignores, String excludes) {
+		createContext(ignores, excludes);
 		try {
 			return internalToString(object, useToString, new MyStringStyle(singleLine, useToString, true, displayTypes));
 		} finally {
@@ -281,9 +294,9 @@ public class ObjectUtils {
 
 	// others
 
-	private static void createContext() {
+	private static void createContext(String ignores, String excludes) {
 		if (contextOnThread.get() == null) {
-			contextOnThread.set(new ObjectUtilsContext(STEP));
+			contextOnThread.set(new ObjectUtilsContext(STEP, ignores, excludes));
 		}
 		contextOnThread.get().incrementToStringCalls();
 	}
@@ -328,9 +341,13 @@ public class ObjectUtils {
 		private final Set<Object> toStringForSelf = new HashSet<Object>();
 		private int toStringCallsCounter;
 		private final int step;
+		private final String excludes;
+		private final String ignores;
 
-		public ObjectUtilsContext(int step) {
+		public ObjectUtilsContext(int step, String ignores, String excludes) {
 			this.step = step;
+			this.excludes = "," + excludes + ",";
+			this.ignores = "," + ignores + ",";
 			identation = 0;
 			toStringCallsCounter = 0;
 		}
@@ -392,6 +409,14 @@ public class ObjectUtils {
 			return Math.min(identation, all.length());
 		}
 
+		public boolean accept(String field) {
+			return !excludes.contains("," + field + ",");
+		}
+
+		public boolean shouldIgnore(String field) {
+			return ignores.contains("," + field + ",");
+		}
+
 	}
 
 	private static String reflectedToString(Object object, final boolean useToString, final MyStringStyle toStringStyle) {
@@ -405,12 +430,20 @@ public class ObjectUtils {
 				if (f.getName().equals("cause") && f.getType().isAssignableFrom(Throwable.class)) {
 					return false;
 				}
+				if (!getContext().accept(f.getName())) {
+					return false;
+				}
 				return super.accept(f);
 			}
 
 			@Override
 			public ToStringBuilder append(String fieldName, Object object) {
-				String value = internalToString(object, useToString, toStringStyle);
+				String value = null;
+				if (getContext().shouldIgnore(fieldName)) {
+					value = IGNORED_VALUE;
+				} else {
+					value = internalToString(object, useToString, toStringStyle);
+				}
 				return super.append(fieldName, value);
 			}
 		};
@@ -483,11 +516,16 @@ public class ObjectUtils {
 				new Mapper<Map.Entry<Object, Object>>() {
 					@Override
 					public String map(Entry<Object, Object> element) {
-						if (element.getKey().toString().contains("pass")) {
-							return element.getKey() + "=*****";
+						if (getContext().shouldIgnore(element.getKey().toString())) {
+							return element.getKey() + "=" + IGNORED_VALUE;
 						}
 						return element.getKey() + "="
 								+ internalToString(element.getValue(), useToString, toStringStyle);
+					}
+
+					@Override
+					public boolean accept(Entry<Object, Object> element) {
+						return getContext().accept(element.getKey().toString());
 					}
 				});
 	}
@@ -516,6 +554,11 @@ public class ObjectUtils {
 			public String map(Object element) {
 				return internalToString(element, useToString, toStringStyle);
 			}
+
+			@Override
+			public boolean accept(Object element) {
+				return true;
+			}
 		});
 	}
 
@@ -530,10 +573,13 @@ public class ObjectUtils {
 			}
 			Iterator<T> it = coll.iterator();
 			while (it.hasNext()) {
-				sb.append(getContext().getRowEnd()).append(getContext().getRowStart()).append(elementPrefix)
-						.append(mapper.map(it.next())).append(elementSuffix);
-				if (it.hasNext()) {
-					sb.append(delim);
+				T entry = it.next();
+				if (mapper.accept(entry)) {
+					sb.append(getContext().getRowEnd()).append(getContext().getRowStart()).append(elementPrefix)
+							.append(mapper.map(entry)).append(elementSuffix);
+					if (it.hasNext()) {
+						sb.append(delim);
+					}
 				}
 			}
 			return sb.toString();
@@ -543,7 +589,9 @@ public class ObjectUtils {
 	}
 
 	static interface Mapper<T> {
-		public String map(T element);
+		boolean accept(T element);
+
+		String map(T element);
 	}
 
 	// TO STRING SPECIALS

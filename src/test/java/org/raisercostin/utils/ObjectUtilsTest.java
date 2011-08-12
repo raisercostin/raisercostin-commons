@@ -104,7 +104,28 @@ public class ObjectUtilsTest {
 		assertStringEquals(
 				"org.raisercostin.utils.ObjectUtilsTest$ATest\n.   testInside1=org.raisercostin.utils.ObjectUtilsTest$BTest\n.   .   value=value1\n.   testInside2=org.raisercostin.utils.ObjectUtilsTest$BTest\n.   .   value=value2\n.   map=java.util.LinkedHashMap\n.   .   key1=value 1\n.   .   key2=value 2\n.   .   key3=value 3\n.   .   key4pass=*****\n.   .   key4=noToString\n.   prop=java.util.Properties\n.   .   pass2=*****\n.   .   p4=v4\n.   .   p3=v3\n.   .   p1=v1\n"
 						+ ".   list=java.util.ArrayList\n.   .   field1\n.   .   org.raisercostin.utils.ObjectUtilsTest$BTest\n.   .   .   value=value3\n.   .   field2\n.   .   org.raisercostin.utils.ObjectUtilsTest$BTest\n.   .   .   value=value1\n.   .   field3",
-				ObjectUtils.toString(a));
+				ObjectUtils.toString(a, "key4pass,pass2"));
+	}
+
+	@Test
+	public void testToStringDump() {
+		BTest b = new BTest("a");
+		assertStringEquals("org.raisercostin.utils.ObjectUtilsTest$BTest\n.   value=a", ObjectUtils.toStringDump(b));
+		ATest a = new ATest();
+		assertStringEquals(
+				"org.raisercostin.utils.ObjectUtilsTest$ATest\n.   testInside1=org.raisercostin.utils.ObjectUtilsTest$BTest\n.   .   value=value1\n.   testInside2=org.raisercostin.utils.ObjectUtilsTest$BTest\n.   .   value=value2\n.   map=java.util.LinkedHashMap\n.   .   key1=value 1\n.   .   key2=value 2\n.   .   key3=value 3\n.   .   key4pass=*****\n.   .   key4=org.raisercostin.utils.ObjectUtilsTest$DTest\n.   .   .   value=value4\n.   prop=java.util.Properties\n.   .   pass2=*****\n.   .   p4=v4\n.   .   p3=v3\n.   .   p1=v1\n"
+						+ ".   list=java.util.ArrayList\n.   .   field1\n.   .   org.raisercostin.utils.ObjectUtilsTest$BTest\n.   .   .   value=value3\n.   .   field2\n.   .   @1\n.   .   field3",
+				ObjectUtils.toStringDump(a, "key4pass,pass2"));
+	}
+
+	@Test
+	public void testToStringDumpWithExcludes() {
+		ATest a = new ATest();
+		assertStringEquals(
+				"org.raisercostin.utils.ObjectUtilsTest$ATest\n.   testInside1=org.raisercostin.utils.ObjectUtilsTest$BTest\n.   .   value=value1\n.   map=java.util.LinkedHashMap\n.   .   key1=value 1\n.   .   key2=value 2\n.   .   key4pass=*****\n.   .   key4=org.raisercostin.utils.ObjectUtilsTest$DTest"
+						+ "\n.   .   .   value=value4\n.   prop=java.util.Properties\n.   .   pass2=*****\n.   .   p4=v4\n.   .   p3=v3\n.   .   p1=v1\n"
+						+ ".   list=java.util.ArrayList\n.   .   field1\n.   .   org.raisercostin.utils.ObjectUtilsTest$BTest\n.   .   .   value=value3\n.   .   field2\n.   .   @1\n.   .   field3",
+				ObjectUtils.toStringDump(a, "key4pass,pass2", "key3,testInside2"));
 	}
 
 	@Test
@@ -118,17 +139,6 @@ public class ObjectUtilsTest {
 		assertStringEquals(
 				"array[java.lang.Object]\n.   org.raisercostin.utils.ObjectUtilsTest$EnumTest\n.   .   theenum=org.raisercostin.utils.ObjectUtilsTest$SomeEnum\n.   .   .   field=a\n.   .   .   dtest=org.raisercostin.utils.ObjectUtilsTest$DTest\n.   .   .   .   value=1\n.   .   .   name=VALUE1\n.   .   .   ordinal=0",
 				ObjectUtils.toStringDump(new Object[] { a }));
-	}
-
-	@Test
-	public void testToStringDump() {
-		BTest b = new BTest("a");
-		assertStringEquals("org.raisercostin.utils.ObjectUtilsTest$BTest\n.   value=a", ObjectUtils.toStringDump(b));
-		ATest a = new ATest();
-		assertStringEquals(
-				"org.raisercostin.utils.ObjectUtilsTest$ATest\n.   testInside1=org.raisercostin.utils.ObjectUtilsTest$BTest\n.   .   value=value1\n.   testInside2=org.raisercostin.utils.ObjectUtilsTest$BTest\n.   .   value=value2\n.   map=java.util.LinkedHashMap\n.   .   key1=value 1\n.   .   key2=value 2\n.   .   key3=value 3\n.   .   key4pass=*****\n.   .   key4=org.raisercostin.utils.ObjectUtilsTest$DTest\n.   .   .   value=value4\n.   prop=java.util.Properties\n.   .   pass2=*****\n.   .   p4=v4\n.   .   p3=v3\n.   .   p1=v1\n"
-						+ ".   list=java.util.ArrayList\n.   .   field1\n.   .   org.raisercostin.utils.ObjectUtilsTest$BTest\n.   .   .   value=value3\n.   .   field2\n.   .   @1\n.   .   field3",
-				ObjectUtils.toStringDump(a));
 	}
 
 	private static class ATest {
