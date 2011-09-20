@@ -39,6 +39,8 @@ import org.apache.commons.lang.builder.ToStringStyle;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.lang.exception.Nestable;
 import org.raisercostin.utils.beans.BeanUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.w3c.dom.Document;
@@ -49,6 +51,8 @@ import com.sun.org.apache.xml.internal.serialize.OutputFormat;
 import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 
 public class ObjectUtils {
+
+	private static final Logger LOG = LoggerFactory.getLogger(ObjectUtils.class);
 	private static final String IGNORED_VALUE = "*****";
 	// private static final MyStringStyle myStringStyle = new MyStringStyle();
 
@@ -59,6 +63,7 @@ public class ObjectUtils {
 	private static final Pattern XML_STRING_PATTERN = Pattern.compile("^<(\\w+)>.+</\\1>$", Pattern.DOTALL);
 	// Thread local is needed because multiple cascaded toStrings could be invoked.
 	private static final ThreadLocal<ObjectUtilsContext> contextOnThread = new ThreadLocal<ObjectUtilsContext>();
+	private static final int MAX_SHORT_STRING = 10;
 
 	// UTILITIES
 	public static void copy(Object destination, Object source) {
@@ -190,6 +195,9 @@ public class ObjectUtils {
 		createContext(ignores, excludes);
 		try {
 			return internalToString(object, useToString, new MyStringStyle(singleLine, useToString, true, displayTypes));
+		} catch (Throwable e) {
+			LOG.warn("Generic toString operation failed.", e);
+			return "<invalidToString>";
 		} finally {
 			removeContext();
 		}
@@ -200,17 +208,23 @@ public class ObjectUtils {
 		if (object == null) {
 			return null;
 		}
+		if (isShortType(object.getClass())) {
+			return object.toString();
+		}
+		if (object instanceof String && ((String) object).length() < MAX_SHORT_STRING) {
+			return (String) object;
+		}
 		String old = getContext().find(object);
 		if (old != null) {
 			if (!getContext().isOriginalToStringCalled(object)) {
 				return old;
 			}
 		}
-		String value = null;
 		String id = getContext().save(object);
-		if (isStandardType(object.getClass())) {
+		if (object instanceof String) {
 			return declaredToString(id, object);
 		}
+		String value = null;
 		if (object instanceof Throwable) {
 			value = throwableToString((Throwable) object, useToString, toStringStyle);
 		} else if (object instanceof Map) {
@@ -315,12 +329,12 @@ public class ObjectUtils {
 		return contextOnThread.get();
 	}
 
-	private static final Set<Class> SPECIAL_TYPES = new HashSet(Arrays.asList(String.class, Character.class,
-			Byte.class, Short.class, Integer.class, Long.class, Float.class, Double.class, Void.class, Timestamp.class,
-			Date.class, java.sql.Date.class, Time.class));
+	private static final Set<Class> SHORT_TYPES = new HashSet(Arrays.asList(Character.class, Byte.class, Short.class,
+			Integer.class, Long.class, Float.class, Double.class, Void.class, Timestamp.class, Date.class,
+			java.sql.Date.class, Time.class, Boolean.class));
 
-	private static boolean isStandardType(Class clazz) {
-		return SPECIAL_TYPES.contains(clazz);
+	private static boolean isShortType(Class clazz) {
+		return SHORT_TYPES.contains(clazz);
 		// return clazz.getName().startsWith("java.lang");
 		// || clazz.getName().startsWith("java") && hasOriginalToString(clazz) && !clazz.isAssignableFrom(Map.class)
 		// && !clazz.isAssignableFrom(Collection.class) && !clazz.isAssignableFrom(Throwable.class);
@@ -376,6 +390,7 @@ public class ObjectUtils {
 		}
 
 		public String find(Object key) {
+			LOG.debug("find key {}", key.getClass());
 			return objects.get(key);
 		}
 
@@ -384,6 +399,7 @@ public class ObjectUtils {
 			if (value != null) {
 				return value;
 			}
+			LOG.debug("save key {}", object.getClass());
 			String id = Integer.toString(objects.size());
 			objects.put(object, "@" + id);
 			return id;

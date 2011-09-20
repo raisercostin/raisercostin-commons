@@ -85,7 +85,11 @@
 			<artifactId>joda-time-hibernate</artifactId>
 			<version>1.0</version>
 			<exclusions>
-				<exclusion>
+  				<exclusion>
+					<groupId>antlr</groupId>
+					<artifactId>antlr</artifactId>
+  				</exclusion>
+  				<exclusion>
 					<groupId>org.hibernate</groupId>
 					<artifactId>hibernate</artifactId>
 				</exclusion>
