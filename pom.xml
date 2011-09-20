@@ -7,13 +7,13 @@
 	</parent>
 	<groupId>org.raisercostin</groupId>
 	<artifactId>raisercostin-common</artifactId>
-	<version>2.14</version>
+	<version>2.15-SNAPSHOT</version>
 	<properties>
 		<junit.version>4.8.2</junit.version>
 	</properties>
 	<scm>
-		<connection>scm:svn:https://svn.raisercostin.dnsdojo.org/all/projects/projects/common/tags/raisercostin-common-2.14</connection>
-		<developerConnection>scm:svn:https://svn.raisercostin.dnsdojo.org/all/projects/projects/common/tags/raisercostin-common-2.14</developerConnection>
+		<connection>scm:svn:https://svn.raisercostin.dnsdojo.org/all/projects/projects/common/trunk</connection>
+		<developerConnection>scm:svn:https://svn.raisercostin.dnsdojo.org/all/projects/projects/common/trunk</developerConnection>
 	</scm>
 	<!--
 	<distributionManagement>
