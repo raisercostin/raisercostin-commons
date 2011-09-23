@@ -51,7 +51,6 @@ import com.sun.org.apache.xml.internal.serialize.OutputFormat;
 import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 
 public class ObjectUtils {
-
 	private static final Logger LOG = LoggerFactory.getLogger(ObjectUtils.class);
 	private static final String IGNORED_VALUE = "*****";
 	// private static final MyStringStyle myStringStyle = new MyStringStyle();
@@ -390,7 +389,6 @@ public class ObjectUtils {
 		}
 
 		public String find(Object key) {
-			LOG.debug("find key {}", key.getClass());
 			return objects.get(key);
 		}
 
@@ -399,7 +397,6 @@ public class ObjectUtils {
 			if (value != null) {
 				return value;
 			}
-			LOG.debug("save key {}", object.getClass());
 			String id = Integer.toString(objects.size());
 			objects.put(object, "@" + id);
 			return id;
