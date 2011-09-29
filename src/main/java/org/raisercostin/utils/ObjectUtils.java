@@ -63,6 +63,7 @@ public class ObjectUtils {
 	// Thread local is needed because multiple cascaded toStrings could be invoked.
 	private static final ThreadLocal<ObjectUtilsContext> contextOnThread = new ThreadLocal<ObjectUtilsContext>();
 	private static final int MAX_SHORT_STRING = 10;
+	private static final int MAX_DEEP = 6;
 
 	// UTILITIES
 	public static void copy(Object destination, Object source) {
@@ -195,7 +196,7 @@ public class ObjectUtils {
 		try {
 			return internalToString(object, useToString, new MyStringStyle(singleLine, useToString, true, displayTypes));
 		} catch (Throwable e) {
-			LOG.warn("Generic toString operation failed.", e);
+			LOG.warn("Generic toString operation failed.", new RuntimeException(e));
 			return "<invalidToString>";
 		} finally {
 			removeContext();
@@ -204,6 +205,9 @@ public class ObjectUtils {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private static String internalToString(Object object, boolean useToString, MyStringStyle toStringStyle) {
+		if (getContext().isMaximumLevel()) {
+			return "...(more)";
+		}
 		if (object == null) {
 			return null;
 		}
@@ -363,6 +367,10 @@ public class ObjectUtils {
 			this.ignores = "," + ignores + ",";
 			identation = 0;
 			toStringCallsCounter = 0;
+		}
+
+		public boolean isMaximumLevel() {
+			return toStringCallsCounter > MAX_DEEP;
 		}
 
 		public void incrementToStringCalls() {

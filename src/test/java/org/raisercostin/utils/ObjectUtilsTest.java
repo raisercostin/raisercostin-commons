@@ -11,6 +11,12 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class ObjectUtilsTest {
+
+	@Test
+	public void testHttpRequest() {
+		Assert.assertEquals("true", ObjectUtils.toStringDump(true));
+	}
+
 	@Test
 	public void testXml2() {
 		Assert.assertEquals(
