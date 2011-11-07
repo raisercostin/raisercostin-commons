@@ -30,7 +30,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.commons.lang.SystemUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
@@ -64,6 +63,7 @@ public class ObjectUtils {
 	private static final ThreadLocal<ObjectUtilsContext> contextOnThread = new ThreadLocal<ObjectUtilsContext>();
 	private static final int MAX_SHORT_STRING = 10;
 	private static final int MAX_DEEP = 6;
+	private static final String END_OF_LINE = "\n";
 
 	// UTILITIES
 	public static void copy(Object destination, Object source) {
@@ -144,27 +144,28 @@ public class ObjectUtils {
 
 	// TO STRING UTILITIES
 	public static String toStringDump(Object object) {
-		return internalToStringWithContext(object, false, false, false, "", "");
+		return internalToStringWithContext(object, false, false, false, "", "", END_OF_LINE);
 	}
 
 	public static String toStringDump(Object object, String ignores) {
-		return internalToStringWithContext(object, false, false, false, ignores, "");
+		return internalToStringWithContext(object, false, false, false, ignores, "", END_OF_LINE);
 	}
 
 	public static String toStringDump(Object object, String ignores, String excludes) {
-		return internalToStringWithContext(object, false, false, false, ignores, excludes);
+		return internalToStringWithContext(object, false, false, false, ignores, excludes, END_OF_LINE);
 	}
 
 	public static String toString(Object object) {
-		return internalToStringWithContext(object, false, true, false, "", "");
+		return internalToStringWithContext(object, false, true, false, "", "", END_OF_LINE);
 	}
 
 	public static String toString(Object object, String ignores) {
-		return internalToStringWithContext(object, false, true, false, ignores, "");
+		return internalToStringWithContext(object, false, true, false, ignores, "", END_OF_LINE);
 	}
 
-	public static String toString(Object object, boolean singleLine, boolean useToString, boolean displayTypes) {
-		return internalToStringWithContext(object, singleLine, useToString, displayTypes, "", "");
+	public static String toString(Object object, boolean singleLine, boolean useToString, boolean displayTypes,
+			String endOfLine) {
+		return internalToStringWithContext(object, singleLine, useToString, displayTypes, "", "", endOfLine);
 	}
 
 	// TOSTRING WITH EXCLUDES - should be implemented in another way
@@ -191,8 +192,8 @@ public class ObjectUtils {
 
 	// IMPLEMENTATION
 	private static String internalToStringWithContext(Object object, boolean singleLine, boolean useToString,
-			boolean displayTypes, String ignores, String excludes) {
-		createContext(ignores, excludes);
+			boolean displayTypes, String ignores, String excludes, String endOfLine) {
+		createContext(ignores, excludes, endOfLine);
 		try {
 			return internalToString(object, useToString, new MyStringStyle(singleLine, useToString, true, displayTypes));
 		} catch (Throwable e) {
@@ -311,9 +312,9 @@ public class ObjectUtils {
 
 	// others
 
-	private static void createContext(String ignores, String excludes) {
+	private static void createContext(String ignores, String excludes, String endOfLine) {
 		if (contextOnThread.get() == null) {
-			contextOnThread.set(new ObjectUtilsContext(STEP, ignores, excludes));
+			contextOnThread.set(new ObjectUtilsContext(STEP, ignores, excludes, endOfLine));
 		}
 		contextOnThread.get().incrementToStringCalls();
 	}
@@ -360,13 +361,15 @@ public class ObjectUtils {
 		private final int step;
 		private final String excludes;
 		private final String ignores;
+		private final String endOfLine;
 
-		public ObjectUtilsContext(int step, String ignores, String excludes) {
+		public ObjectUtilsContext(int step, String ignores, String excludes, String endOfLine) {
 			this.step = step;
 			this.excludes = "," + excludes + ",";
 			this.ignores = "," + ignores + ",";
 			identation = 0;
 			toStringCallsCounter = 0;
+			this.endOfLine = endOfLine;
 		}
 
 		public boolean isMaximumLevel() {
@@ -423,7 +426,7 @@ public class ObjectUtils {
 		}
 
 		public String getRowEnd() {
-			return SystemUtils.LINE_SEPARATOR;
+			return endOfLine;
 		}
 
 		private int getIdentation() {
