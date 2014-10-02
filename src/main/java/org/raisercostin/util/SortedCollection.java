@@ -8,13 +8,7 @@
  *****************************************************************************/
 package org.raisercostin.util;
 
-import java.util.AbstractCollection;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class SortedCollection<T extends Comparable<? super T>> extends
 		AbstractCollection<T> implements Collection<T> {

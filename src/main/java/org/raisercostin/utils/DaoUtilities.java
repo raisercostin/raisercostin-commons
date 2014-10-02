@@ -1,8 +1,6 @@
 package org.raisercostin.utils;
 
-import org.hibernate.cfg.AnnotationConfiguration;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.cfg.ImprovedNamingStrategy;
+import org.hibernate.cfg.*;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
 
 /**

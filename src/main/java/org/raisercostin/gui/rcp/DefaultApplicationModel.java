@@ -3,13 +3,7 @@
  */
 package org.raisercostin.gui.rcp;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +21,7 @@ public abstract class DefaultApplicationModel implements ApplicationModel {
 		configuration = new Configuration();
 	}
 
+	@Override
 	public String getVersionHTML() {
 		return "<html>"
 				+ "Project: "
@@ -54,48 +49,58 @@ public abstract class DefaultApplicationModel implements ApplicationModel {
 				+ "</html>";
 	}
 
+	@Override
 	public String getApplicationBuildType() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
 	public String getApplicationBuildDate() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
 	public String getApplicationBuild() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
 	public String getApplicationVersion() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
 	public String getApplicationUniqueName() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
 	public String getApplicationName() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
 	public int getApplicationPreferredWidth() {
 		return 1000;
 	}
 
+	@Override
 	public int getApplicationPreferredHeight() {
 		return 600;
 	}
 
+	@Override
 	public void setController(final ApplicationController controller) {
 		this.controller = controller;
 	}
 
+	@Override
 	public void saveProperties() throws IOException {
 		final OutputStream os = new FileOutputStream("configure.properties");
 		configuration.save(os);
@@ -109,6 +114,7 @@ public abstract class DefaultApplicationModel implements ApplicationModel {
 
 	private final Configuration configuration;
 
+	@Override
 	public void loadProperties() throws IOException, ClassNotFoundException {
 		InputStream is = null;
 		try {
@@ -169,6 +175,7 @@ public abstract class DefaultApplicationModel implements ApplicationModel {
 		return true;
 	}
 
+	@Override
 	public void init() {
 		initProperties();
 	}

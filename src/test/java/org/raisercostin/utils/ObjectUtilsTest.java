@@ -1,11 +1,6 @@
 package org.raisercostin.utils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -20,20 +15,20 @@ public class ObjectUtilsTest {
 	@Test
 	public void testXml2() {
 		Assert.assertEquals(
-				"<SedEnvelope>\n  <sedHeader>\n    <ackIssue>false</ackIssue>\n  </sedHeader>\n  <sed>\n    <sedData>&lt;?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?&gt;\n"
-						+ "&lt;ns2:ack xmlns:ns2=\"http://messages.system.eessi.dgempl.ec.eu/\"&gt;\n"
+				"<tag1>\n  <tag2>\n    <tag5>false</tag5>\n  </tag2>\n  <tag4>\n    <tag3>&lt;?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?&gt;\n"
+						+ "&lt;ns2:ack xmlns:ns2=\"http://site/\"&gt;\n"
 						+ "    &lt;type&gt;1&lt;/type&gt;\n"
 						+ "    &lt;code&gt;43&lt;/code&gt;\n"
-						+ "    &lt;ackMessage&gt;LocalSEDID does not exist&lt;/ackMessage&gt;\n"
+						+ "    &lt;tag6&gt;Localtag4ID does not exist&lt;/tag6&gt;\n"
 						+ "&lt;/ns2:ack&gt;\n"
-						+ "</sedData>\n  </sed>\n</SedEnvelope>",
+						+ "</tag3>\n  </tag4>\n</tag1>",
 				ObjectUtils
-						.toString("<SedEnvelope><sedHeader><ackIssue>false</ackIssue></sedHeader><sed><sedData>&lt;?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?&gt;\n"
-								+ "&lt;ns2:ack xmlns:ns2=\"http://messages.system.eessi.dgempl.ec.eu/\"&gt;\n"
+						.toString("<tag1><tag2><tag5>false</tag5></tag2><tag4><tag3>&lt;?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?&gt;\n"
+								+ "&lt;ns2:ack xmlns:ns2=\"http://site/\"&gt;\n"
 								+ "    &lt;type&gt;1&lt;/type&gt;\n"
 								+ "    &lt;code&gt;43&lt;/code&gt;\n"
-								+ "    &lt;ackMessage&gt;LocalSEDID does not exist&lt;/ackMessage&gt;\n"
-								+ "&lt;/ns2:ack&gt;\n" + "</sedData></sed></SedEnvelope>"));
+								+ "    &lt;tag6&gt;Localtag4ID does not exist&lt;/tag6&gt;\n"
+								+ "&lt;/ns2:ack&gt;\n" + "</tag3></tag4></tag1>"));
 	}
 
 	@Test

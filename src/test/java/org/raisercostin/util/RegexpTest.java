@@ -8,8 +8,6 @@
  *****************************************************************************/
 package org.raisercostin.util;
 
-import org.raisercostin.util.Regexp;
-
 import junit.framework.TestCase;
 
 /**

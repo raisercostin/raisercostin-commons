@@ -6,10 +6,7 @@ package org.raisercostin.gui.rcp;
 import java.awt.Frame;
 import java.io.IOException;
 
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JWindow;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 
 import org.raisercostin.gui.Console;
 import org.slf4j.Logger;
@@ -82,10 +79,12 @@ public class DefaultApplicationController implements ApplicationController {
 		return view;
 	}
 
+	@Override
 	public void fireShowAboutDialog() {
 		getAboutDialog().setVisible(true);
 	}
 
+	@Override
 	public void fireActionExit() {
 		console.exit();
 	}
@@ -96,21 +95,25 @@ public class DefaultApplicationController implements ApplicationController {
 		}
 	}
 
+	@Override
 	public void setConsole(final Console console) {
 		this.console = console;
 		console.setConfirmOnExit(true);
 	}
 
+	@Override
 	public void setModel(final ApplicationModel model) {
 		this.model = model;
 		model.setController(this);
 	}
 
+	@Override
 	public void setView(final ApplicationView view) {
 		this.view = view;
 		view.setController(this);
 	}
 
+	@Override
 	public void startApplication() {
 		setSplashVisible(false);
 		console.show(view);
@@ -128,6 +131,7 @@ public class DefaultApplicationController implements ApplicationController {
 		return splash;
 	}
 
+	@Override
 	public void setSplashVisible(final boolean visible) {
 		if (visible) {
 			getSplash().setVisible(true);
@@ -142,14 +146,17 @@ public class DefaultApplicationController implements ApplicationController {
 		}
 	}
 
+	@Override
 	public void saveProperties() throws IOException {
 		model.saveProperties();
 	}
 
+	@Override
 	public void join() throws InterruptedException {
 		console.join();
 	}
 
+	@Override
 	public void loadProperties() {
 		final Thread t = new Thread() {
 			@Override
@@ -186,26 +193,32 @@ public class DefaultApplicationController implements ApplicationController {
 		view.onModelChanged();
 	}
 
+	@Override
 	public void firePropertiesLoaded() {
 		model.onPropertiesLoaded();
 	}
 
+	@Override
 	public void initModel() {
 		model.init();
 	}
 
+	@Override
 	public void initView() {
 		view.init();
 	}
 
+	@Override
 	public void setStatusInfo(final String message) {
 		view.setStatusInfo(message);
 	}
 
+	@Override
 	public void setStatusWarn(final String message) {
 		view.setStatusWarn(message);
 	}
 
+	@Override
 	public void setStatusError(final String message) {
 		view.setStatusError(message);
 	}

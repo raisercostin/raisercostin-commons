@@ -16,6 +16,7 @@ public class ApplicationContextRegistry implements ApplicationContextAware {
 		return beanFactory;
 	}
 
+	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		setBeanFactory(applicationContext);
 	}

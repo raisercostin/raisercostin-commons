@@ -10,9 +10,7 @@
 
 package jsync;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 
 /**
  * This class links input and output streams so that data taken from input

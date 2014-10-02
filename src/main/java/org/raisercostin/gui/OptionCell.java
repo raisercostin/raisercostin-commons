@@ -3,14 +3,9 @@
  */
 package org.raisercostin.gui;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.EventListenerList;
+import javax.swing.event.*;
 
 /**
  * @author org.raisercostin

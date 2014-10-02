@@ -8,12 +8,7 @@
  *****************************************************************************/
 package org.raisercostin.io;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-
-import org.raisercostin.io.FormattedWriter;
+import java.io.*;
 
 import junit.framework.TestCase;
 

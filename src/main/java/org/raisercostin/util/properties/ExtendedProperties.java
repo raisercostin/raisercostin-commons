@@ -8,13 +8,8 @@
  *****************************************************************************/
 package org.raisercostin.util.properties;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.Properties;
+import java.io.*;
+import java.util.*;
 
 /**
  * @author: Costin Emilian GRIGORE

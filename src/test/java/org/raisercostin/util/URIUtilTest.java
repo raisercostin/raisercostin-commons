@@ -12,10 +12,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import org.raisercostin.io.FileUtils;
-import org.raisercostin.util.URIUtil;
-
 import junit.framework.TestCase;
+
+import org.raisercostin.io.FileUtils;
 
 /**
  * @author: Costin Emilian GRIGORE

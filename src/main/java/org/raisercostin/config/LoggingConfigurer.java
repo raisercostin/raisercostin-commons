@@ -9,9 +9,7 @@ import org.apache.log4j.PropertyConfigurator;
 import org.apache.log4j.helpers.FileWatchdog;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Required;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
+import org.springframework.core.io.*;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 /**

@@ -1,10 +1,6 @@
 package org.raisercostin.utils.beans;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class ArrayedMap<Key, Value> extends HashMap<Key, Value> implements OrderedIndexedMap<Key, Value> {
 	private static final long serialVersionUID = 8544588595673314378L;
@@ -36,10 +32,12 @@ public class ArrayedMap<Key, Value> extends HashMap<Key, Value> implements Order
 		this(arrayedMap);
 	}
 
+	@Override
 	public Key getKeyAt(int index) {
 		return this.allKeys.get(index);
 	}
 
+	@Override
 	public Value getValueAt(int index) {
 		return get(this.allKeys.get(index));
 	}
@@ -58,6 +56,7 @@ public class ArrayedMap<Key, Value> extends HashMap<Key, Value> implements Order
 		throw new IllegalStateException("Not implemented yet.");
 	}
 
+	@Override
 	public Value removeKey(Key key) {
 		this.allKeys.remove(key);
 		return super.remove(key);
@@ -68,6 +67,7 @@ public class ArrayedMap<Key, Value> extends HashMap<Key, Value> implements Order
 		throw new IllegalStateException("Not implemented yet.");
 	}
 
+	@Override
 	public List<Key> keyList() {
 		return this.allKeys;
 	}
@@ -82,15 +82,18 @@ public class ArrayedMap<Key, Value> extends HashMap<Key, Value> implements Order
 //		throw new IllegalStateException("Use keyList instead.");
 	}
 
+	@Override
 	public void replaceValue(Key key, Value newValue) {
 		super.remove(key);
 		super.put(key, newValue);
 	}
 
+	@Override
 	public Map<Key, Value> lightMapClone() {
 		return new ArrayedMap<Key, Value>(this, true);
 	}
 
+	@Override
 	public void replaceKey(Key key, Key newKey) {
 		put(newKey, get(key));
 		removeKey(key);

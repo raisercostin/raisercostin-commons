@@ -13,14 +13,17 @@ public class IteratorUtils {
 	public static <T> Iterator<T> createIterator(
 			final Enumeration<T> enumeration) {
 		return new Iterator<T>() {
+			@Override
 			public boolean hasNext() {
 				return enumeration.hasMoreElements();
 			}
 
+			@Override
 			public T next() {
 				return enumeration.nextElement();
 			}
 
+			@Override
 			public void remove() {
 				throw new RuntimeException("Not impelemented.");
 			}

@@ -10,6 +10,7 @@ public class AmountValidator implements org.hibernate.validator.Validator<Amount
 	private String getter;
 	private final static String DIGITS = "999999999999999999999999999999999999999999999";
 
+	@Override
 	public boolean isValid(Object value2) {
 		if (value2 == null) {
 			return true;
@@ -33,6 +34,7 @@ public class AmountValidator implements org.hibernate.validator.Validator<Amount
 		return theValue.compareTo(max) <= 0;
 	}
 
+	@Override
 	public void initialize(Amount parameters) {
 		max = new BigDecimal(DIGITS.substring(0, parameters.precision() - parameters.scale()) + "." + DIGITS.substring(0, parameters.scale()));
 		getter = "get" + StringUtils.capitalize(parameters.field());

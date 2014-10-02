@@ -1,25 +1,18 @@
 package org.raisercostin.config;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 import org.raisercostin.utils.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.BeanFactoryAware;
-import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.*;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.core.io.Resource;
-import org.springframework.util.PropertyPlaceholderHelper;
+import org.springframework.util.*;
 import org.springframework.util.PropertyPlaceholderHelper.PlaceholderResolver;
-import org.springframework.util.StringValueResolver;
 
 /**
  * Extends PropertyPlaceholderConfigurer to expose the properties the configurer will use.

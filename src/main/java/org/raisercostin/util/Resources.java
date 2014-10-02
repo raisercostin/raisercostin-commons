@@ -19,10 +19,8 @@ public class Resources extends JApplet {
 	private static final long serialVersionUID = 1967495532014762035L;
 
 	/**
-	 * Get an url for a relativePath. If the current application is an applet
-	 * tries to resolve path in the current jar, or using codeBase. If the
-	 * application is stand-alone then the relativePath is from current
-	 * directory.
+	 * Get an url for a relativePath. If the current application is an applet tries to resolve path in the current jar,
+	 * or using codeBase. If the application is stand-alone then the relativePath is from current directory.
 	 * 
 	 * @param relativePath
 	 * @return
@@ -33,9 +31,9 @@ public class Resources extends JApplet {
 
 	private static URL getBaseDir(final String path) {
 		URL baseDir = null;
-		if (baseDir == null) {
-			baseDir = getBaseDirFromSystemResources(path);
-		}
+		// if (baseDir == null) {
+		baseDir = getBaseDirFromSystemResources(path);
+		// }
 		if (baseDir == null) {
 			baseDir = getBaseDirFromLocalDirectory(path);
 		}

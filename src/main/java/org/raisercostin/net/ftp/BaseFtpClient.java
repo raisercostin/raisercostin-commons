@@ -8,10 +8,7 @@
  *****************************************************************************/
 package org.raisercostin.net.ftp;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 
 import org.apache.commons.net.io.CopyStreamException;
 import org.apache.commons.net.io.Util;
@@ -25,6 +22,7 @@ public abstract class BaseFtpClient implements FtpClient {
 	 *         fileName is empty. all data into a byte array if fileName exists
 	 *         and is not empty.
 	 */
+	@Override
 	public byte[] getBytes(final String fileName) throws FtpProtocolException {
 		final ByteArrayOutputStream out = new ByteArrayOutputStream();
 		final InputStream in = get(fileName);
@@ -49,6 +47,7 @@ public abstract class BaseFtpClient implements FtpClient {
 		return out.toByteArray();
 	}
 
+	@Override
 	public void putBytes(final String fileName, final byte[] data)
 			throws FtpProtocolException {
 		final OutputStream out = put(fileName);
@@ -65,6 +64,7 @@ public abstract class BaseFtpClient implements FtpClient {
 	}
 
 	// PROFILE
+	@Override
 	public boolean exists(final String fileName) throws FtpProtocolException {
 		try {
 			return getBytes(fileName) != null;

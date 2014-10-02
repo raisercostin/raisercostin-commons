@@ -3,12 +3,7 @@
  */
 package org.raisercostin.util;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.Shape;
+import java.awt.*;
 import java.awt.geom.Ellipse2D;
 
 import javax.swing.Icon;
@@ -59,14 +54,17 @@ public class RandomizeIcon implements Icon {
 		return (int) (Math.random() * width);
 	}
 
+	@Override
 	public int getIconHeight() {
 		return height;
 	}
 
+	@Override
 	public int getIconWidth() {
 		return width;
 	}
 
+	@Override
 	public void paintIcon(final Component c, final Graphics g, int x, int y) {
 		final Graphics2D g2 = (Graphics2D) g;
 		final Shape oldClip = g2.getClip();

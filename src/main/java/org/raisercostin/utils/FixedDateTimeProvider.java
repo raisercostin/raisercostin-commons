@@ -18,7 +18,8 @@ public class FixedDateTimeProvider implements DateTimeProvider {
         this.dateTime = dateTime;
     }
 
-    public DateTime getDateTime() {
+    @Override
+	public DateTime getDateTime() {
         return dateTime;
     }
 }

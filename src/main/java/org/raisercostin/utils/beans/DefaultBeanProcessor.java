@@ -1,24 +1,14 @@
 package org.raisercostin.utils.beans;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Array;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 import java.math.BigDecimal;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.security.InvalidParameterException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,10 +22,7 @@ import org.hibernate.validator.InvalidValue;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.raisercostin.utils.ExceptionNotificationHandler;
-import org.raisercostin.utils.annotations.CustomTranslator;
-import org.raisercostin.utils.annotations.Length;
-import org.raisercostin.utils.annotations.Mandatory;
-import org.raisercostin.utils.annotations.Trim;
+import org.raisercostin.utils.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -564,7 +551,7 @@ public class DefaultBeanProcessor implements BeanProcessor {
 			} catch (NoSuchMethodException e2) {
 				logger.debug("Couldn't find a getter (get/is) for property " + StringUtils.capitalize(attribute)
 						+ " on setter. Return null.");
-				getter = null;
+				//getter = null;
 			}
 		}
 		if (getter != null) {
@@ -710,7 +697,7 @@ public class DefaultBeanProcessor implements BeanProcessor {
 					throw new RuntimeException(e);
 				}
 			} else if ((parameters != null) && parameters.containsKey(VALUE) && (parameters.get(VALUE) == null)) {
-				result = null;
+				//result = null;
 			} else {
 				try {
 					result = type.newInstance();
@@ -1814,9 +1801,9 @@ public class DefaultBeanProcessor implements BeanProcessor {
 	private <T> Object createObjectFromString(Class<T> setClass, String value) throws ParseException {
 		Object converted = null;
 		if (value == null) {
-			converted = null;
+			//converted = null;
 		} else if ((value.trim().length() == 0) && !setClass.equals(String.class)) {
-			converted = null;
+			//converted = null;
 		} else if (setClass.equals(String.class)) {
 			converted = value;
 		} else if (Date.class.isAssignableFrom(setClass)) {

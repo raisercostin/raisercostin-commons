@@ -7,40 +7,16 @@
  ******************************************************************************/
 package org.raisercostin.gui;
 
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Point;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.util.Enumeration;
-import java.util.EventObject;
-import java.util.Vector;
+import java.util.*;
 
-import javax.swing.Action;
-import javax.swing.JComponent;
-import javax.swing.JTable;
-import javax.swing.JViewport;
-import javax.swing.KeyStroke;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
-import javax.swing.ToolTipManager;
-import javax.swing.event.CellEditorListener;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.TableColumnModelEvent;
-import javax.swing.event.TableColumnModelListener;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
-import javax.swing.table.JTableHeader;
-import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
-import javax.swing.table.TableModel;
+import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.table.*;
 
 /**
  * A JTable with a few bugfixes. This class is the class FTable taken from
@@ -947,38 +923,47 @@ public class JTable2 extends JTable {
 	// Delegates methods back to JTable, but is not Serializable.
 	private class Listener implements TableModelListener,
 			TableColumnModelListener, ListSelectionListener, CellEditorListener {
+		@Override
 		public void tableChanged(final TableModelEvent e) {
 			JTable2.this.tableChanged(e);
 		}
 
+		@Override
 		public void columnAdded(final TableColumnModelEvent e) {
 			JTable2.this.columnAdded(e);
 		}
 
+		@Override
 		public void columnRemoved(final TableColumnModelEvent e) {
 			JTable2.this.columnRemoved(e);
 		}
 
+		@Override
 		public void columnMoved(final TableColumnModelEvent e) {
 			JTable2.this.columnMoved(e);
 		}
 
+		@Override
 		public void columnMarginChanged(final ChangeEvent e) {
 			JTable2.this.columnMarginChanged(e);
 		}
 
+		@Override
 		public void columnSelectionChanged(final ListSelectionEvent e) {
 			JTable2.this.columnSelectionChanged(e);
 		}
 
+		@Override
 		public void valueChanged(final ListSelectionEvent e) {
 			JTable2.this.valueChanged(e);
 		}
 
+		@Override
 		public void editingStopped(final ChangeEvent e) {
 			JTable2.this.editingStopped(e);
 		}
 
+		@Override
 		public void editingCanceled(final ChangeEvent e) {
 			JTable2.this.editingCanceled(e);
 		}

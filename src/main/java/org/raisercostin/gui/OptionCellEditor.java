@@ -8,11 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.util.EventObject;
 
-import javax.swing.CellEditor;
-import javax.swing.DefaultCellEditor;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JTable;
+import javax.swing.*;
 
 /**
  * @author org.raisercostin

@@ -8,14 +8,10 @@
  *****************************************************************************/
 package org.raisercostin.net.ftp;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.SocketException;
 
-import org.apache.commons.net.ftp.FTP;
-import org.apache.commons.net.ftp.FTPClient;
-import org.apache.commons.net.ftp.FTPReply;
+import org.apache.commons.net.ftp.*;
 
 /**
  * @author: Costin Emilian GRIGORE
@@ -28,6 +24,7 @@ public class ApacheFtpClient extends BaseFtpClient implements FtpClient {
 	public ApacheFtpClient() {
 	}
 
+	@Override
 	public void connect(final String host, final int port)
 			throws FtpProtocolException {
 		client = new FTPClient();
@@ -54,10 +51,12 @@ public class ApacheFtpClient extends BaseFtpClient implements FtpClient {
 		}
 	}
 
+	@Override
 	public void connect(final String host) throws FtpProtocolException {
 		connect(host, DEFAULT_FTP_PORT);
 	}
 
+	@Override
 	public void login(final String userName, final String password)
 			throws FtpProtocolException {
 		try {
@@ -69,6 +68,7 @@ public class ApacheFtpClient extends BaseFtpClient implements FtpClient {
 		}
 	}
 
+	@Override
 	public void binary() throws FtpProtocolException {
 		try {
 			client.setFileType(FTP.BINARY_FILE_TYPE);
@@ -79,6 +79,7 @@ public class ApacheFtpClient extends BaseFtpClient implements FtpClient {
 		}
 	}
 
+	@Override
 	public void passive() throws FtpProtocolException {
 		try {
 			client.mode(FTPClient.PASSIVE_LOCAL_DATA_CONNECTION_MODE);
@@ -87,6 +88,7 @@ public class ApacheFtpClient extends BaseFtpClient implements FtpClient {
 		}
 	}
 
+	@Override
 	public OutputStream put(final String fileName) throws FtpProtocolException {
 		try {
 			return client.storeFileStream(fileName);
@@ -95,6 +97,7 @@ public class ApacheFtpClient extends BaseFtpClient implements FtpClient {
 		}
 	}
 
+	@Override
 	public InputStream get(final String fileName) throws FtpProtocolException {
 		try {
 			return client.retrieveFileStream(fileName);
@@ -103,6 +106,7 @@ public class ApacheFtpClient extends BaseFtpClient implements FtpClient {
 		}
 	}
 
+	@Override
 	public void disconnect() throws FtpProtocolException {
 		try {
 			client.disconnect();

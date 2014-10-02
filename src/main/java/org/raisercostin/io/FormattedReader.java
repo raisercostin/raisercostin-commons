@@ -26,10 +26,12 @@ public class FormattedReader implements DataReader {
 		this.reader = reader;
 	}
 
+	@Override
 	public void close() throws IOException {
 		reader.close();
 	}
 
+	@Override
 	public Integer readInteger() throws IOException {
 		if ((line == null) || (line.length() == 0) || (!st.hasMoreTokens())) {
 			do {
@@ -43,6 +45,7 @@ public class FormattedReader implements DataReader {
 		return new Integer(st.nextToken());
 	}
 
+	@Override
 	public String readString() throws IOException {
 		if ((line == null) || (line.length() == 0) || (!st.hasMoreTokens())) {
 			do {
@@ -56,6 +59,7 @@ public class FormattedReader implements DataReader {
 		return st.nextToken();
 	}
 
+	@Override
 	public char readCharacter(final String accepted) throws IOException {
 		final char result = readCharacter();
 		if (accepted.indexOf(result) == -1) {

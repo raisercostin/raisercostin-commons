@@ -3,17 +3,7 @@
  */
 package org.raisercostin.io;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
@@ -49,8 +39,7 @@ public class FileUtils {
 	 * @return
 	 */
 	public static String getPath(final String path) {
-		return path.endsWith(getFileSeparator()) ? path : path
-				+ getFileSeparator();
+		return path.endsWith(getFileSeparator()) ? path : path + getFileSeparator();
 	}
 
 	/**
@@ -61,16 +50,13 @@ public class FileUtils {
 	 * @param dest
 	 *            Destination file (no directory!)
 	 */
-	public static void copy(final String sourceFileName,
-			final String destinationFileName) throws IOException {
+	public static void copy(final String sourceFileName, final String destinationFileName) throws IOException {
 		copy(sourceFileName, destinationFileName, true);
 	}
 
-	public static void copy(final String sourceFileName,
-			final String destinationFileName,
+	public static void copy(final String sourceFileName, final String destinationFileName,
 			final boolean createDirectoriesIfNecessary) throws IOException {
-		subfile(sourceFileName, destinationFileName,
-				createDirectoriesIfNecessary, 0, -1);
+		subfile(sourceFileName, destinationFileName, createDirectoriesIfNecessary, 0, -1);
 	}
 
 	/**
@@ -98,15 +84,12 @@ public class FileUtils {
 		final File file = new File(path);
 		if (file.exists()) {
 			if (file.isDirectory()) {
-				logger.debug("Path [" + extractCanonicalName(file)
-						+ "] is already created.");
+				logger.debug("Path [" + extractCanonicalName(file) + "] is already created.");
 				return true;
 			}
 			if (file.isDirectory()) {
-				logger
-						.debug("Path ["
-								+ extractCanonicalName(file)
-								+ "] can't be created, a file with the same name already exists.");
+				logger.debug("Path [" + extractCanonicalName(file)
+						+ "] can't be created, a file with the same name already exists.");
 				return false;
 			}
 		}
@@ -145,23 +128,20 @@ public class FileUtils {
 		return delete(new File(fileName), 1000, 10, true);
 	}
 
-	public static boolean delete(final String fileName,
-			final boolean errorIfNotExists) throws IOException {
+	public static boolean delete(final String fileName, final boolean errorIfNotExists) throws IOException {
 		return delete(new File(fileName), 100, 10, errorIfNotExists);
 	}
 
 	/**
 	 * On some JVMs there is a bug in delete method.
 	 */
-	static boolean delete(final File file, final int timeout, final int tries,
-			final boolean errorIfNotExists) throws IOException {
+	static boolean delete(final File file, final int timeout, final int tries, final boolean errorIfNotExists)
+			throws IOException {
 		try {
 			if (!file.exists()) {
 				if (errorIfNotExists) {
-					throw new IOException(
-							"File "
-									+ file.getAbsolutePath()
-									+ " doesn't exist. Can't delete non existent files.");
+					throw new IOException("File " + file.getAbsolutePath()
+							+ " doesn't exist. Can't delete non existent files.");
 				} else {
 					return true;
 				}
@@ -169,10 +149,8 @@ public class FileUtils {
 			if (file.delete()) {
 				return true;
 			}
-			System.err
-					.println("Directly delete of existing file "
-							+ file.getAbsolutePath()
-							+ " failed. You should consider closing all streams connected on this file.");
+			System.err.println("Directly delete of existing file " + file.getAbsolutePath()
+					+ " failed. You should consider closing all streams connected on this file.");
 			boolean result = false;
 			int pause = timeout / tries;
 			for (int i = 0; (i < tries) && (!(result = file.delete())); i++) {
@@ -181,12 +159,11 @@ public class FileUtils {
 			}
 			System.err.println("After some hacks the file "
 					+ file.getAbsolutePath()
-					+ (result ? " was deleted." : " was NOT deleted. I tried "
-							+ tries + " times x " + +pause + " miliseconds."));
+					+ (result ? " was deleted." : " was NOT deleted. I tried " + tries + " times x " + +pause
+							+ " miliseconds."));
 			return result;
 		} catch (final InterruptedException e) {
-			throw new IOException("The process of deleting file "
-					+ file.getAbsolutePath() + " was interrupted.");
+			throw new IOException("The process of deleting file " + file.getAbsolutePath() + " was interrupted.");
 		}
 	}
 
@@ -208,8 +185,7 @@ public class FileUtils {
 	 * @return
 	 * @throws IOException
 	 */
-	public static String getTempFile(final String id, final String near)
-			throws IOException {
+	public static String getTempFile(final String id, final String near) throws IOException {
 		return getTempFile(id, new File(near)).getCanonicalPath();
 	}
 
@@ -217,15 +193,12 @@ public class FileUtils {
 	 * Create a uniquely named temporary file of the form XXXnnnnn.tmp.
 	 * 
 	 * @param id
-	 *            a string prepended on the file generated. Should you fail to
-	 *            delete it later, the id will help identify where it came from.
-	 *            null and "" also allowed.
+	 *            a string prepended on the file generated. Should you fail to delete it later, the id will help
+	 *            identify where it came from. null and "" also allowed.
 	 * @param near
-	 *            Directory to create file in. Can also be a file, then
-	 *            temporary file is created in same directory. If null, one of
-	 *            these locations is used (sorted by preference; : is used as
-	 *            path.separator, / as file.separator ): 1) /tmp 2) /var/tmp 3)
-	 *            c:/temp 4) c:/windows/temp 5) / 6) current directory
+	 *            Directory to create file in. Can also be a file, then temporary file is created in same directory. If
+	 *            null, one of these locations is used (sorted by preference; : is used as path.separator, / as
+	 *            file.separator ): 1) /tmp 2) /var/tmp 3) c:/temp 4) c:/windows/temp 5) / 6) current directory
 	 * @return a temporary File with a unique name of the form XXXnnnnn.tmp.
 	 */
 	public static java.io.File getTempFile(final String id,
@@ -243,7 +216,7 @@ public class FileUtils {
 			}
 		}
 		if ((near == null)
-				|| ((near != null) && (checkTempLocation(temp_loc) == false))) {
+				|| (checkTempLocation(temp_loc) == false)) {
 			final String pathSep = System.getProperty("path.separator");
 			final String fileSep = System.getProperty("file.separator");
 			if (checkTempLocation(fileSep + "tmp") == true) {
@@ -280,34 +253,29 @@ public class FileUtils {
 		return tempFile;
 	}
 
-	public static void rename(final File srcFile, final File dstFile,
-			final boolean checkDestination, final boolean deleteDestination)
-			throws IOException {
+	public static void rename(final File srcFile, final File dstFile, final boolean checkDestination,
+			final boolean deleteDestination) throws IOException {
 		if (checkDestination) {
 			if (exists(dstFile, true)) {
 				if (deleteDestination) {
 					dstFile.delete();
 				} else {
-					throw new IOException("Can't rename. Destination exists ["
-							+ dstFile + "].");
+					throw new IOException("Can't rename. Destination exists [" + dstFile + "].");
 				}
 			}
 		}
 		if (!renameFixed(srcFile, dstFile)) {
 			copy(srcFile.getAbsolutePath(), dstFile.getAbsolutePath());
 			if (!delete(srcFile)) {
-				throw new IOException("Can't delete source file["
-						+ srcFile.getAbsolutePath() + "].");
+				throw new IOException("Can't delete source file[" + srcFile.getAbsolutePath() + "].");
 			}
 		}
 	}
 
-	private static boolean exists(final File dstFile,
-			final boolean caseSensitive) throws IOException {
+	private static boolean exists(final File dstFile, final boolean caseSensitive) throws IOException {
 		boolean result = dstFile.exists();
 		if (caseSensitive && result) {
-			result = dstFile.getCanonicalPath().equals(
-					dstFile.getAbsolutePath());
+			result = dstFile.getCanonicalPath().equals(dstFile.getAbsolutePath());
 		}
 		return result;
 	}
@@ -315,11 +283,8 @@ public class FileUtils {
 	private static boolean renameFixed(final File srcFile, final File dstFile) {
 		boolean result = true;
 		// windows case sensitive rename
-		if (SystemUtils.isWindows()
-				&& srcFile.getAbsolutePath().equalsIgnoreCase(
-						dstFile.getAbsolutePath())) {
-			final File dstFile2 = new File(dstFile.getAbsolutePath()
-					+ "tempdfwaetw2134213rwefsda");
+		if (SystemUtils.isWindows() && srcFile.getAbsolutePath().equalsIgnoreCase(dstFile.getAbsolutePath())) {
+			final File dstFile2 = new File(dstFile.getAbsolutePath() + "tempdfwaetw2134213rwefsda");
 			result &= srcFile.renameTo(dstFile2);
 			result &= dstFile2.renameTo(dstFile);
 		} else {
@@ -329,15 +294,14 @@ public class FileUtils {
 	}
 
 	/**
-	 * Rename srcFile to dstFile. If can't rename because srcFile must be moved
-	 * copies srcFile to dstFile and then deletes srcFile.
+	 * Rename srcFile to dstFile. If can't rename because srcFile must be moved copies srcFile to dstFile and then
+	 * deletes srcFile.
 	 * 
 	 * @param srcFile
 	 * @param dstFile
 	 * @throws IOException
 	 */
-	public static void rename(final File srcFile, final File dstFile)
-			throws IOException {
+	public static void rename(final File srcFile, final File dstFile) throws IOException {
 		rename(srcFile, dstFile, false, false);
 	}
 
@@ -358,10 +322,8 @@ public class FileUtils {
 		return result.substring(0, result.length() - 1);
 	}
 
-	public static void subfile(final String sourceFileName,
-			final String destinationFileName,
-			final boolean createDirectoriesIfNecessary, final long from,
-			final long to) throws IOException {
+	public static void subfile(final String sourceFileName, final String destinationFileName,
+			final boolean createDirectoriesIfNecessary, final long from, final long to) throws IOException {
 		if (createDirectoriesIfNecessary) {
 			makedir(parsePath(destinationFileName));
 		}
@@ -369,8 +331,7 @@ public class FileUtils {
 		OutputStream out = null;
 		try {
 			in = new BufferedInputStream(new FileInputStream(sourceFileName));
-			out = new BufferedOutputStream(new FileOutputStream(
-					destinationFileName));
+			out = new BufferedOutputStream(new FileOutputStream(destinationFileName));
 			final byte str[] = new byte[1024];
 			long index = 0;
 			int nb;
@@ -400,20 +361,16 @@ public class FileUtils {
 		}
 	}
 
-	public static void rename(final String temp, final String fileName,
-			final boolean checkDestination, final boolean deleteDestination)
-			throws IOException {
-		rename(new File(temp), new File(fileName), checkDestination,
-				deleteDestination);
+	public static void rename(final String temp, final String fileName, final boolean checkDestination,
+			final boolean deleteDestination) throws IOException {
+		rename(new File(temp), new File(fileName), checkDestination, deleteDestination);
 	}
 
-	public static void rename(final String temp, final String fileName)
-			throws IOException {
+	public static void rename(final String temp, final String fileName) throws IOException {
 		rename(new File(temp), new File(fileName));
 	}
 
-	public static void create(final String file, final byte[] data)
-			throws IOException {
+	public static void create(final String file, final byte[] data) throws IOException {
 		final FileOutputStream f = new FileOutputStream(file);
 		f.write(data);
 		f.close();
@@ -421,10 +378,10 @@ public class FileUtils {
 
 	public static String getRealPath(final String fileName) throws IOException {
 		final String name = parseFileName(fileName);
-		final String dir2 = parsePath(new File(fileName).getAbsolutePath())
-				+ "\\";
+		final String dir2 = parsePath(new File(fileName).getAbsolutePath()) + "\\";
 		final File dir = parseDirectory(new File(fileName));
 		final String[] result = dir.list(new FilenameFilter() {
+			@Override
 			public boolean accept(File dir, String fileName2) {
 				return name.equalsIgnoreCase(fileName2);
 			}
@@ -440,8 +397,7 @@ public class FileUtils {
 				return dir2 + fileName;
 			}
 		}
-		throw new IOException("File [" + fileName
-				+ "] doesn't exists. But some file with other case exists: ["
+		throw new IOException("File [" + fileName + "] doesn't exists. But some file with other case exists: ["
 				+ Arrays.asList(result) + "]");
 	}
 
@@ -475,6 +431,7 @@ public class FileUtils {
 	public static File[] list(final String path, final String regexp) {
 		final Pattern p = Pattern.compile(regexp);
 		return new File(path).listFiles(new FileFilter() {
+			@Override
 			public boolean accept(final File pathname) {
 				return p.matcher(pathname.getAbsolutePath()).matches();
 			}
@@ -496,8 +453,8 @@ public class FileUtils {
 		}
 	}
 
-	public static void copy(final org.springframework.core.io.Resource source,
-			final String destination) throws IOException {
+	public static void copy(final org.springframework.core.io.Resource source, final String destination)
+			throws IOException {
 		copy(source.getFile().getAbsolutePath(), destination);
 	}
 }

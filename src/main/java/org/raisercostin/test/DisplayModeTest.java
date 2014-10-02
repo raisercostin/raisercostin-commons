@@ -17,24 +17,11 @@ package org.raisercostin.test;
  * graphics card.
  */
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.DisplayMode;
-import java.awt.FlowLayout;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
+import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
@@ -163,6 +150,7 @@ public class DisplayModeTest extends JFrame implements ActionListener,
 		changeDM.setEnabled(device.isDisplayChangeSupported());
 	}
 
+	@Override
 	public void actionPerformed(final ActionEvent ev) {
 		final Object source = ev.getSource();
 		if (source == exit) {
@@ -183,6 +171,7 @@ public class DisplayModeTest extends JFrame implements ActionListener,
 		}
 	}
 
+	@Override
 	public void valueChanged(final ListSelectionEvent ev) {
 		changeDM.setEnabled(device.isDisplayChangeSupported());
 	}

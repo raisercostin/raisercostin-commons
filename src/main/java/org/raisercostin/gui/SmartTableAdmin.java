@@ -2,9 +2,7 @@ package org.raisercostin.gui;
 
 import java.awt.BorderLayout;
 
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
+import javax.swing.*;
 
 public class SmartTableAdmin<T> extends JPanel {
 	/**

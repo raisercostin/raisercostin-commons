@@ -8,16 +8,9 @@
  *****************************************************************************/
 package org.raisercostin.net.ftp;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
+import java.io.*;
 
-import com.enterprisedt.net.ftp.FTPClient;
-import com.enterprisedt.net.ftp.FTPConnectMode;
-import com.enterprisedt.net.ftp.FTPException;
-import com.enterprisedt.net.ftp.FTPTransferType;
+import com.enterprisedt.net.ftp.*;
 
 /**
  * @author: Costin Emilian GRIGORE
@@ -29,6 +22,7 @@ public class EnterpriseDistributedTechnologiesFtpClient extends BaseFtpClient
 	public EnterpriseDistributedTechnologiesFtpClient() {
 	}
 
+	@Override
 	public void connect(final String host, final int port)
 			throws FtpProtocolException {
 		try {
@@ -40,6 +34,7 @@ public class EnterpriseDistributedTechnologiesFtpClient extends BaseFtpClient
 		}
 	}
 
+	@Override
 	public void connect(final String host) throws FtpProtocolException {
 		try {
 			client = new FTPClient(host);
@@ -50,6 +45,7 @@ public class EnterpriseDistributedTechnologiesFtpClient extends BaseFtpClient
 		}
 	}
 
+	@Override
 	public void login(final String userName, final String password)
 			throws FtpProtocolException {
 		try {
@@ -61,6 +57,7 @@ public class EnterpriseDistributedTechnologiesFtpClient extends BaseFtpClient
 		}
 	}
 
+	@Override
 	public void binary() throws FtpProtocolException {
 		try {
 			client.setType(FTPTransferType.BINARY);
@@ -71,10 +68,12 @@ public class EnterpriseDistributedTechnologiesFtpClient extends BaseFtpClient
 		}
 	}
 
+	@Override
 	public void passive() {
 		client.setConnectMode(FTPConnectMode.PASV);
 	}
 
+	@Override
 	public OutputStream put(final String fileName) throws FtpProtocolException {
 		try {
 			final PipedOutputStream pos = new PipedOutputStream();
@@ -102,6 +101,7 @@ public class EnterpriseDistributedTechnologiesFtpClient extends BaseFtpClient
 		}
 	}
 
+	@Override
 	public InputStream get(final String fileName) throws FtpProtocolException {
 		try {
 			final PipedOutputStream pos = new PipedOutputStream();
@@ -144,6 +144,7 @@ public class EnterpriseDistributedTechnologiesFtpClient extends BaseFtpClient
 		 */
 	}
 
+	@Override
 	public void disconnect() throws FtpProtocolException {
 		try {
 			client.quit();

@@ -4,17 +4,10 @@
  ******************************************************************************/
 package org.raisercostin.gui;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import org.raisercostin.gui.Console;
-import org.raisercostin.gui.SmartTable;
-import org.raisercostin.gui.Task;
-
-import uk.org.lidalia.sysoutslf4j.context.SysOutOverSLF4J;
+import java.util.*;
 
 import junit.framework.TestCase;
+import uk.org.lidalia.sysoutslf4j.context.SysOutOverSLF4J;
 
 /**
  * @author org.raisercostin

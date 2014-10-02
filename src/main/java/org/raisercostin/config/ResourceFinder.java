@@ -2,13 +2,8 @@ package org.raisercostin.config;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.net.*;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

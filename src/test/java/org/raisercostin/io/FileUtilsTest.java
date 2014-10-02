@@ -11,8 +11,6 @@ package org.raisercostin.io;
 import java.io.File;
 import java.io.IOException;
 
-import org.raisercostin.io.FileUtils;
-
 import junit.framework.TestCase;
 
 public class FileUtilsTest extends TestCase {

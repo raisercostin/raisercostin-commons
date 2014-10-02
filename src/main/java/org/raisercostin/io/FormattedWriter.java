@@ -21,22 +21,26 @@ public class FormattedWriter implements DataWriter {
 		this.writer = writer;
 	}
 
+	@Override
 	public void close() throws IOException {
 		writer.close();
 	}
 
+	@Override
 	public DataWriter writeInteger(final Integer value) throws IOException {
 		writer.write(value.toString());
 		writer.write(' ');
 		return this;
 	}
 
+	@Override
 	public DataWriter writeInt(final int value) throws IOException {
 		writer.write(Integer.toString(value));
 		writer.write(' ');
 		return this;
 	}
 
+	@Override
 	public DataWriter writeString(final String value) throws IOException {
 		final String[] values = value.split("\\n", -1);
 		for (int i = 0; i < values.length; i++) {
@@ -51,33 +55,39 @@ public class FormattedWriter implements DataWriter {
 		return this;
 	}
 
+	@Override
 	public DataWriter writeCharacter(final Character value) throws IOException {
 		writer.write(value.charValue());
 		writer.write(' ');
 		return this;
 	}
 
+	@Override
 	public DataWriter writeChar(final char value) throws IOException {
 		writer.write(Character.toString(value));
 		writer.write(' ');
 		return this;
 	}
 
+	@Override
 	public DataWriter writeNewLine() throws IOException {
 		writer.newLine();
 		return this;
 	}
 
+	@Override
 	public void flush() throws IOException {
 		writer.flush();
 	}
 
+	@Override
 	public DataWriter writeDouble(final double value) throws IOException {
 		writer.write(Double.toString(value));
 		writer.write(' ');
 		return this;
 	}
 
+	@Override
 	public DataWriter writeLong(final long value) throws IOException {
 		writer.write(Long.toString(value));
 		writer.write(' ');

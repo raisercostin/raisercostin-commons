@@ -6,8 +6,6 @@ package org.raisercostin.util;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import org.raisercostin.util.Formatter;
-
 import junit.framework.TestCase;
 
 public class FormatterTest extends TestCase {

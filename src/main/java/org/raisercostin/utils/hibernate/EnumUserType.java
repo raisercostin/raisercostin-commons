@@ -1,10 +1,7 @@
 package org.raisercostin.utils.hibernate;
 
 import java.io.Serializable;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Types;
+import java.sql.*;
 import java.util.Properties;
 
 import org.hibernate.HibernateException;
@@ -20,7 +17,8 @@ public class EnumUserType implements UserType, ParameterizedType {
     public EnumUserType() {
     }
 
-    public void setParameterValues(Properties parameters) {
+    @Override
+	public void setParameterValues(Properties parameters) {
         String className = (String) parameters.get("type");
         try {
             this.clazz = Class.forName(className);
@@ -29,15 +27,18 @@ public class EnumUserType implements UserType, ParameterizedType {
         }
     }
 
-    public int[] sqlTypes() {
+    @Override
+	public int[] sqlTypes() {
         return SQL_TYPES;
     }
 
-    public Class<?> returnedClass() {
+    @Override
+	public Class<?> returnedClass() {
         return clazz;
     }
 
-    @SuppressWarnings("unchecked")
+    @Override
+	@SuppressWarnings("unchecked")
 	public Object nullSafeGet(ResultSet resultSet, String[] names, Object owner) throws HibernateException,
             SQLException {
         String name = resultSet.getString(names[0]);
@@ -48,7 +49,8 @@ public class EnumUserType implements UserType, ParameterizedType {
         return result;
     }
 
-    public void nullSafeSet(PreparedStatement preparedStatement, Object value, int index) throws HibernateException,
+    @Override
+	public void nullSafeSet(PreparedStatement preparedStatement, Object value, int index) throws HibernateException,
             SQLException {
         if (null == value) {
             preparedStatement.setNull(index, Types.VARCHAR);
@@ -57,31 +59,38 @@ public class EnumUserType implements UserType, ParameterizedType {
         }
     }
 
-    public Object deepCopy(Object value) throws HibernateException {
+    @Override
+	public Object deepCopy(Object value) throws HibernateException {
         return value;
     }
 
-    public boolean isMutable() {
+    @Override
+	public boolean isMutable() {
         return false;
     }
 
-    public Object assemble(Serializable cached, Object owner) throws HibernateException {
+    @Override
+	public Object assemble(Serializable cached, Object owner) throws HibernateException {
         return cached;
     }
 
-    public Serializable disassemble(Object value) throws HibernateException {
+    @Override
+	public Serializable disassemble(Object value) throws HibernateException {
         return (Serializable) value;
     }
 
-    public Object replace(Object original, Object target, Object owner) throws HibernateException {
+    @Override
+	public Object replace(Object original, Object target, Object owner) throws HibernateException {
         return original;
     }
 
-    public int hashCode(Object x) throws HibernateException {
+    @Override
+	public int hashCode(Object x) throws HibernateException {
         return x.hashCode();
     }
 
-    public boolean equals(Object x, Object y) throws HibernateException {
+    @Override
+	public boolean equals(Object x, Object y) throws HibernateException {
         if (x == y) {
             return true;
         }

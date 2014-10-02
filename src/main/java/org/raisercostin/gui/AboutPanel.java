@@ -8,9 +8,7 @@
  *****************************************************************************/
 package org.raisercostin.gui;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.UIManager;
+import javax.swing.*;
 
 /**
  * @author org.raisercostin

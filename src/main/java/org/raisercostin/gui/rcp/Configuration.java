@@ -3,17 +3,8 @@
  */
 package org.raisercostin.gui.rcp;
 
-import java.beans.ExceptionListener;
-import java.beans.XMLDecoder;
-import java.beans.XMLEncoder;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.io.Serializable;
+import java.beans.*;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,6 +49,7 @@ public class Configuration implements Serializable {
 	private static Configuration loadFromXML2(final InputStream in) {
 		final XMLDecoder d = new XMLDecoder(new BufferedInputStream(in));
 		d.setExceptionListener(new ExceptionListener() {
+			@Override
 			public void exceptionThrown(final Exception e) {
 				logger.error("",e);
 			}
@@ -79,6 +71,7 @@ public class Configuration implements Serializable {
 			final OutputStream os) {
 		final XMLEncoder e = new XMLEncoder(new BufferedOutputStream(os));
 		e.setExceptionListener(new ExceptionListener() {
+			@Override
 			public void exceptionThrown(final Exception e) {
 				logger.error("",e);
 			}

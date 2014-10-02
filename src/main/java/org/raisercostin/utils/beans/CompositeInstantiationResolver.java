@@ -11,6 +11,7 @@ public class CompositeInstantiationResolver implements InstantiationResolver {
 		this.instantiationResolvers = instantiationResolvers;
 	}
 
+	@Override
 	public Object newInstance(Class<?> type, Object value, OrderedIndexedMap<String, String> parameters, String path) {
 		for (InstantiationResolver instantiationResolver : instantiationResolvers) {
 			Object result = instantiationResolver.newInstance(type, value, parameters, path);

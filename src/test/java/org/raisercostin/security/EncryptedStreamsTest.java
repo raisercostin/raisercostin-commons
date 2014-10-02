@@ -8,19 +8,10 @@
  *****************************************************************************/
 package org.raisercostin.security;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
-
-import org.raisercostin.security.EncryptedInputStream;
-import org.raisercostin.security.EncryptedOutputStream;
 
 import junit.framework.TestCase;
 
