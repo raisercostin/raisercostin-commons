@@ -1,1 +1,1 @@
-mvn release:prepare release:perform -Prelease -Darguments="-Prelease"
+mvn release:prepare release:perform -DskipTests=true -Prelease -Darguments="-DskipTests=true -Prelease"
