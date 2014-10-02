@@ -5,7 +5,6 @@ import org.springframework.util.SystemPropertyUtils;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
-import com.sun.istack.internal.Nullable;
 
 public class PropertyUtils {
 	private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(PropertyUtils.class);
@@ -52,8 +51,7 @@ public class PropertyUtils {
 	private static <T> Function<T, String> toString2() {
 		return new Function<T, String>() {
 			@Override
-			@Nullable
-			public String apply(@Nullable T value) {
+			public String apply(T value) {
 				return ObjectUtils.toString(value, true, false, false, "") + "\n";
 			}
 		};

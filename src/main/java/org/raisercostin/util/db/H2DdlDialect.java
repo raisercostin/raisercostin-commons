@@ -14,7 +14,6 @@ import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Function;
-import com.sun.istack.internal.Nullable;
 
 /** @see http://www.h2database.com/html/grammar.html - for h2 grammar. */
 public class H2DdlDialect extends AbstractDdlDialect implements DdlDialect {
@@ -25,8 +24,7 @@ public class H2DdlDialect extends AbstractDdlDialect implements DdlDialect {
 	private static String configure() {
 		return PropertyUtils.configure("EESSI_DB_H2_DIR", "~/_default-db/", new Function<String, String>() {
 			@Override
-			@Nullable
-			public String apply(@Nullable String value) {
+			public String apply(String value) {
 				return value;
 			}
 		}, "");

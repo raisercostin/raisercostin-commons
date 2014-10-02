@@ -1,7 +1,7 @@
 package org.raisercostin.util;
+import org.raisercostin.utils.annotations.Nullable;
 
 import com.google.common.base.Function;
-import com.sun.istack.internal.Nullable;
 
 final public class Tuple3<T1, T2, T3> {
 	public final T1 _1;

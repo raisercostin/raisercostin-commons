@@ -34,7 +34,7 @@ public class DaoUtilities {
      */
     public static void exportSchema(String hibernateConfigurationFileName, String schemaExportFileName) {
         /* Configuration settings */
-        Configuration cfg = new AnnotationConfiguration();
+        Configuration cfg = new Configuration();
         cfg.configure(hibernateConfigurationFileName);
         // set programatically the naming strategy (in hibernate.cfg is not pisible)
         cfg.setNamingStrategy(new ImprovedNamingStrategy());
