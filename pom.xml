@@ -4,26 +4,37 @@
 	<parent>
 		<groupId>org.raisercostin</groupId>
 		<artifactId>raisercostin-maven-defaults</artifactId>
-		<version>3.2</version>
+		<version>3.3</version>
 	</parent>
 	<groupId>org.raisercostin</groupId>
 	<artifactId>raisercostin-common</artifactId>
 	<version>2.19-SNAPSHOT</version>
-	<properties>
-		<junit.version>4.8.2</junit.version>
-		<encoding>UTF-8</encoding>
-		<java.version>1.7</java.version>
-		<createChecksum>false</createChecksum>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
-	<scm>
-		<connection>scm:svn:https://svn.raisercostin.dnsdojo.org/all/projects/projects/common/trunk</connection>
-		<developerConnection>scm:svn:https://svn.raisercostin.dnsdojo.org/all/projects/projects/common/trunk</developerConnection>
-	</scm>
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<distribution>repo</distribution>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
+	<distributionManagement>
+		<repository>
+			<id>raisercostin-releases</id>
+			<url>svn:https://raisercostin.googlecode.com/svn/maven2/</url>
+		</repository>
+		<snapshotRepository>
+			<id>raisercostin-snapshots</id>
+			<url>svn:https://raisercostin.googlecode.com/svn/maven2-snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
 	<!-- <distributionManagement> <repository> <id>org.raisercostin.public.releases</id> 
 		<url>dav:https://raisercostin.googlecode.com/svn/maven2</url> </repository> 
 		<snapshotRepository> <id>org.raisercostin.public.snapshots</id> <url>dav:https://raisercostin.googlecode.com/svn/maven2-snapshots</url> 
 		</snapshotRepository> </distributionManagement> -->
+	<!--
+
+
+
+
 	<distributionManagement>
 		<repository>
 			<id>org.raisercostin.private.releases</id>
@@ -34,23 +45,35 @@
 			<url>http://nexus.raisercostin.dnsdojo.org/nexus/content/repositories/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
-	<repositories>
-		<repository>
-			<id>org.raisercostin.maven.group.releases</id>
-			<name>raisercostin-public</name>
-			<url>http://nexus.raisercostin.dnsdojo.org/nexus/content/groups/public</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>org.raisercostin.public.releases</id>
-			<url>http://raisercostin.googlecode.com/svn/maven2</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
+	-->
+	<scm>
+		<connection>scm:svn:svn://raisercostin.synology.me/all/projects/projects/raisercostin-common/trunk</connection>
+		<developerConnection>scm:svn:svn://raisercostin.synology.me/all/projects/projects/raisercostin-common/trunk</developerConnection>
+
+
+
+	</scm>
+	<!--
+	<scm>
+		<connection>scm:svn:https://svn.raisercostin.dnsdojo.org/all/projects/projects/common/trunk</connection>
+		<developerConnection>scm:svn:https://svn.raisercostin.dnsdojo.org/all/projects/projects/common/trunk</developerConnection>
+	</scm>
+	-->
+	<developers>
+		<developer>
+			<id>raisercostin</id>
+			<name>Costin Grigore</name>
+		</developer>
+	</developers>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<junit.version>4.8.2</junit.version>
+		<encoding>UTF-8</encoding>
+		<java.version>1.7</java.version>
+		<createChecksum>false</createChecksum>
+
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>commons-beanutils</groupId>
@@ -320,4 +343,32 @@
 			<optional>true</optional>
 		</dependency>
 	</dependencies>
+	<!--
+	<repositories>
+		<repository>
+			<id>org.raisercostin.maven.group.releases</id>
+			<name>raisercostin-public</name>
+			<url>http://nexus.raisercostin.dnsdojo.org/nexus/content/groups/public</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>org.raisercostin.public.releases</id>
+			<url>http://raisercostin.googlecode.com/svn/maven2</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+	-->
+	<repositories>
+		<repository>
+			<id>org.raisercostin.public.releases</id>
+			<url>http://raisercostin.googlecode.com/svn/maven2</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
 </project>
