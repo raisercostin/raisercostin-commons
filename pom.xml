@@ -7,7 +7,7 @@
 	</parent>
 	<groupId>org.raisercostin</groupId>
 	<artifactId>raisercostin-common</artifactId>
-	<version>2.20</version>
+	<version>2.21-SNAPSHOT</version>
 	<licenses>
 		<license>
 			<name>The Apache Software License, Version 2.0</name>
@@ -46,8 +46,8 @@
 	</distributionManagement>
 	-->
 	<scm>
-		<connection>scm:svn:svn://raisercostin.synology.me/all/projects/projects/raisercostin-common/tags/raisercostin-common-2.20</connection>
-		<developerConnection>scm:svn:svn://raisercostin.synology.me/all/projects/projects/raisercostin-common/tags/raisercostin-common-2.20</developerConnection>
+		<connection>scm:svn:svn://raisercostin.synology.me/all/projects/projects/raisercostin-common/trunk</connection>
+		<developerConnection>scm:svn:svn://raisercostin.synology.me/all/projects/projects/raisercostin-common/trunk</developerConnection>
 
 
 
