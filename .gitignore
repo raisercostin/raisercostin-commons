@@ -1,0 +1,7 @@
+/.svn
+/*.bak
+/.settings
+/target
+/*.out
+/.classpath
+/.project
