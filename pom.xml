@@ -1,5 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	<prerequisites>
+		<maven>3.0.4</maven>
+	</prerequisites>
 	<parent>
 		<groupId>org.raisercostin</groupId>
 		<artifactId>raisercostin-maven-defaults</artifactId>
@@ -8,6 +12,8 @@
 	<groupId>org.raisercostin</groupId>
 	<artifactId>raisercostin-common</artifactId>
 	<version>2.21-SNAPSHOT</version>
+	<packaging>jar</packaging>
+	<name>raisercostin-utils</name>
 	<licenses>
 		<license>
 			<name>The Apache Software License, Version 2.0</name>
@@ -30,10 +36,6 @@
 		<snapshotRepository> <id>org.raisercostin.public.snapshots</id> <url>dav:https://raisercostin.googlecode.com/svn/maven2-snapshots</url> 
 		</snapshotRepository> </distributionManagement> -->
 	<!--
-
-
-
-
 	<distributionManagement>
 		<repository>
 			<id>org.raisercostin.private.releases</id>
@@ -72,7 +74,6 @@
 		<createChecksum>false</createChecksum>
 
 	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>commons-beanutils</groupId>
@@ -342,25 +343,6 @@
 			<optional>true</optional>
 		</dependency>
 	</dependencies>
-	<!--
-	<repositories>
-		<repository>
-			<id>org.raisercostin.maven.group.releases</id>
-			<name>raisercostin-public</name>
-			<url>http://nexus.raisercostin.dnsdojo.org/nexus/content/groups/public</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>org.raisercostin.public.releases</id>
-			<url>http://raisercostin.googlecode.com/svn/maven2</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
-	-->
 	<repositories>
 		<repository>
 			<id>org.raisercostin.public.releases</id>
