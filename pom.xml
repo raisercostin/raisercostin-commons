@@ -14,6 +14,7 @@
 	<version>2.21-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>raisercostin-utils</name>
+	<url>${github.url}</url>
 	<licenses>
 		<license>
 			<name>The Apache Software License, Version 2.0</name>
@@ -21,16 +22,30 @@
 			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
 		</license>
 	</licenses>
+	<developers>
+		<developer>
+			<name>Costin Grigore</name>
+			<email>raisercostin@gmail.com</email>
+			<organization>raisercostin</organization>
+			<organizationUrl>http://raisercostin.org</organizationUrl>
+		</developer>
+	</developers>
+	<scm>
+		<connection>scm:git:${github.url}.git</connection>
+		<developerConnection>scm:git:${github.url}.git</developerConnection>
+		<url>${github.url}</url>
+		<tag>raisercostin-common-2.21-SNAPSHOT</tag>
+	</scm>
 	<distributionManagement>
 		<repository>
-			<id>raisercostin-releases</id>
-			<url>svn:https://raisercostin.googlecode.com/svn/maven2/</url>
+			<id>bintray</id>
+			<url>https://api.bintray.com/maven/${bintray.user}/${bintray.repo}/${bintray.package}</url>
 		</repository>
-		<snapshotRepository>
-			<id>raisercostin-snapshots</id>
-			<url>svn:https://raisercostin.googlecode.com/svn/maven2-snapshots/</url>
-		</snapshotRepository>
 	</distributionManagement>
+	<issueManagement>
+		<system>Github</system>
+		<url>https://github.com/raisercostin/${artifactId}/issues</url>
+	</issueManagement>
 	<!-- <distributionManagement> <repository> <id>org.raisercostin.public.releases</id> 
 		<url>dav:https://raisercostin.googlecode.com/svn/maven2</url> </repository> 
 		<snapshotRepository> <id>org.raisercostin.public.snapshots</id> <url>dav:https://raisercostin.googlecode.com/svn/maven2-snapshots</url> 
@@ -346,11 +361,24 @@
 	<repositories>
 		<repository>
 			<id>jcenter-bintray</id>
+			<name>Bintray JCenter Maven Repository</name>
+			<layout>default</layout>
 			<url>https://jcenter.bintray.com/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
 		</repository>
 		<repository>
-			<id>org.raisercostin.public.releases</id>
-			<url>http://raisercostin.googlecode.com/svn/maven2</url>
+			<id>raisercostin-bintray</id>
+			<name>Bintray Raisercostin Maven Repository</name>
+			<layout>default</layout>
+			<url>https://dl.bintray.com/raisercostin/maven</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
