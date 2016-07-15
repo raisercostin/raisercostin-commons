@@ -15,29 +15,30 @@ import javax.xml.parsers.*;
 import org.apache.commons.lang.builder.*;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.lang.exception.Nestable;
-import org.raisercostin.utils.beans.BeanUtils;
+//import org.apache.xml.security.c14n.CanonicalizationException;
+//import org.bouncycastle.crypto.RuntimeCryptoException;
+//import org.raisercostin.utils.beans.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import com.sun.org.apache.xml.internal.serialize.OutputFormat;
-import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
+//import com.sun.org.apache.xml.internal.serialize.OutputFormat;
+//import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 
 public class ObjectUtils {
 	private static final Logger LOG = LoggerFactory.getLogger(ObjectUtils.class);
 	private static final String IGNORED_VALUE = "*****";
 	// private static final MyStringStyle myStringStyle = new MyStringStyle();
 
+	private static final boolean DEFAULT_TRANSIENTS = false;
 	private static final String TO_STRING_METHOD = "toString";
 	private static final int STEP = 4;
 	private static final String all = ".   .   .   .   .   .   .   .   .   .   .   .   .   .   ";
-	private static final boolean DEFAULT_TRANSIENTS = false;
 	private static final Pattern XML_STRING_PATTERN = Pattern.compile("^<(\\w+)>.+</\\1>$", Pattern.DOTALL);
-	// Thread local is needed because multiple cascaded toStrings could be invoked.
+	// Thread local is needed because multiple cascaded toStrings could be
+	// invoked.
 	private static final ThreadLocal<ObjectUtilsContext> contextOnThread = new ThreadLocal<ObjectUtilsContext>();
 	private static final int MAX_SHORT_STRING = 10;
 	private static final int MAX_DEEP = 6;
@@ -58,7 +59,34 @@ public class ObjectUtils {
 
 	public static int hashCode(Object object, String commaSeparatedExceptedFields) {
 		return HashCodeBuilder.reflectionHashCode(17, 37, object, DEFAULT_TRANSIENTS, null,
-				StringUtils.tokenizeToStringArray(commaSeparatedExceptedFields, ",", true, true));
+				tokenizeToStringArray(commaSeparatedExceptedFields, ",", true, true));
+	}
+
+	public static String[] tokenizeToStringArray(String str, String delimiters, boolean trimTokens,
+			boolean ignoreEmptyTokens) {
+
+		if (str == null) {
+			return null;
+		}
+		StringTokenizer st = new StringTokenizer(str, delimiters);
+		List<String> tokens = new ArrayList<String>();
+		while (st.hasMoreTokens()) {
+			String token = st.nextToken();
+			if (trimTokens) {
+				token = token.trim();
+			}
+			if (!ignoreEmptyTokens || token.length() > 0) {
+				tokens.add(token);
+			}
+		}
+		return toStringArray(tokens);
+	}
+
+	public static String[] toStringArray(Collection<String> collection) {
+		if (collection == null) {
+			return null;
+		}
+		return collection.toArray(new String[collection.size()]);
 	}
 
 	public static BigDecimal normalize(BigDecimal rate) {
@@ -79,38 +107,39 @@ public class ObjectUtils {
 	}
 
 	public static void validate(Object object) {
-		BeanUtils.validate(object);
+		// BeanUtils.validate(object);
 	}
 
 	@SuppressWarnings("restriction")
 	public static String formatXml(String unformattedXml) {
-		try {
-			final Document document = parseXmlFile(unformattedXml);
-			OutputFormat format = new OutputFormat(document);
-			format.setLineWidth(120);
-			format.setIndenting(true);
-			format.setIndent(2);
-			format.setOmitXMLDeclaration(!unformattedXml.startsWith("<?xml"));
-			format.setOmitComments(false);
-			format.setPreserveEmptyAttributes(true);
-			Writer out = new StringWriter();
-			XMLSerializer serializer = new XMLSerializer(out, format);
-			serializer.serialize(document);
-			String result = out.toString();
-			if (result.endsWith("\r\n")) {
-				result = result.substring(0, result.length() - "\r\n".length());
-			}
-			if (result.endsWith("\n")) {
-				result = result.substring(0, result.length() - "\n".length());
-			}
-			return result;
-		} catch (ParserConfigurationException e) {
-			return "!xmlFormatingFailed " + e + " xml=[" + unformattedXml + "]";
-		} catch (SAXException e) {
-			return "!xmlFormatingFailed " + e + " xml=[" + unformattedXml + "]";
-		} catch (IOException e) {
-			return "!xmlFormatingFailed " + e + " xml=[" + unformattedXml + "]";
-		}
+		return unformattedXml;
+		// try {
+		// final Document document = parseXmlFile(unformattedXml);
+		// OutputFormat format = new OutputFormat(document);
+		// format.setLineWidth(120);
+		// format.setIndenting(true);
+		// format.setIndent(2);
+		// format.setOmitXMLDeclaration(!unformattedXml.startsWith("<?xml"));
+		// format.setOmitComments(false);
+		// format.setPreserveEmptyAttributes(true);
+		// Writer out = new StringWriter();
+		// XMLSerializer serializer = new XMLSerializer(out, format);
+		// serializer.serialize(document);
+		// String result = out.toString();
+		// if (result.endsWith("\r\n")) {
+		// result = result.substring(0, result.length() - "\r\n".length());
+		// }
+		// if (result.endsWith("\n")) {
+		// result = result.substring(0, result.length() - "\n".length());
+		// }
+		// return result;
+		// } catch (ParserConfigurationException e) {
+		// return "!xmlFormatingFailed " + e + " xml=[" + unformattedXml + "]";
+		// } catch (SAXException e) {
+		// return "!xmlFormatingFailed " + e + " xml=[" + unformattedXml + "]";
+		// } catch (IOException e) {
+		// return "!xmlFormatingFailed " + e + " xml=[" + unformattedXml + "]";
+		// }
 	}
 
 	private static Document parseXmlFile(String in) throws ParserConfigurationException, SAXException, IOException {
@@ -122,35 +151,43 @@ public class ObjectUtils {
 
 	// TO STRING UTILITIES
 	public static String toStringDump(Object object) {
-		return internalToStringWithContext(object, false, false, false, "", "", END_OF_LINE);
+		return internalToStringWithContext(object, false, false, false, "", "", END_OF_LINE, DEFAULT_TRANSIENTS, false, false);
+	}
+
+	public static String toStringDump(Object object, String ignores, String excludes, boolean showTransient,
+			boolean showIds) {
+		return internalToStringWithContext(object, false, false, false, ignores, excludes, END_OF_LINE, showTransient,
+				false, showIds);
 	}
 
 	public static String toStringDump(Object object, String ignores) {
-		return internalToStringWithContext(object, false, false, false, ignores, "", END_OF_LINE);
+		return toStringDump(object,ignores,ignores);
 	}
-
 	public static String toStringDump(Object object, String ignores, String excludes) {
-		return internalToStringWithContext(object, false, false, false, ignores, excludes, END_OF_LINE);
+		return internalToStringWithContext(object, false, false, false, ignores, excludes, END_OF_LINE,
+				DEFAULT_TRANSIENTS, false, false);
 	}
 
 	public static String toString(Object object) {
-		return internalToStringWithContext(object, false, true, false, "", "", END_OF_LINE);
+		return internalToStringWithContext(object, false, true, false, "", "", END_OF_LINE, DEFAULT_TRANSIENTS, false, false);
 	}
 
 	public static String toString(Object object, String ignores) {
-		return internalToStringWithContext(object, false, true, false, ignores, "", END_OF_LINE);
+		return internalToStringWithContext(object, false, true, false, ignores, "", END_OF_LINE, DEFAULT_TRANSIENTS,
+				false, false);
 	}
 
 	public static String toString(Object object, boolean singleLine, boolean useToString, boolean displayTypes,
-			String endOfLine) {
-		return internalToStringWithContext(object, singleLine, useToString, displayTypes, "", "", endOfLine);
+			String endOfLine, boolean showTransients, boolean showIds) {
+		return internalToStringWithContext(object, singleLine, useToString, displayTypes, "", "", endOfLine,
+				showTransients, false, showIds);
 	}
 
 	// TOSTRING WITH EXCLUDES - should be implemented in another way
 	@Deprecated
 	private static String toString(Object object, boolean singleLine, boolean classDecorators, String[] excludes) {
-		ReflectionToStringBuilder builder = new ReflectionToStringBuilder(object, new MyStringStyle(singleLine, true,
-				classDecorators, false), null, null, false, false);
+		ReflectionToStringBuilder builder = new ReflectionToStringBuilder(object,
+				new MyStringStyle(singleLine, true, classDecorators, false, false, DEFAULT_TRANSIENTS), null, null, false,false);
 		builder.setExcludeFieldNames(excludes);
 		return builder.toString();
 	}
@@ -159,7 +196,7 @@ public class ObjectUtils {
 	private static String toStringWithExclusions(Object object, boolean singleLine, boolean classDecorators,
 			String commaSeparatedExceptedFields) {
 		return toStringWithExclusions(object, singleLine, classDecorators,
-				StringUtils.tokenizeToStringArray(commaSeparatedExceptedFields, ",", true, true));
+				tokenizeToStringArray(commaSeparatedExceptedFields, ",", true, true));
 	}
 
 	@Deprecated
@@ -170,10 +207,12 @@ public class ObjectUtils {
 
 	// IMPLEMENTATION
 	private static String internalToStringWithContext(Object object, boolean singleLine, boolean useToString,
-			boolean displayTypes, String ignores, String excludes, String endOfLine) {
-		createContext(ignores, excludes, endOfLine);
+			boolean displayTypes, String ignores, String excludes, String endOfLine, boolean showTransients,
+			boolean showStatics,boolean showIds) {
+		createContext(ignores, excludes, endOfLine, showIds);
 		try {
-			return internalToString(object, useToString, new MyStringStyle(singleLine, useToString, true, displayTypes));
+			return internalToString(object, useToString,
+					new MyStringStyle(singleLine, useToString, true, displayTypes, showTransients,showStatics));
 		} catch (Throwable e) {
 			LOG.warn("Generic toString operation failed.", new RuntimeException(e));
 			return "<invalidToString>";
@@ -184,7 +223,8 @@ public class ObjectUtils {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private static String internalToString(Object object, boolean useToString, MyStringStyle toStringStyle) {
-		if (getContext().isMaximumLevel()) {
+		ObjectUtilsContext context = getContext();
+		if (context.isMaximumLevel()) {
 			return "...(more)";
 		}
 		if (object == null) {
@@ -196,36 +236,47 @@ public class ObjectUtils {
 		if (object instanceof String && ((String) object).length() < MAX_SHORT_STRING) {
 			return (String) object;
 		}
-		String old = getContext().find(object);
+		String old = context.find(object);
 		if (old != null) {
-			if (!getContext().isOriginalToStringCalled(object)) {
+			if (!context.isOriginalToStringCalled(object)) {
 				return old;
 			}
+			// else {
+			// return "#" + System.identityHashCode(object);
+			// }
 		}
-		String id = getContext().save(object);
+		String id = context.save(object);
 		if (object instanceof String) {
-			return declaredToString(id, object);
+			return context.prefix(id + ":decS:") + declaredToString(id, object);
 		}
-		String value = null;
-		if (object instanceof Throwable) {
-			value = throwableToString((Throwable) object, useToString, toStringStyle);
-		} else if (object instanceof Map) {
-			value = mapToString((Map<Object, Object>) object, useToString, toStringStyle);
-		} else if (object instanceof Collection) {
-			value = collectionToString((Collection<Object>) object, useToString, toStringStyle);
-		} else if (object.getClass().isArray()) {
-			value = arrayToString(object, useToString, toStringStyle);
-		} else if ((object instanceof Class) && ((Class<?>) object).isEnum()) {
-			value = enumToString((Class<Enum>) object, useToString, toStringStyle);
-		} else {
-			if (useToString && !getContext().isOriginalToStringCalled(object)
-					&& !hasBadToStringImplementation(object.getClass())) {
-				value = declaredToString(id, object);
+		try {
+			String value = null;
+			if (object instanceof Throwable) {
+				value = throwableToString((Throwable) object, useToString, toStringStyle);
+			} else if (object instanceof Map) {
+				value = mapToString((Map<Object, Object>) object, useToString, toStringStyle);
+			} else if (object instanceof Collection) {
+				value = collectionToString((Collection<Object>) object, useToString, toStringStyle);
+			} else if (object.getClass().isArray()) {
+				value = arrayToString(object, useToString, toStringStyle);
+			} else if ((object instanceof Class) && ((Class<?>) object).isEnum()) {
+				value = enumToString((Class<Enum>) object, useToString, toStringStyle);
+//			} else if ((object instanceof org.apache.xml.security.signature.XMLSignatureInput)
+//					&& (((org.apache.xml.security.signature.XMLSignatureInput) object).getBytes() == null)) {
+//				// fix a bug in this class
+//				return "null";
 			} else {
-				value = reflectedToString(object, useToString, toStringStyle);
+				if (useToString && !context.isOriginalToStringCalled(object)
+						&& !hasBadToStringImplementation(object.getClass())) {
+					value = context.prefix("dec:") + declaredToString(id, object);
+				} else {
+					value = context.prefix("ref:") + reflectedToString(object, useToString, toStringStyle);
+				}
 			}
+			return context.prefix(id + ":") + value;
+		} catch (/*CanonicalizationException | */RuntimeException e) {
+			throw new RuntimeException(e);
 		}
-		return value;
 	}
 
 	private static String toIdentedString(String text) {
@@ -266,7 +317,7 @@ public class ObjectUtils {
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException(e);
 		} catch (InvocationTargetException e) {
-			throw new RuntimeException(e);
+			throw new RuntimeException("Can't call toString on object of type " + object.getClass(), e);
 		} catch (NoSuchMethodException e) {
 			return object.toString();
 		}
@@ -290,9 +341,9 @@ public class ObjectUtils {
 
 	// others
 
-	private static void createContext(String ignores, String excludes, String endOfLine) {
+	private static void createContext(String ignores, String excludes, String endOfLine, boolean showIds) {
 		if (contextOnThread.get() == null) {
-			contextOnThread.set(new ObjectUtilsContext(STEP, ignores, excludes, endOfLine));
+			contextOnThread.set(new ObjectUtilsContext(STEP, ignores, excludes, endOfLine, showIds));
 		}
 		contextOnThread.get().incrementToStringCalls();
 	}
@@ -318,8 +369,10 @@ public class ObjectUtils {
 	private static boolean isShortType(Class clazz) {
 		return SHORT_TYPES.contains(clazz);
 		// return clazz.getName().startsWith("java.lang");
-		// || clazz.getName().startsWith("java") && hasOriginalToString(clazz) && !clazz.isAssignableFrom(Map.class)
-		// && !clazz.isAssignableFrom(Collection.class) && !clazz.isAssignableFrom(Throwable.class);
+		// || clazz.getName().startsWith("java") && hasOriginalToString(clazz)
+		// && !clazz.isAssignableFrom(Map.class)
+		// && !clazz.isAssignableFrom(Collection.class) &&
+		// !clazz.isAssignableFrom(Throwable.class);
 	}
 
 	private static boolean hasBadToStringImplementation(Class clazz) {
@@ -334,20 +387,29 @@ public class ObjectUtils {
 	private static class ObjectUtilsContext {
 		private int identation = 0;
 		private final Map<Object, String> objects = new HashMap<Object, String>();
-		private final Set<Object> toStringForSelf = new HashSet<Object>();
+		private final Set<Integer> toStringForSelf = new HashSet<Integer>();
 		private int toStringCallsCounter;
 		private final int step;
 		private final String excludes;
 		private final String ignores;
 		private final String endOfLine;
+		private final boolean showIds;
 
-		public ObjectUtilsContext(int step, String ignores, String excludes, String endOfLine) {
+		public ObjectUtilsContext(int step, String ignores, String excludes, String endOfLine, boolean showIds) {
 			this.step = step;
 			this.excludes = "," + excludes + ",";
 			this.ignores = "," + ignores + ",";
 			identation = 0;
 			toStringCallsCounter = 0;
 			this.endOfLine = endOfLine;
+			this.showIds = showIds;
+		}
+
+		public String prefix(String prefix) {
+			if (showIds) {
+				return prefix;
+			}
+			return "";
 		}
 
 		public boolean isMaximumLevel() {
@@ -378,25 +440,25 @@ public class ObjectUtils {
 		}
 
 		public String find(Object key) {
-			return objects.get(key);
+			return objects.get(key(key));
 		}
 
 		public String save(Object object) {
-			String value = objects.get(object);
+			String value = objects.get(key(object));
 			if (value != null) {
 				return value;
 			}
 			String id = Integer.toString(objects.size());
-			objects.put(object, "@" + id);
+			objects.put(key(object), "@" + id);
 			return id;
 		}
 
 		public void callOriginalToString(Object object) {
-			toStringForSelf.add(object);
+			toStringForSelf.add(key(object));
 		}
 
 		public boolean isOriginalToStringCalled(Object object) {
-			return toStringForSelf.contains(object);
+			return toStringForSelf.contains(key(object));
 		}
 
 		public String getRowStart() {
@@ -419,23 +481,43 @@ public class ObjectUtils {
 			return ignores.contains("," + field + ",");
 		}
 
+		public int key(Object object) {
+			// for identical strings we want to get the same hashCode. The system identity hash code might generate
+			// different values.
+			if (object instanceof String) {
+				return object.hashCode();
+			}
+			return System.identityHashCode(object);
+		}
+
 	}
 
-	private static String reflectedToString(Object object, final boolean useToString, final MyStringStyle toStringStyle) {
-		ReflectionToStringBuilder builder = new ReflectionToStringBuilder(object, toStringStyle, null, null,
-				DEFAULT_TRANSIENTS, false) {
+	private static String reflectedToString(Object object, final boolean useToString,
+			final MyStringStyle toStringStyle) {
+//		if (object.toString().equals("[saml2p:Response: null]")) {
+//			//
+//			System.out.println(
+//					getContext().isOriginalToStringCalled(object) + ":" + getContext().find(object) + ":" + object);
+//		}
+		ReflectionToStringBuilder builder = new ReflectionToStringBuilder(object, toStringStyle, null, Object.class,
+				toStringStyle.showTransients, toStringStyle.showStatics) {
+
 			@Override
 			protected boolean accept(Field f) {
-				if (f.getName().equals("stackTrace")) {
-					return false;
-				}
-				if (f.getName().equals("cause") && f.getType().isAssignableFrom(Throwable.class)) {
-					return false;
-				}
-				if (!getContext().accept(f.getName())) {
-					return false;
-				}
-				return super.accept(f);
+//				if (this.hideStatic  && java.lang.reflect.Modifier.isStatic(f.getModifiers())) {
+//					return false;
+//				} else {
+					if (f.getName().equals("stackTrace")) {
+						return false;
+					}
+					if (f.getName().equals("cause") && f.getType().isAssignableFrom(Throwable.class)) {
+						return false;
+					}
+					if (!getContext().accept(f.getName())) {
+						return false;
+					}
+					return super.accept(f);
+//				}
 			}
 
 			@Override
@@ -454,24 +536,31 @@ public class ObjectUtils {
 
 	private static class MyStringStyle extends ToStringStyle {
 		private static final long serialVersionUID = -3053031248321811775L;
+		public final boolean showTransients;
+		public final boolean showStatics;
 		private final boolean useToString;
 		private final boolean displayTypes;
+		private boolean singleLine;
 
-		public MyStringStyle(boolean singleLine, boolean useToString, boolean classDecorators, boolean displayTypes) {
+		public MyStringStyle(boolean singleLine, boolean useToString, boolean classDecorators, boolean displayTypes,
+				boolean showTransients,boolean showStatics) {
 			super();
+			this.showTransients = showTransients;
+			this.showStatics = showStatics;
 			this.displayTypes = displayTypes;
 			this.useToString = useToString;
 			this.setUseShortClassName(false);
 			this.setUseClassName(classDecorators);
 			this.setUseIdentityHashCode(false);
 			this.setFieldSeparatorAtEnd(false);
-			if (!singleLine) {
+			this.singleLine = singleLine;
+			if (singleLine) {
+				this.setContentStart("[");
+				this.setContentEnd("]");
+			} else {
 				this.setFieldSeparatorAtStart(true);
 				this.setContentStart("");
 				this.setContentEnd("");
-			} else {
-				this.setContentStart("[");
-				this.setContentEnd("]");
 			}
 		}
 
@@ -484,6 +573,8 @@ public class ObjectUtils {
 		@Override
 		public void appendEnd(StringBuffer buffer, Object object) {
 			getContext().deident();
+			if (singleLine)
+				super.appendEnd(buffer, object);
 		}
 
 		@Override
@@ -506,8 +597,8 @@ public class ObjectUtils {
 			if (useToString) {
 				super.appendDetail(buffer, fieldName, (displayTypes ? value.getClass().getName() + ":" : "") + value);
 			} else {
-				super.appendDetail(buffer, fieldName, (displayTypes ? value.getClass().getName() + ":" : "")
-						+ ObjectUtils.toString(value));
+				super.appendDetail(buffer, fieldName,
+						(displayTypes ? value.getClass().getName() + ":" : "") + ObjectUtils.toString(value));
 			}
 		}
 	}
@@ -570,7 +661,7 @@ public class ObjectUtils {
 		sb.append(clazz.getName());
 		getContext().ident();
 		try {
-			if (CollectionUtils.isEmpty(coll)) {
+			if (isEmpty(coll)) {
 				return sb.toString();
 			}
 			Iterator<T> it = coll.iterator();
@@ -588,6 +679,11 @@ public class ObjectUtils {
 		} finally {
 			getContext().deident();
 		}
+	}
+
+	// copied from org.springframework.util.CollectionUtils
+	public static boolean isEmpty(Collection<?> collection) {
+		return (collection == null || collection.isEmpty());
 	}
 
 	static interface Mapper<T> {
@@ -744,9 +840,9 @@ public class ObjectUtils {
 	 * The names of methods commonly used to access a wrapped exception.
 	 * </p>
 	 */
-	private static String[] CAUSE_METHOD_NAMES = { "getCause", "getNextException", "getTargetException",
-			"getException", "getSourceException", "getRootCause", "getCausedByException", "getNested",
-			"getLinkedException", "getNestedException", "getLinkedCause", "getThrowable",
+	private static String[] CAUSE_METHOD_NAMES = { "getCause", "getNextException", "getTargetException", "getException",
+			"getSourceException", "getRootCause", "getCausedByException", "getNested", "getLinkedException",
+			"getNestedException", "getLinkedCause", "getThrowable",
 			// costin: added for batch sql exceptions
 			"getNextException" };
 

@@ -52,7 +52,7 @@ public class PropertyUtils {
 		return new Function<T, String>() {
 			@Override
 			public String apply(T value) {
-				return ObjectUtils.toString(value, true, false, false, "") + "\n";
+				return ObjectUtils.toString(value, true, false, false, "", false, false) + "\n";
 			}
 		};
 	}

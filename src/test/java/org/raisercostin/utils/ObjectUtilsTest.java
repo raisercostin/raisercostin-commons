@@ -33,7 +33,7 @@ public class ObjectUtilsTest {
 
 	@Test
 	public void testSimpleTypes() {
-		Assert.assertTrue(ObjectUtils.toString(new RuntimeException("mesaj"), false, false, true, "\n").contains(
+		Assert.assertTrue(ObjectUtils.toString(new RuntimeException("mesaj"), false, false, true, "\n", false, false).contains(
 				"detailMessage=java.lang.String:mesaj"));
 		Assert.assertTrue(ObjectUtils.toString(new RuntimeException("mesaj")).contains("detailMessage=mesaj"));
 		Assert.assertEquals("aa", ObjectUtils.toString("aa"));
