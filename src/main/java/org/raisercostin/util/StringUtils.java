@@ -45,11 +45,11 @@ public class StringUtils {
 	}
 	
 	public static boolean equals(String firstString, String secondString) {
-		return org.apache.commons.lang.StringUtils.equals(firstString, secondString);
+		return org.apache.commons.lang3.StringUtils.equals(firstString, secondString);
 	}
 	
 	public static boolean isEmpty(String theString) {
-		return org.apache.commons.lang.StringUtils.isEmpty(theString);
+		return org.apache.commons.lang3.StringUtils.isEmpty(theString);
 	}
 	
 	public static String normalize(String toNormalize) {

@@ -12,9 +12,8 @@ import java.util.regex.Pattern;
 
 import javax.xml.parsers.*;
 
-import org.apache.commons.lang.builder.*;
-import org.apache.commons.lang.exception.ExceptionUtils;
-import org.apache.commons.lang.exception.Nestable;
+import org.apache.commons.lang3.builder.*;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 //import org.apache.xml.security.c14n.CanonicalizationException;
 //import org.bouncycastle.crypto.RuntimeCryptoException;
 //import org.raisercostin.utils.beans.BeanUtils;
@@ -795,9 +794,7 @@ public class ObjectUtils {
 			return false;
 		}
 
-		if (throwable instanceof Nestable) {
-			return true;
-		} else if (throwable instanceof SQLException) {
+		if (throwable instanceof SQLException) {
 			return true;
 		} else if (throwable instanceof InvocationTargetException) {
 			return true;

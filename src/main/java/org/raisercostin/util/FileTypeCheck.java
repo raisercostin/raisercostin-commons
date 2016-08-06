@@ -2,7 +2,7 @@ package org.raisercostin.util;
 
 import java.io.File;
 
-import org.apache.commons.lang.NotImplementedException;
+import org.apache.commons.lang3.NotImplementedException;
 
 public class FileTypeCheck {
 
@@ -11,7 +11,7 @@ public class FileTypeCheck {
 	}
 
 	public boolean IsExecutable(File file) {
-		throw new NotImplementedException();
+		throw new NotImplementedException("");
 	}
 
 }

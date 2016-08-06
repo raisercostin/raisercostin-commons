@@ -8,7 +8,7 @@ import javassist.*;
 import javassist.bytecode.*;
 import javassist.bytecode.annotation.Annotation;
 
-import org.apache.commons.lang.time.FastDateFormat;
+import org.apache.commons.lang3.time.FastDateFormat;
 import org.raisercostin.utils.ObjectUtils;
 
 public class OtherUtils {

@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.apache.commons.lang.NotImplementedException;
+import org.apache.commons.lang3.NotImplementedException;
 import org.raisercostin.util.DBUtils;
 import org.raisercostin.util.PlayUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -98,6 +98,6 @@ public class PostgresDdlDialect extends AbstractDdlDialect implements DdlDialect
 
 	@Override
 	public List<String> showTables(DatabaseConfig db, String tableLike) {
-		throw new NotImplementedException();
+		throw new NotImplementedException("");
 	}
 }

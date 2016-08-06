@@ -21,8 +21,6 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.Map.Entry;
 
-import org.apache.commons.lang.UnhandledException;
-
 /**
  * <p>
  * Assists in implementing {@link Object#clone()} methods for simple model classes.
@@ -204,7 +202,7 @@ public class CloneBuilder {
 				return (T) object.getClass().newInstance();
 			}
 		} catch (Exception ex) {
-			throw new UnhandledException(ex);
+			throw new RuntimeException(ex);
 		}
 	}
 
@@ -231,7 +229,7 @@ public class CloneBuilder {
 				field.set(newObject, field.get(existingObject));
 			}
 		} catch (Exception ex) {
-			throw new UnhandledException(ex);
+			throw new RuntimeException(ex);
 		}
 	}
 

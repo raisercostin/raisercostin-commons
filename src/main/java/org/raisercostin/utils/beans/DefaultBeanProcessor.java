@@ -167,7 +167,7 @@ public class DefaultBeanProcessor implements BeanProcessor {
 
 					if (truncate) {
 						if (m.getAnnotation(Trim.class) != null) {
-							fixed = org.apache.commons.lang.StringUtils.trim(fixed);
+							fixed = org.apache.commons.lang3.StringUtils.trim(fixed);
 						}
 						Length lengthAnnotation = m.getAnnotation(Length.class);
 						if ((m.getAnnotation(Truncate.class) != null) && (lengthAnnotation != null)) {
