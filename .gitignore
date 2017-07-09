@@ -1,0 +1,13 @@
+
+# /
+/target
+/temp
+/.settings
+/xml.out
+/.project
+/.classpath
+/test.encrypted
+
+# /src/main/java/org/raisercostin/config/
+
+# /src/test/java/org/raisercostin/config/
