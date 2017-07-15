@@ -62,7 +62,8 @@ public class ObjectUtilsTest {
 	@Test
 	public void testXml() {
 		Assert.assertEquals(
-				"!xmlFormatingFailed org.xml.sax.SAXParseException: XML document structures must start and end within the same entity. xml=[<?xml version=\"1.0\"?><catalog><book id=\"bk101\"><author>Gambardella, Matthew</author><title>XML Developer's Guide</title><genre>Computer</genre>]",
+				"!xmlFormatingFailed org.xml.sax.SAXParseException; lineNumber: 1; columnNumber: 144; XML document structures must start and end within the same entity. "
+				    + "xml=[<?xml version=\"1.0\"?><catalog><book id=\"bk101\"><author>Gambardella, Matthew</author><title>XML Developer's Guide</title><genre>Computer</genre>]",
 				ObjectUtils
 						.toString("<?xml version=\"1.0\"?><catalog><book id=\"bk101\"><author>Gambardella, Matthew</author><title>XML Developer's Guide</title><genre>Computer</genre>"));
 		Assert.assertEquals(
@@ -116,7 +117,7 @@ public class ObjectUtilsTest {
 		assertStringEquals(
 				"org.raisercostin.utils.ObjectUtilsTest$ATest\n.   testInside1=org.raisercostin.utils.ObjectUtilsTest$BTest\n.   .   value=value1\n.   testInside2=org.raisercostin.utils.ObjectUtilsTest$BTest\n.   .   value=value2\n.   map=java.util.LinkedHashMap\n.   .   key1=value 1\n.   .   key2=value 2\n.   .   key3=value 3\n.   .   key4pass=*****\n.   .   key4=org.raisercostin.utils.ObjectUtilsTest$DTest\n.   .   .   value=value4\n.   prop=java.util.Properties\n.   .   pass2=*****\n.   .   p4=v4\n.   .   p3=v3\n.   .   p1=v1\n"
 						+ ".   list=java.util.ArrayList\n.   .   field1\n.   .   org.raisercostin.utils.ObjectUtilsTest$BTest\n.   .   .   value=value3\n.   .   field2\n.   .   @1\n.   .   field3",
-				ObjectUtils.toStringDump(a, "key4pass,pass2"));
+				ObjectUtils.toStringDump(a, "key4pass,pass2", ""));
 	}
 
 	@Test
