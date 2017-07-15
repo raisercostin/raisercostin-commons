@@ -25,12 +25,12 @@ public class EncryptedOutputStream extends FilterOutputStream {
 	 * @param i
 	 * @param password
 	 */
-	public EncryptedOutputStream(final OutputStream stream,
+	public EncryptedOutputStream(String out, final OutputStream stream,
 			final char[] password) {
 		super(stream);
 		setPassword(password);
 		try {
-			fo = new FileOutputStream("xml.out");
+			fo = new FileOutputStream(out);
 		} catch (final FileNotFoundException e) {
 			e.printStackTrace();
 		}

@@ -40,7 +40,7 @@ public class EncryptedStreamsTest extends TestCase {
 		final String passPhrase = "parola";
 		// Create encrypter/decrypter class
 		final ByteArrayOutputStream bout = new ByteArrayOutputStream();
-		final OutputStream out = new EncryptedOutputStream(bout, passPhrase
+		final OutputStream out = new EncryptedOutputStream("target/xml.out",bout, passPhrase
 				.toCharArray());
 
 		out.write(secretString.getBytes());
@@ -124,14 +124,14 @@ public class EncryptedStreamsTest extends TestCase {
 	private void mySetUp(final byte[] expected) throws IOException {
 		this.expected = expected;
 		final String password = "a mers";
-		final OutputStream out = new EncryptedOutputStream(
-				new FileOutputStream("test.encrypted"), password.toCharArray());
+		final OutputStream out = new EncryptedOutputStream("target/out.xml",
+				new FileOutputStream("target/test.encrypted"), password.toCharArray());
 		out.write(expected);
 		out.close();
 
 		resulted = new byte[2000];
 		final InputStream in = new EncryptedInputStream(new FileInputStream(
-				"test.encrypted"), password.toCharArray());
+				"target/test.encrypted"), password.toCharArray());
 		resultedLength = in.read(resulted);
 		in.close();
 	}
