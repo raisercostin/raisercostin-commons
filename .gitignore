@@ -1,13 +1,7 @@
-
-# /
-/target
-/temp
+/.svn
+/*.bak
 /.settings
-/xml.out
-/.project
+/target
+/*.out
 /.classpath
-/test.encrypted
-
-# /src/main/java/org/raisercostin/config/
-
-# /src/test/java/org/raisercostin/config/
+/.project
