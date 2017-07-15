@@ -5,6 +5,8 @@ import java.util.*;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.google.common.collect.Maps;
+
 public class ObjectUtilsTest {
 
 	@Test
@@ -109,6 +111,13 @@ public class ObjectUtilsTest {
 				ObjectUtils.toString(a, "key4pass,pass2"));
 	}
 
+  @Test
+  public void testMapWithNullKeyToStringDump() {
+    Map<String,String> map = Maps.newHashMap();
+    map.put(null,"value for null key");
+    assertStringEquals("java.util.HashMap\n.   null=value for null key", ObjectUtils.toStringDump(map));
+  }
+
 	@Test
 	public void testToStringDump() {
 		BTest b = new BTest("a");
@@ -165,7 +174,7 @@ public class ObjectUtilsTest {
 			map.put("key2", "value 2");
 			map.put("key3", "value 3");
 			map.put("key4pass", "value 4");
-			map.put("key4", new DTest("value4"));
+      map.put("key4", new DTest("value4"));
 			list = new ArrayList<Object>();
 			list.add("field1");
 			list.add(new BTest("value3"));

@@ -652,14 +652,20 @@ public class ObjectUtils {
         new Mapper<Map.Entry<Object, Object>>() {
           @Override
           public String map(Entry<Object, Object> element) {
-            if (getContext().shouldIgnore(element.getKey().toString())) {
-              return element.getKey() + "=" + IGNORED_VALUE;
+            Object key = element.getKey();
+            String key2 = null;
+            if(key!=null)
+              key2 = key.toString();
+            if (getContext().shouldIgnore(key2)) {
+              return key2 + "=" + IGNORED_VALUE;
             }
-            return element.getKey() + "=" + internalToString(element.getValue(), useToString, toStringStyle);
+            return key2 + "=" + internalToString(element.getValue(), useToString, toStringStyle);
           }
 
           @Override
           public boolean accept(Entry<Object, Object> element) {
+            if(element.getKey()==null)
+              return true;
             return getContext().accept(element.getKey().toString());
           }
         });
