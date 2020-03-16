@@ -13,7 +13,6 @@
     <artifactId>maven-defaults-raisercostin</artifactId>
     <version>1.2</version>
   </parent>
-  <groupId>org.raisercostin</groupId>
   <artifactId>raisercostin-commons</artifactId>
   <version>2.27-SNAPSHOT</version>
   <packaging>jar</packaging>
@@ -38,7 +37,7 @@
     <connection>scm:git:${github.url}.git</connection>
     <developerConnection>scm:git:${github.url}.git</developerConnection>
     <url>${github.url}</url>
-    <tag>raisercostin-common-2.21-SNAPSHOT</tag>
+    <tag>${artifactId}-${version}</tag>
   </scm>
   <distributionManagement>
     <repository>
