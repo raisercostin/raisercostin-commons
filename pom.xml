@@ -56,7 +56,7 @@
     <encoding>UTF-8</encoding>
     <java.version>1.7</java.version>
     <createChecksum>false</createChecksum>
-    <spring.version>3.0.5.RELEASE</spring.version>
+    <spring.version>5.2.4.RELEASE</spring.version>
     <source.java.version>1.7</source.java.version>
     <target.java.version>1.7</target.java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
