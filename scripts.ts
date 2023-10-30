@@ -12,7 +12,7 @@ function releasePrepareAndPerform(): void {
 
 function releasePrepare(): void {
   shell.exec(
-    'mvn -B release:prepare -DskipTests=true -Prelease -Darguments="-DskipTests=true -Prelease"'
+    'mvn -B release:prepare -DskipTests=true -Prelease -Darguments="-DskipTests=true -Prelease"',
   );
 }
 
@@ -27,7 +27,7 @@ function releasePerformLocal(args?: any): void {
   shell.mkdir("-p", `${repo}/${groupPath}/${artifactId}/${version}`);
   shell.cp(
     `${localMavenRepo}/${groupPath}/${artifactId}/${version}/${artifactId}-${version}*`,
-    `${repo}/${groupPath}/${artifactId}/${version}/`
+    `${repo}/${groupPath}/${artifactId}/${version}/`,
   );
 
   // Call createChecksums for each type
@@ -38,7 +38,7 @@ function releasePerformLocal(args?: any): void {
       repo,
       localMavenRepo,
       groupPath,
-      artifactId
+      artifactId,
     );
   });
 
@@ -46,7 +46,7 @@ function releasePerformLocal(args?: any): void {
   shell.exec(`git -C ${repo} status`);
   shell.exec(`git -C ${repo} add .`);
   shell.exec(
-    `git -C ${repo} commit -m "Release ${artifactId}-${version}" || echo "ignore commit failure, proceed"`
+    `git -C ${repo} commit -m "Release ${artifactId}-${version}" || echo "ignore commit failure, proceed"`,
   );
   shell.exec(`git -C ${repo} push`);
   shell.rm("-f", "pom.xml.releaseBackup", "release.properties");
@@ -54,8 +54,9 @@ function releasePerformLocal(args?: any): void {
 }
 
 function normalizePom(): void {
-  const cmd = 'mvn com.github.ekryd.sortpom:sortpom-maven-plugin:sort -Dsort.encoding=UTF-8 -Dsort.sortDependencies=scope,artifactId -Dsort.sortPlugins=artifactId -Dsort.sortProperties=true -Dsort.sortExecutions=true -Dsort.sortDependencyExclusions=artifactId -Dsort.lineSeparator="\\n" -Dsort.ignoreLineSeparators=false -Dsort.expandEmptyElements=false -Dsort.nrOfIndentSpace=2 -Dsort.indentSchemaLocation=true'
-  shell.echo('executing>', cmd);
+  const cmd =
+    'mvn com.github.ekryd.sortpom:sortpom-maven-plugin:sort -Dsort.encoding=UTF-8 -Dsort.sortDependencies=scope,artifactId -Dsort.sortPlugins=artifactId -Dsort.sortProperties=true -Dsort.sortExecutions=true -Dsort.sortDependencyExclusions=artifactId -Dsort.lineSeparator="\\n" -Dsort.ignoreLineSeparators=false -Dsort.expandEmptyElements=false -Dsort.nrOfIndentSpace=2 -Dsort.indentSchemaLocation=true';
+  shell.echo("executing>", cmd);
   shell.exec(cmd);
 }
 
@@ -65,7 +66,7 @@ function createChecksums(
   repo: string,
   localMavenRepo: string,
   groupPath: string,
-  artifactId: string
+  artifactId: string,
 ): void {
   let file = `${repo}/${groupPath}/${artifactId}/${version}/${artifactId}-${version}${classifier}`;
   shell.rm("-f", `${file}.sha1`);
@@ -80,18 +81,25 @@ function runTest(test: string = "LocationsTest"): void {
 
 const argv = yargs
   .scriptName("scripts")
-  .command("releasePrepareAndPerform", "Executes releasePrepare and releasePerformLocal", {}, releasePrepareAndPerform)
+  .command(
+    "releasePrepareAndPerform",
+    "Executes releasePrepare and releasePerformLocal",
+    {},
+    releasePrepareAndPerform,
+  )
   .command("normalizePom", "Normalizes the POM file", {}, normalizePom)
   .command("releasePrepare", "Prepares the release", {}, releasePrepare)
-  .command("releasePerformLocal", "Performs the release locally",
+  .command(
+    "releasePerformLocal",
+    "Performs the release locally",
     {
       newVersion: { type: "string" },
       repo: { type: "string" },
       localMavenRepo: { type: "string" },
       groupPath: { type: "string" },
       artifactId: { type: "string" },
-    }, releasePerformLocal
+    },
+    releasePerformLocal,
   )
   .demandCommand()
-  .help()
-  .argv;
+  .help().argv;
