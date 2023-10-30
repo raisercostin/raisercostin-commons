@@ -227,8 +227,7 @@ public class NetworkUtils {
 
   public static Pair<HttpStatus, String> getUrlResult(String url) {
     String msg = "no message";
-    try {
-      DefaultHttpClient httpClient = new DefaultHttpClient();
+    try (DefaultHttpClient httpClient = new DefaultHttpClient()) {
       HttpParams params = httpClient.getParams();
       HttpConnectionParams.setConnectionTimeout(params, 1000);
       HttpConnectionParams.setSoTimeout(params, 1000);

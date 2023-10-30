@@ -116,19 +116,18 @@ public abstract class DefaultApplicationModel implements ApplicationModel {
 
   @Override
   public void loadProperties() throws IOException, ClassNotFoundException {
-    InputStream is = null;
-    try {
-      is = new FileInputStream("configure.properties");
+    try (InputStream is = new FileInputStream("configure.properties");) {
       logger.info("Found configure.properties file: "
           + new File("configure.properties").getAbsolutePath());
+      configuration.load(is);
     } catch (final FileNotFoundException e) {
-      is = getClass().getClassLoader()
+      try (InputStream is2 = getClass().getClassLoader()
         .getResourceAsStream(
-          "configure.properties");
-      logger.info("Found configure.properties file in classpath.", e);
+          "configure.properties")) {
+        logger.info("Found configure.properties file in classpath.", e);
+        configuration.load(is2);
+      }
     }
-    configuration.load(is);
-    is.close();
     // setInputPath(getProperty("input.path", ""));
     // setInputFilter(getProperty("input.filter", ".*[.]mp3"));
     // setOutputPath(getProperty("output.path", ""));
