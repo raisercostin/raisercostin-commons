@@ -33,7 +33,7 @@
   <scm>
     <connection>scm:git:${github.url}.git</connection>
     <developerConnection>scm:git:${github.url}.git</developerConnection>
-    <tag>${artifactId}-${version}</tag>
+    <tag>${project.artifactId}-${project.version}</tag>
     <url>${github.url}</url>
   </scm>
   <issueManagement>
@@ -180,6 +180,10 @@
         <exclusion>
           <groupId>commons-logging</groupId>
           <artifactId>commons-logging</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.projectlombok</groupId>
+          <artifactId>lombok</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
