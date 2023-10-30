@@ -9,3 +9,7 @@
 
 # building
 mvn release:prepare release:perform -DskipTests=true -Prelease -Darguments="-DskipTests=true -Prelease"
+
+## release to git https://github.com/raisercostin/maven-repo
+npm run release-prepare
+npm run release-perform
