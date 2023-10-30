@@ -17,12 +17,11 @@ function releasePrepare(): void {
 }
 
 function releasePerformLocal(args?: any): void {
-  const version = args.newVersion || "0.72";
-  const repo = args.repo || "d:/home/raiser/work/maven-repo";
-  const localMavenRepo =
-    args.localMavenRepo || "c:/Users/raiser/.m2/repository";
-  const groupPath = args.groupPath || "org/raisercostin";
-  const artifactId = args.artifactId || "jedio";
+  const version = args.releaseVersion;
+  const repo = args.repo;
+  const localMavenRepo = args.localMavenRepo;
+  const groupPath = args.groupPath;
+  const artifactId = args.artifactId;
 
   shell.mkdir("-p", `${repo}/${groupPath}/${artifactId}/${version}`);
   shell.cp(
@@ -93,11 +92,12 @@ const argv = yargs
     "releasePerformLocal",
     "Performs the release locally",
     {
-      newVersion: { type: "string" },
-      repo: { type: "string" },
-      localMavenRepo: { type: "string" },
-      groupPath: { type: "string" },
-      artifactId: { type: "string" },
+      repo: { type: "string", demandOption: true, describe: 'Path to git repo with maven libraries like: d:/home/raiser/work/maven-repo' },
+      //Normally this should not be nedeed
+      localMavenRepo: { type: "string", demandOption: true, describe: 'Path to git repo with maven libraries like: c:/Users/raiser/.m2/repository' },
+      groupPath: { type: "string", demandOption: true, describe: 'Maven groupPath like org/raisercostin' },
+      artifactId: { type: "string", demandOption: true, describe: 'Maven artifactId like jedio' },
+      releaseVersion: { type: "string", demandOption: true, describe: 'Maven released version like 0.72' }
     },
     releasePerformLocal,
   )
