@@ -15,85 +15,89 @@ package jsync;
  * <code>signal()</code> operations.
  */
 public class Semaphore {
-	/**
-	 * Wait for non-zero value of counter.
-	 */
-	public synchronized void waitSemaphore() {
-		while (counter == 0) {
-			try {
-				wait();
-			} catch (final InterruptedException ex) {
-				// It is possible for a thread to be interrupted after
-				// being notified but before returning from the wait()
-				// call. To prevent lost of notification notify()
-				// is invoked.
-				notify();
-				throw new InterruptedError();
-			}
-		}
-		counter -= 1;
-	}
+  private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Semaphore.class);
 
-	/**
-	 * Wait at most <code>timeout</code> miliseconds for non-zero value of
-	 * counter.
-	 * 
-	 * @param timeout
-	 *            the maximum time to wait in milliseconds.
-	 * @return <code>true</code> if counter is not zero, <code>false</code>
-	 *         if <code>wait()</code> was terminated due to timeout
-	 *         expiration.
-	 */
-	public synchronized boolean waitSemaphore(final long timeout) {
-		if (counter == 0) {
-			final long startTime = System.currentTimeMillis();
-			do {
-				final long currentTime = System.currentTimeMillis();
-				if (currentTime - startTime >= timeout) {
-					return false;
-				}
-				try {
-					wait(timeout - currentTime + startTime);
-				} catch (final InterruptedException ex) {
-					// It is possible for a thread to be interrupted after
-					// being notified but before returning from the wait()
-					// call. To prevent lost of notification notify()
-					// is invoked.
-					notify();
-					throw new InterruptedError();
-				}
-			} while (counter == 0);
-		}
-		counter -= 1;
-		return true;
-	}
+  /**
+   * Wait for non-zero value of counter.
+   */
+  public synchronized void waitSemaphore() {
+    while (counter == 0) {
+      try {
+        wait();
+      } catch (final InterruptedException ex) {
+        log.info("ignored", ex);
+        // It is possible for a thread to be interrupted after
+        // being notified but before returning from the wait()
+        // call. To prevent lost of notification notify()
+        // is invoked.
+        notify();
+        throw new InterruptedError();
+      }
+    }
+    counter -= 1;
+  }
 
-	/**
-	 * Increment value of the counter. If there are waiting threads, exactly one
-	 * of them will be awaken.
-	 */
-	public synchronized void signal() {
-		counter += 1;
-		notify();
-	}
+  /**
+   * Wait at most <code>timeout</code> miliseconds for non-zero value of
+   * counter.
+   *
+   * @param timeout
+   *            the maximum time to wait in milliseconds.
+   * @return <code>true</code> if counter is not zero, <code>false</code>
+   *         if <code>wait()</code> was terminated due to timeout
+   *         expiration.
+   */
+  public synchronized boolean waitSemaphore(final long timeout) {
+    if (counter == 0) {
+      final long startTime = System.currentTimeMillis();
+      do {
+        final long currentTime = System.currentTimeMillis();
+        if (currentTime - startTime >= timeout) {
+          return false;
+        }
+        try {
+          wait(timeout - currentTime + startTime);
+        } catch (final InterruptedException ex) {
+          log.info("ignored", ex);
+          // It is possible for a thread to be interrupted after
+          // being notified but before returning from the wait()
+          // call. To prevent lost of notification notify()
+          // is invoked.
+          notify();
+          throw new InterruptedError();
+        }
+      } while (counter == 0);
+    }
+    counter -= 1;
+    return true;
+  }
 
-	/**
-	 * Create semaphore with zero counter value.
-	 */
-	public Semaphore() {
-		counter = 0;
-	}
+  /**
+   * Increment value of the counter. If there are waiting threads, exactly one
+   * of them will be awaken.
+   */
+  public synchronized void signal() {
+    counter += 1;
+    notify();
+  }
 
-	/**
-	 * Create semaphore with specified non-negative counter value.
-	 * 
-	 * @param initValue
-	 *            initial value of semaphore counter
-	 */
-	public Semaphore(final int initValue) {
-		Assert.that(initValue >= 0);
-		counter = initValue;
-	}
+  /**
+   * Create semaphore with zero counter value.
+   */
+  public Semaphore() {
+    counter = 0;
+  }
 
-	protected int counter;
+  /**
+   * Create semaphore with specified non-negative counter value.
+   *
+   * @param initValue
+   *            initial value of semaphore counter
+   */
+  public Semaphore(final int initValue) {
+    Assert.that(initValue >= 0);
+    counter = initValue;
+  }
+
+  protected int counter;
 }

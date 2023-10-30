@@ -17,59 +17,62 @@ import org.apache.commons.net.io.Util;
  * @author: Costin Emilian GRIGORE
  */
 public abstract class BaseFtpClient implements FtpClient {
-	/**
-	 * @return null - if the fileName don't exists. new byte[0] - if the
-	 *         fileName is empty. all data into a byte array if fileName exists
-	 *         and is not empty.
-	 */
-	@Override
-	public byte[] getBytes(final String fileName) throws FtpProtocolException {
-		final ByteArrayOutputStream out = new ByteArrayOutputStream();
-		final InputStream in = get(fileName);
-		if (in == null) {
-			return null;
-		}
-		try {
-			Util.copyStream(in, out);
-			try {
-				in.close();
-			} catch (final IOException e1) {
-				throw new FtpProtocolException(e1);
-			}
-		} catch (final CopyStreamException e) {
-			try {
-				in.close();
-			} catch (final IOException e1) {
-				throw new FtpProtocolException(e1);
-			}
-			throw new FtpProtocolException(e);
-		}
-		return out.toByteArray();
-	}
+  private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(BaseFtpClient.class);
 
-	@Override
-	public void putBytes(final String fileName, final byte[] data)
-			throws FtpProtocolException {
-		final OutputStream out = put(fileName);
-		try {
-			out.write(data);
-		} catch (final IOException e) {
-			throw new FtpProtocolException(e);
-		}
-		try {
-			out.close();
-		} catch (final IOException e1) {
-			throw new FtpProtocolException(e1);
-		}
-	}
+  /**
+   * @return null - if the fileName don't exists. new byte[0] - if the
+   *         fileName is empty. all data into a byte array if fileName exists
+   *         and is not empty.
+   */
+  @Override
+  public byte[] getBytes(final String fileName) throws FtpProtocolException {
+    final ByteArrayOutputStream out = new ByteArrayOutputStream();
+    final InputStream in = get(fileName);
+    if (in == null) {
+      return null;
+    }
+    try {
+      Util.copyStream(in, out);
+      try {
+        in.close();
+      } catch (final IOException e1) {
+        throw new FtpProtocolException(e1);
+      }
+    } catch (final CopyStreamException e) {
+      try {
+        in.close();
+      } catch (final IOException e1) {
+        throw new FtpProtocolException(e1);
+      }
+      throw new FtpProtocolException(e);
+    }
+    return out.toByteArray();
+  }
 
-	// PROFILE
-	@Override
-	public boolean exists(final String fileName) throws FtpProtocolException {
-		try {
-			return getBytes(fileName) != null;
-		} catch (final IOException e) {
-			return false;
-		}
-	}
+  @Override
+  public void putBytes(final String fileName, final byte[] data)
+      throws FtpProtocolException {
+    final OutputStream out = put(fileName);
+    try {
+      out.write(data);
+    } catch (final IOException e) {
+      throw new FtpProtocolException(e);
+    }
+    try {
+      out.close();
+    } catch (final IOException e1) {
+      throw new FtpProtocolException(e1);
+    }
+  }
+
+  // PROFILE
+  @Override
+  public boolean exists(final String fileName) throws FtpProtocolException {
+    try {
+      return getBytes(fileName) != null;
+    } catch (final IOException e) {
+      log.info("ignored", e);
+      return false;
+    }
+  }
 }

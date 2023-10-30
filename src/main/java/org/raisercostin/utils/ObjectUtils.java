@@ -34,7 +34,8 @@ import org.xml.sax.SAXException;
 //import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 
 public class ObjectUtils {
-  private static final Logger LOG = LoggerFactory.getLogger(ObjectUtils.class);
+  private static final Logger log = LoggerFactory.getLogger(ObjectUtils.class);
+
   private static final String IGNORED_VALUE = "*****";
   // private static final MyStringStyle myStringStyle = new MyStringStyle();
 
@@ -45,7 +46,7 @@ public class ObjectUtils {
   private static final Pattern XML_STRING_PATTERN = Pattern.compile("^<(\\w+)>.+</\\1>$", Pattern.DOTALL);
   // Thread local is needed because multiple cascaded toStrings could be
   // invoked.
-  private static final ThreadLocal<ObjectUtilsContext> contextOnThread = new ThreadLocal<ObjectUtilsContext>();
+  private static final ThreadLocal<ObjectUtilsContext> contextOnThread = new ThreadLocal<>();
   private static final int MAX_SHORT_STRING = 10;
   private static final int MAX_DEEP = 6;
   private static final String END_OF_LINE = "\n";
@@ -65,7 +66,7 @@ public class ObjectUtils {
 
   public static int hashCode(Object object, String commaSeparatedExceptedFields) {
     return HashCodeBuilder.reflectionHashCode(17, 37, object, DEFAULT_TRANSIENTS, null,
-        tokenizeToStringArray(commaSeparatedExceptedFields, ",", true, true));
+      tokenizeToStringArray(commaSeparatedExceptedFields, ",", true, true));
   }
 
   public static String[] tokenizeToStringArray(String str, String delimiters, boolean trimTokens,
@@ -75,7 +76,7 @@ public class ObjectUtils {
       return null;
     }
     StringTokenizer st = new StringTokenizer(str, delimiters);
-    List<String> tokens = new ArrayList<String>();
+    List<String> tokens = new ArrayList<>();
     while (st.hasMoreTokens()) {
       String token = st.nextToken();
       if (trimTokens) {
@@ -188,13 +189,13 @@ public class ObjectUtils {
   // TO STRING UTILITIES
   public static String toStringDump(Object object) {
     return internalToStringWithContext(object, false, false, false, "", "", END_OF_LINE, DEFAULT_TRANSIENTS, false,
-        false);
+      false);
   }
 
   public static String toStringDump(Object object, String ignores, String excludes, boolean showTransient,
       boolean showIds) {
     return internalToStringWithContext(object, false, false, false, ignores, excludes, END_OF_LINE, showTransient,
-        false, showIds);
+      false, showIds);
   }
 
   public static String toStringDump(Object object, String ignores) {
@@ -203,31 +204,31 @@ public class ObjectUtils {
 
   public static String toStringDump(Object object, String ignores, String excludes) {
     return internalToStringWithContext(object, false, false, false, ignores, excludes, END_OF_LINE, DEFAULT_TRANSIENTS,
-        false, false);
+      false, false);
   }
 
   public static String toString(Object object) {
     return internalToStringWithContext(object, false, true, false, "", "", END_OF_LINE, DEFAULT_TRANSIENTS, false,
-        false);
+      false);
   }
 
   public static String toString(Object object, String ignores) {
     return internalToStringWithContext(object, false, true, false, ignores, "", END_OF_LINE, DEFAULT_TRANSIENTS, false,
-        false);
+      false);
   }
 
   public static String toString(Object object, boolean singleLine, boolean useToString, boolean displayTypes,
       String endOfLine, boolean showTransients, boolean showIds) {
     return internalToStringWithContext(object, singleLine, useToString, displayTypes, "", "", endOfLine, showTransients,
-        false, showIds);
+      false, showIds);
   }
 
   // TOSTRING WITH EXCLUDES - should be implemented in another way
   @Deprecated
   private static String toString(Object object, boolean singleLine, boolean classDecorators, String[] excludes) {
     ReflectionToStringBuilder builder = new ReflectionToStringBuilder(object,
-        new MyStringStyle(singleLine, true, classDecorators, false, false, DEFAULT_TRANSIENTS), null, null, false,
-        false);
+      new MyStringStyle(singleLine, true, classDecorators, false, false, DEFAULT_TRANSIENTS), null, null, false,
+      false);
     builder.setExcludeFieldNames(excludes);
     return builder.toString();
   }
@@ -236,7 +237,7 @@ public class ObjectUtils {
   private static String toStringWithExclusions(Object object, boolean singleLine, boolean classDecorators,
       String commaSeparatedExceptedFields) {
     return toStringWithExclusions(object, singleLine, classDecorators,
-        tokenizeToStringArray(commaSeparatedExceptedFields, ",", true, true));
+      tokenizeToStringArray(commaSeparatedExceptedFields, ",", true, true));
   }
 
   @Deprecated
@@ -252,9 +253,9 @@ public class ObjectUtils {
     createContext(ignores, excludes, endOfLine, showIds);
     try {
       return internalToString(object, useToString,
-          new MyStringStyle(singleLine, useToString, true, displayTypes, showTransients, showStatics));
+        new MyStringStyle(singleLine, useToString, true, displayTypes, showTransients, showStatics));
     } catch (Throwable e) {
-      LOG.warn("Generic toString operation failed.", new RuntimeException(e));
+      log.warn("Generic toString operation failed.", new RuntimeException(e));
       return "<invalidToString>";
     } finally {
       removeContext();
@@ -361,6 +362,7 @@ public class ObjectUtils {
     } catch (InvocationTargetException e) {
       throw new RuntimeException("Can't call toString on object of type " + object.getClass(), e);
     } catch (NoSuchMethodException e) {
+      log.info("ignored", e);
       return object.toString();
     }
   }
@@ -373,8 +375,12 @@ public class ObjectUtils {
     sb.append(declaredToString("", object)).append(" enums=[");
     for (@SuppressWarnings("rawtypes")
     Enum oneConstant : constants) {
-      sb.append(getContext().getRowEnd()).append(oneConstant.name()).append("(").append(oneConstant.ordinal())
-          .append(")=").append(ObjectUtils.toStringWithExclusions(oneConstant, true, false, "name", "ordinal"));
+      sb.append(getContext().getRowEnd())
+        .append(oneConstant.name())
+        .append("(")
+        .append(oneConstant.ordinal())
+        .append(")=")
+        .append(ObjectUtils.toStringWithExclusions(oneConstant, true, false, "name", "ordinal"));
     }
     sb.append("]");
     return sb.toString();
@@ -404,8 +410,8 @@ public class ObjectUtils {
   }
 
   private static final Set<Class> SHORT_TYPES = new HashSet(
-      Arrays.asList(Character.class, Byte.class, Short.class, Integer.class, Long.class, Float.class, Double.class,
-          Void.class, Timestamp.class, Date.class, java.sql.Date.class, Time.class, Boolean.class));
+    Arrays.asList(Character.class, Byte.class, Short.class, Integer.class, Long.class, Float.class, Double.class,
+      Void.class, Timestamp.class, Date.class, java.sql.Date.class, Time.class, Boolean.class));
 
   private static boolean isShortType(Class clazz) {
     return SHORT_TYPES.contains(clazz);
@@ -421,14 +427,15 @@ public class ObjectUtils {
       return Throwable.class.isAssignableFrom(clazz)
           || clazz.getMethod("toString").getDeclaringClass().equals(Object.class);
     } catch (NoSuchMethodException e) {
+      log.info("ignored", e);
       return false;
     }
   }
 
   private static class ObjectUtilsContext {
     private int identation = 0;
-    private final Map<Object, String> objects = new HashMap<Object, String>();
-    private final Set<Integer> toStringForSelf = new HashSet<Integer>();
+    private final Map<Object, String> objects = new HashMap<>();
+    private final Set<Integer> toStringForSelf = new HashSet<>();
     private int toStringCallsCounter;
     private final int step;
     private final String excludes;
@@ -542,38 +549,39 @@ public class ObjectUtils {
     // getContext().find(object) + ":" + object);
     // }
     ReflectionToStringBuilder builder = new ReflectionToStringBuilder(object, toStringStyle, null, Object.class,
-        toStringStyle.showTransients, toStringStyle.showStatics) {
+      toStringStyle.showTransients, toStringStyle.showStatics)
+      {
 
-      @Override
-      protected boolean accept(Field f) {
-        // if (this.hideStatic &&
-        // java.lang.reflect.Modifier.isStatic(f.getModifiers())) {
-        // return false;
-        // } else {
-        if (f.getName().equals("stackTrace")) {
-          return false;
+        @Override
+        protected boolean accept(Field f) {
+          // if (this.hideStatic &&
+          // java.lang.reflect.Modifier.isStatic(f.getModifiers())) {
+          // return false;
+          // } else {
+          if (f.getName().equals("stackTrace")) {
+            return false;
+          }
+          if (f.getName().equals("cause") && f.getType().isAssignableFrom(Throwable.class)) {
+            return false;
+          }
+          if (!getContext().accept(f.getName())) {
+            return false;
+          }
+          return super.accept(f);
+          // }
         }
-        if (f.getName().equals("cause") && f.getType().isAssignableFrom(Throwable.class)) {
-          return false;
-        }
-        if (!getContext().accept(f.getName())) {
-          return false;
-        }
-        return super.accept(f);
-        // }
-      }
 
-      @Override
-      public ToStringBuilder append(String fieldName, Object object) {
-        String value = null;
-        if (getContext().shouldIgnore(fieldName)) {
-          value = IGNORED_VALUE;
-        } else {
-          value = internalToString(object, useToString, toStringStyle);
+        @Override
+        public ToStringBuilder append(String fieldName, Object object) {
+          String value = null;
+          if (getContext().shouldIgnore(fieldName)) {
+            value = IGNORED_VALUE;
+          } else {
+            value = internalToString(object, useToString, toStringStyle);
+          }
+          return super.append(fieldName, value);
         }
-        return super.append(fieldName, value);
-      }
-    };
+      };
     return builder.toString();
   }
 
@@ -586,7 +594,8 @@ public class ObjectUtils {
     private boolean singleLine;
 
     public MyStringStyle(boolean singleLine, boolean useToString, boolean classDecorators, boolean displayTypes,
-        boolean showTransients, boolean showStatics) {
+        boolean showTransients, boolean showStatics)
+    {
       super();
       this.showTransients = showTransients;
       this.showStatics = showStatics;
@@ -616,8 +625,9 @@ public class ObjectUtils {
     @Override
     public void appendEnd(StringBuffer buffer, Object object) {
       getContext().deident();
-      if (singleLine)
+      if (singleLine) {
         super.appendEnd(buffer, object);
+      }
     }
 
     @Override
@@ -641,7 +651,7 @@ public class ObjectUtils {
         super.appendDetail(buffer, fieldName, (displayTypes ? value.getClass().getName() + ":" : "") + value);
       } else {
         super.appendDetail(buffer, fieldName,
-            (displayTypes ? value.getClass().getName() + ":" : "") + ObjectUtils.toString(value));
+          (displayTypes ? value.getClass().getName() + ":" : "") + ObjectUtils.toString(value));
       }
     }
   }
@@ -649,13 +659,15 @@ public class ObjectUtils {
   private static String mapToString(Map<Object, Object> map, final boolean useToString,
       final MyStringStyle toStringStyle) {
     return collectionToDelimitedString(map.getClass(), map.entrySet(), "", "", "",
-        new Mapper<Map.Entry<Object, Object>>() {
+      new Mapper<Map.Entry<Object, Object>>()
+        {
           @Override
           public String map(Entry<Object, Object> element) {
             Object key = element.getKey();
             String key2 = null;
-            if(key!=null)
+            if (key != null) {
               key2 = key.toString();
+            }
             if (getContext().shouldIgnore(key2)) {
               return key2 + "=" + IGNORED_VALUE;
             }
@@ -664,8 +676,9 @@ public class ObjectUtils {
 
           @Override
           public boolean accept(Entry<Object, Object> element) {
-            if(element.getKey()==null)
+            if (element.getKey() == null) {
               return true;
+            }
             return getContext().accept(element.getKey().toString());
           }
         });
@@ -679,8 +692,9 @@ public class ObjectUtils {
     try {
       for (int i = 0; i < length; i++) {
         Object item = Array.get(array, i);
-        sb.append(getContext().getRowEnd()).append(getContext().getRowStart())
-            .append(internalToString(item, useToString, toStringStyle));
+        sb.append(getContext().getRowEnd())
+          .append(getContext().getRowStart())
+          .append(internalToString(item, useToString, toStringStyle));
       }
       return sb.toString();
     } finally {
@@ -690,17 +704,18 @@ public class ObjectUtils {
 
   private static String collectionToString(Collection<Object> collection, final boolean useToString,
       final MyStringStyle toStringStyle) {
-    return collectionToDelimitedString(collection.getClass(), collection, "", "", "", new Mapper<Object>() {
-      @Override
-      public String map(Object element) {
-        return internalToString(element, useToString, toStringStyle);
-      }
+    return collectionToDelimitedString(collection.getClass(), collection, "", "", "", new Mapper<Object>()
+      {
+        @Override
+        public String map(Object element) {
+          return internalToString(element, useToString, toStringStyle);
+        }
 
-      @Override
-      public boolean accept(Object element) {
-        return true;
-      }
-    });
+        @Override
+        public boolean accept(Object element) {
+          return true;
+        }
+      });
   }
 
   private static <T> String collectionToDelimitedString(Class clazz, Collection<T> coll, String delim,
@@ -716,8 +731,11 @@ public class ObjectUtils {
       while (it.hasNext()) {
         T entry = it.next();
         if (mapper.accept(entry)) {
-          sb.append(getContext().getRowEnd()).append(getContext().getRowStart()).append(elementPrefix)
-              .append(mapper.map(entry)).append(elementSuffix);
+          sb.append(getContext().getRowEnd())
+            .append(getContext().getRowStart())
+            .append(elementPrefix)
+            .append(mapper.map(entry))
+            .append(elementSuffix);
           if (it.hasNext()) {
             sb.append(delim);
           }
@@ -734,7 +752,7 @@ public class ObjectUtils {
     return (collection == null || collection.isEmpty());
   }
 
-  static interface Mapper<T> {
+  interface Mapper<T> {
     boolean accept(T element);
 
     String map(T element);
@@ -750,9 +768,9 @@ public class ObjectUtils {
     StringWriter sw = new StringWriter();
     PrintWriter pw = new PrintWriter(sw, true);
     Throwable[] ts = getThrowables(throwable);
-    for (int i = 0; i < ts.length; i++) {
-      _printStackTrace(ts[i], pw, useToString, toStringStyle);
-      if (isNestedThrowable(ts[i])) {
+    for (Throwable element : ts) {
+      _printStackTrace(element, pw, useToString, toStringStyle);
+      if (isNestedThrowable(element)) {
         break;
       }
     }
@@ -768,18 +786,19 @@ public class ObjectUtils {
     printwriter.print("Stacktrace:");
     StackTraceElement astacktraceelement[] = t.getStackTrace();
     getContext().ident();
-    for (int i = 0; i < astacktraceelement.length; i++) {
+    for (StackTraceElement element : astacktraceelement) {
       printwriter.print(getContext().getRowEnd());
       printwriter.print(getContext().getRowStart());
       printwriter.print("at ");
-      printwriter.print(astacktraceelement[i]);
+      printwriter.print(element);
     }
     getContext().deident();
     getContext().deident();
 
     Throwable throwable = t.getCause();
-    if (throwable != null)
+    if (throwable != null) {
       _printStackTraceAsCause(throwable, printwriter, astacktraceelement, useToString, toStringStyle);
+    }
   }
 
   private static void _printStackTraceAsCause(Throwable throwable, PrintWriter printstream,
@@ -787,8 +806,9 @@ public class ObjectUtils {
     StackTraceElement astacktraceelement1[] = throwable.getStackTrace();
     int i = astacktraceelement1.length - 1;
     for (int j = astacktraceelement.length - 1; i >= 0 && j >= 0
-        && astacktraceelement1[i].equals(astacktraceelement[j]); j--)
+        && astacktraceelement1[i].equals(astacktraceelement[j]); j--) {
       i--;
+    }
 
     int k = astacktraceelement1.length - 1 - i;
     printstream.print(getContext().getRowEnd());
@@ -820,8 +840,9 @@ public class ObjectUtils {
     getContext().deident();
 
     Throwable throwable2 = throwable.getCause();
-    if (throwable2 != null)
+    if (throwable2 != null) {
       _printStackTraceAsCause(throwable2, printstream, astacktraceelement1, useToString, toStringStyle);
+    }
   }
 
   private static Throwable[] getThrowables(Throwable throwable) {
@@ -853,16 +874,16 @@ public class ObjectUtils {
 
     Class cls = throwable.getClass();
     synchronized (CAUSE_METHOD_NAMES_LOCK) {
-      for (int i = 0, isize = CAUSE_METHOD_NAMES.length; i < isize; i++) {
+      for (String element : CAUSE_METHOD_NAMES) {
         try {
-          Method method = cls.getMethod(CAUSE_METHOD_NAMES[i]);
+          Method method = cls.getMethod(element);
           if (method != null && Throwable.class.isAssignableFrom(method.getReturnType())) {
             return true;
           }
         } catch (NoSuchMethodException ignored) {
-          // exception ignored
+          log.info("ignored", ignored);
         } catch (SecurityException ignored) {
-          // exception ignored
+          log.info("ignored", ignored);
         }
       }
     }
@@ -873,9 +894,9 @@ public class ObjectUtils {
         return true;
       }
     } catch (NoSuchFieldException ignored) {
-      // exception ignored
+      log.info("ignored", ignored);
     } catch (SecurityException ignored) {
-      // exception ignored
+      log.info("ignored", ignored);
     }
 
     return false;
@@ -886,9 +907,19 @@ public class ObjectUtils {
    * The names of methods commonly used to access a wrapped exception.
    * </p>
    */
-  private static String[] CAUSE_METHOD_NAMES = { "getCause", "getNextException", "getTargetException", "getException",
-      "getSourceException", "getRootCause", "getCausedByException", "getNested", "getLinkedException",
-      "getNestedException", "getLinkedCause", "getThrowable",
+  private static String[] CAUSE_METHOD_NAMES = {
+      "getCause",
+      "getNextException",
+      "getTargetException",
+      "getException",
+      "getSourceException",
+      "getRootCause",
+      "getCausedByException",
+      "getNested",
+      "getLinkedException",
+      "getNestedException",
+      "getLinkedCause",
+      "getThrowable",
       // costin: added for batch sql exceptions
       "getNextException" };
 
@@ -917,12 +948,14 @@ public class ObjectUtils {
     try {
       causeMethod = Throwable.class.getMethod("getCause", (Class[]) null);
     } catch (Exception e) {
+      log.info("ignored", e);
       causeMethod = null;
     }
     THROWABLE_CAUSE_METHOD = causeMethod;
     try {
       causeMethod = Throwable.class.getMethod("initCause", new Class[] { Throwable.class });
     } catch (Exception e) {
+      log.info("ignored", e);
       causeMethod = null;
     }
     THROWABLE_INITCAUSE_METHOD = causeMethod;

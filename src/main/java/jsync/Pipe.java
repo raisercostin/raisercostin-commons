@@ -24,65 +24,69 @@ import java.io.*;
  * catched.
  */
 public class Pipe {
-	/**
-	 * Default size of buffer used to transfer data from the input stream to the
-	 * output stream.
-	 */
-	static public int defaultBufferSize = 4096;
+  /**
+   * Default size of buffer used to transfer data from the input stream to the
+   * output stream.
+   */
+  static public int defaultBufferSize = 4096;
 
-	/**
-	 * Establish connection between input and output streams with specified size
-	 * of buffer used for data transfer.
-	 * 
-	 * @param in
-	 *            input stream
-	 * @param out
-	 *            output stream
-	 * @param bufferSize
-	 *            size of buffer used to transfer data from the input stream to
-	 *            the output stream
-	 */
-	static public void between(final InputStream in, final OutputStream out,
-			final int bufferSize) {
-		(new PipeThread(in, out, bufferSize)).start();
-	}
+  /**
+   * Establish connection between input and output streams with specified size
+   * of buffer used for data transfer.
+   *
+   * @param in
+   *            input stream
+   * @param out
+   *            output stream
+   * @param bufferSize
+   *            size of buffer used to transfer data from the input stream to
+   *            the output stream
+   */
+  static public void between(final InputStream in, final OutputStream out,
+      final int bufferSize) {
+    (new PipeThread(in, out, bufferSize)).start();
+  }
 
-	/**
-	 * Establish connection between input and output streams with default buffer
-	 * size.
-	 * 
-	 * @param in
-	 *            input stream
-	 * @param out
-	 *            output stream
-	 */
-	static public void between(final InputStream in, final OutputStream out) {
-		(new PipeThread(in, out, defaultBufferSize)).start();
-	}
+  /**
+   * Establish connection between input and output streams with default buffer
+   * size.
+   *
+   * @param in
+   *            input stream
+   * @param out
+   *            output stream
+   */
+  static public void between(final InputStream in, final OutputStream out) {
+    (new PipeThread(in, out, defaultBufferSize)).start();
+  }
 }
 
 class PipeThread extends Thread {
-	InputStream in;
+  private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(PipeThread.class);
 
-	OutputStream out;
+  InputStream in;
 
-	byte[] buffer;
+  OutputStream out;
 
-	PipeThread(final InputStream in, final OutputStream out,
-			final int bufferSize) {
-		this.in = in;
-		this.out = out;
-		buffer = new byte[bufferSize];
-	}
+  byte[] buffer;
 
-	@Override
-	public void run() {
-		try {
-			int length;
-			while ((length = in.read(buffer)) > 0) {
-				out.write(buffer, 0, length);
-			}
-		} catch (final IOException ex) {
-		}
-	}
+  PipeThread(final InputStream in, final OutputStream out,
+      final int bufferSize)
+  {
+    this.in = in;
+    this.out = out;
+    buffer = new byte[bufferSize];
+  }
+
+  @Override
+  public void run() {
+    try {
+      int length;
+      while ((length = in.read(buffer)) > 0) {
+        out.write(buffer, 0, length);
+      }
+    } catch (final IOException ex) {
+      log.info("ignored", ex);
+    }
+  }
 }

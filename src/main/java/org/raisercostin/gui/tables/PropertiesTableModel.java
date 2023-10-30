@@ -17,270 +17,271 @@ import javax.swing.table.AbstractTableModel;
 import org.apache.commons.beanutils.PropertyUtils;
 
 public class PropertiesTableModel<T> extends AbstractTableModel implements SmartTableModel<T> {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2254858775537494543L;
+  private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(PropertiesTableModel.class);
 
-	private List<PropertyDescriptor> descriptors;
+  /**
+   *
+   */
+  private static final long serialVersionUID = 2254858775537494543L;
 
-	private List<T> data;
+  private List<PropertyDescriptor> descriptors;
 
-	public List<PropertyDescriptor> columns;
+  private List<T> data;
 
-	private List<String> initialColumns;
+  public List<PropertyDescriptor> columns;
 
-	private Class<? extends T> defaultNewRow;
+  private List<String> initialColumns;
 
-	public PropertiesTableModel() {
-		this((List<String>) null, new ArrayList<T>());
-	}
+  private Class<? extends T> defaultNewRow;
 
-	public PropertiesTableModel(final List<T> data) {
-		this((List<String>) null, data);
-	}
+  public PropertiesTableModel() {
+    this((List<String>) null, new ArrayList<T>());
+  }
 
-	public PropertiesTableModel(final List<String> columnNames, final List<T> data) {
-		super();
-		setData(data);
-		setColumns(columnNames);
-		fireTableStructureChanged();
-	}
+  public PropertiesTableModel(final List<T> data) {
+    this((List<String>) null, data);
+  }
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public <T2> PropertiesTableModel(final T2[] data) {
-		super();
-		List asList = Arrays.asList(data);
-		setData(new ArrayList(asList));
-		setColumns(null);
-		fireTableStructureChanged();
-	}
+  public PropertiesTableModel(final List<String> columnNames, final List<T> data) {
+    super();
+    setData(data);
+    setColumns(columnNames);
+    fireTableStructureChanged();
+  }
 
-	public PropertiesTableModel(final Class<T> defaultNewRow, final List<T> data) {
-		super();
-		setData(data);
-		setDefaultNewRow(defaultNewRow);
-		fireTableStructureChanged();
-	}
+  @SuppressWarnings({ "rawtypes", "unchecked" })
+  public <T2> PropertiesTableModel(final T2[] data) {
+    super();
+    List asList = Arrays.asList(data);
+    setData(new ArrayList(asList));
+    setColumns(null);
+    fireTableStructureChanged();
+  }
 
-	private void init() {
-		if (data == null) {
-			data = new ArrayList<T>();
-		}
-		fireTableStructureChanged();
-	}
+  public PropertiesTableModel(final Class<T> defaultNewRow, final List<T> data) {
+    super();
+    setData(data);
+    setDefaultNewRow(defaultNewRow);
+    fireTableStructureChanged();
+  }
 
-	@Override
-	public void fireTableStructureChanged() {
-		computeDescriptors();
-		super.fireTableStructureChanged();
-	}
+  private void init() {
+    if (data == null) {
+      data = new ArrayList<>();
+    }
+    fireTableStructureChanged();
+  }
 
-	@Override
-	public Class<?> getColumnClass(final int columnIndex) {
-		for (int i = 0; i < getRowCount(); i++) {
-			if (getValueAt(i, columnIndex) != null) {
-				return getValueAt(i, columnIndex).getClass();
-			}
-		}
-		return super.getColumnClass(columnIndex);
-	}
+  @Override
+  public void fireTableStructureChanged() {
+    computeDescriptors();
+    super.fireTableStructureChanged();
+  }
 
-	private List<PropertyDescriptor> getDescriptors() {
-		if (descriptors == null) {
-			init();
-		}
-		return descriptors;
-	}
+  @Override
+  public Class<?> getColumnClass(final int columnIndex) {
+    for (int i = 0; i < getRowCount(); i++) {
+      if (getValueAt(i, columnIndex) != null) {
+        return getValueAt(i, columnIndex).getClass();
+      }
+    }
+    return super.getColumnClass(columnIndex);
+  }
 
-	@Override
-	public int getColumnCount() {
-		return getDescriptors().size();
-	}
+  private List<PropertyDescriptor> getDescriptors() {
+    if (descriptors == null) {
+      init();
+    }
+    return descriptors;
+  }
 
-	@Override
-	public String getColumnName(final int column) {
-		return descriptors.get(column).getName();
-	}
+  @Override
+  public int getColumnCount() {
+    return getDescriptors().size();
+  }
 
-	@Override
-	public int getRowCount() {
-		return getData().size();
-	}
+  @Override
+  public String getColumnName(final int column) {
+    return descriptors.get(column).getName();
+  }
 
-	private List<?> getData() {
-		if (data == null) {
-			init();
-		}
-		return data;
-	}
+  @Override
+  public int getRowCount() {
+    return getData().size();
+  }
 
-	@Override
-	public Object getValueAt(final int row, final int column) {
-		return getProperty(getObject(row), getColumnName(column));
-	}
+  private List<?> getData() {
+    if (data == null) {
+      init();
+    }
+    return data;
+  }
 
-	@Override
-	public void setValueAt(final Object aValue, final int row, final int column) {
-		setProperty(getObject(row), getColumnName(column), aValue);
-	}
+  @Override
+  public Object getValueAt(final int row, final int column) {
+    return getProperty(getObject(row), getColumnName(column));
+  }
 
-	private Object getObject(final int row) {
-		return data.get(row);
-	}
+  @Override
+  public void setValueAt(final Object aValue, final int row, final int column) {
+    setProperty(getObject(row), getColumnName(column), aValue);
+  }
 
-	@Override
-	public boolean isCellEditable(final int row, final int column) {
-		return descriptors.get(column).getWriteMethod() != null;
-	}
+  private Object getObject(final int row) {
+    return data.get(row);
+  }
 
-	private void computeDescriptors() {
-		final Class<?> infoClass = data.size() == 0 ? getDefaultNewRow() : data.get(0).getClass();
-		System.out.println("computeDescriptors infoClass=" + infoClass + " default=" + getDefaultNewRow());
-		columns = null;
-		descriptors = getColumns(infoClass, initialColumns);
-	}
+  @Override
+  public boolean isCellEditable(final int row, final int column) {
+    return descriptors.get(column).getWriteMethod() != null;
+  }
 
-	public Object getProperty(final Object object, final String name) {
-		try {
-			return PropertyUtils.getProperty(object, name);
-		} catch (final IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (final InvocationTargetException e) {
-			e.printStackTrace();
-		} catch (final NoSuchMethodException e) {
-			return "****";
-		}
-		return "";
-	}
+  private void computeDescriptors() {
+    final Class<?> infoClass = data.size() == 0 ? getDefaultNewRow() : data.get(0).getClass();
+    System.out.println("computeDescriptors infoClass=" + infoClass + " default=" + getDefaultNewRow());
+    columns = null;
+    descriptors = getColumns(infoClass, initialColumns);
+  }
 
-	public void setProperty(final Object object, final String name, final Object value) {
-		try {
-			PropertyUtils.setProperty(object, name, value);
-		} catch (final IllegalArgumentException e) {
-			throw new RuntimeException("Can't set property '" + name + "' with value '" + value + "'.", e);
-		} catch (final IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (final InvocationTargetException e) {
-			e.printStackTrace();
-		} catch (final NoSuchMethodException e) {
-			e.printStackTrace();
-		}
-	}
+  public Object getProperty(final Object object, final String name) {
+    try {
+      return PropertyUtils.getProperty(object, name);
+    } catch (final IllegalAccessException e) {
+      log.info("ignored", e);
+    } catch (final InvocationTargetException e) {
+      log.info("ignored", e);
+    } catch (final NoSuchMethodException e) {
+      log.info("ignored", e);
+      return "****";
+    }
+    return "";
+  }
 
-	public List<PropertyDescriptor> getColumns(final Class<?> infoClass, final List<String> columns2) {
-		if (columns == null) {
-			columns = computeColumns(infoClass, columns2);
-		}
-		return columns;
-	}
+  public void setProperty(final Object object, final String name, final Object value) {
+    try {
+      PropertyUtils.setProperty(object, name, value);
+    } catch (final IllegalArgumentException e) {
+      throw new RuntimeException("Can't set property '" + name + "' with value '" + value + "'.", e);
+    } catch (final IllegalAccessException e) {
+      e.printStackTrace();
+    } catch (final InvocationTargetException e) {
+      e.printStackTrace();
+    } catch (final NoSuchMethodException e) {
+      e.printStackTrace();
+    }
+  }
 
-	/**
-	 * @param infoClass
-	 */
-	private static List<PropertyDescriptor> computeColumns(final Class<?> infoClass, final List<String> columns2) {
-		final PropertyDescriptor[] desc = PropertyUtils.getPropertyDescriptors(infoClass);
-		final List<PropertyDescriptor> columns = new ArrayList<PropertyDescriptor>();
-		if (columns2 != null) {
-			for (final String columnName : columns2) {
-				final PropertyDescriptor temp = find(desc, columnName);
-				if (temp != null) {
-					columns.add(temp);
-				}
-			}
-		} else {
-			for (final PropertyDescriptor element : desc) {
-				if (!element.getName().equals("class")) {
-					// if ((columns2 == null)
-					// || (columns2.indexOf(element.getName()) != -1)) {
-					columns.add(element);
-					// }
-				}
-			}
-			if (columns.size() == 0) {
-				throw new RuntimeException("No public property was discovered to the class [" + infoClass + "].");
-			}
-			Collections.sort(columns, new Comparator<PropertyDescriptor>() {
-				@Override
-				public int compare(final PropertyDescriptor o1, final PropertyDescriptor o2) {
-					return o1.getName().compareToIgnoreCase(o1.getName());
-				}
-			});
-		}
-		return columns;
-	}
+  public List<PropertyDescriptor> getColumns(final Class<?> infoClass, final List<String> columns2) {
+    if (columns == null) {
+      columns = computeColumns(infoClass, columns2);
+    }
+    return columns;
+  }
 
-	/**
-	 * @param desc
-	 * @param columnName
-	 * @return
-	 */
-	private static PropertyDescriptor find(final PropertyDescriptor[] desc, final String columnName) {
-		for (final PropertyDescriptor element : desc) {
-			if (columnName.equals(element.getName())) {
-				return element;
-			}
-		}
-		return null;
-	}
+  /**
+   * @param infoClass
+   */
+  private static List<PropertyDescriptor> computeColumns(final Class<?> infoClass, final List<String> columns2) {
+    final PropertyDescriptor[] desc = PropertyUtils.getPropertyDescriptors(infoClass);
+    final List<PropertyDescriptor> columns = new ArrayList<>();
+    if (columns2 != null) {
+      for (final String columnName : columns2) {
+        final PropertyDescriptor temp = find(desc, columnName);
+        if (temp != null) {
+          columns.add(temp);
+        }
+      }
+    } else {
+      for (final PropertyDescriptor element : desc) {
+        if (!element.getName().equals("class")) {
+          // if ((columns2 == null)
+          // || (columns2.indexOf(element.getName()) != -1)) {
+          columns.add(element);
+          // }
+        }
+      }
+      if (columns.size() == 0) {
+        throw new RuntimeException("No public property was discovered to the class [" + infoClass + "].");
+      }
+      Collections.sort(columns, new Comparator<PropertyDescriptor>()
+        {
+          @Override
+          public int compare(final PropertyDescriptor o1, final PropertyDescriptor o2) {
+            return o1.getName().compareToIgnoreCase(o1.getName());
+          }
+        });
+    }
+    return columns;
+  }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.raisercostin.gui.tables.SmartTableModel#add(java.lang.Object)
-	 */
-	@Override
-	public void add(final T object) {
-		data.add(object);
-		fireTableRowsInserted(getRowCount() - 1, getRowCount() - 1);
-	}
+  /**
+   * @param desc
+   * @param columnName
+   * @return
+   */
+  private static PropertyDescriptor find(final PropertyDescriptor[] desc, final String columnName) {
+    for (final PropertyDescriptor element : desc) {
+      if (columnName.equals(element.getName())) {
+        return element;
+      }
+    }
+    return null;
+  }
 
-	@Override
-	public void addData() throws InstantiationException, IllegalAccessException {
-		data.add(getDefaultNewRow().newInstance());
-		fireTableStructureChanged();
-	}
+  /*
+   * (non-Javadoc)
+   * @see org.raisercostin.gui.tables.SmartTableModel#add(java.lang.Object)
+   */
+  @Override
+  public void add(final T object) {
+    data.add(object);
+    fireTableRowsInserted(getRowCount() - 1, getRowCount() - 1);
+  }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.raisercostin.gui.tables.SmartTableModel#setData(java.util.List)
-	 */
-	@Override
-	public void setData(final List<T> data) {
-		this.data = data;
-	}
+  @Override
+  public void addData() throws InstantiationException, IllegalAccessException {
+    data.add(getDefaultNewRow().newInstance());
+    fireTableStructureChanged();
+  }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.raisercostin.gui.tables.SmartTableModel#setColumns(java.util.List)
-	 */
-	@Override
-	public void setColumns(final List<String> columns) {
-		this.initialColumns = columns;
-	}
+  /*
+   * (non-Javadoc)
+   * @see org.raisercostin.gui.tables.SmartTableModel#setData(java.util.List)
+   */
+  @Override
+  public void setData(final List<T> data) {
+    this.data = data;
+  }
 
-	/*
-	 * (non-Javadoc) @param defaultNewRow The defaultNewRow to set.
-	 */
-	@Override
-	public void setDefaultNewRow(final Class<? extends T> defaultNewRow) {
-		this.defaultNewRow = defaultNewRow;
-	}
+  /*
+   * (non-Javadoc)
+   * @see org.raisercostin.gui.tables.SmartTableModel#setColumns(java.util.List)
+   */
+  @Override
+  public void setColumns(final List<String> columns) {
+    this.initialColumns = columns;
+  }
 
-	/**
-	 * @return Returns the defaultNewRow.
-	 */
-	private Class<? extends T> getDefaultNewRow() {
-		// if (defaultNewRow == null) {
-		// defaultNewRow = Object.class;
-		// }
-		return defaultNewRow;
-	}
+  /*
+   * (non-Javadoc) @param defaultNewRow The defaultNewRow to set.
+   */
+  @Override
+  public void setDefaultNewRow(final Class<? extends T> defaultNewRow) {
+    this.defaultNewRow = defaultNewRow;
+  }
 
-	public void removeElementAt(final int index) {
-		data.remove(index);
-		fireTableStructureChanged();
-	}
+  /**
+   * @return Returns the defaultNewRow.
+   */
+  private Class<? extends T> getDefaultNewRow() {
+    // if (defaultNewRow == null) {
+    // defaultNewRow = Object.class;
+    // }
+    return defaultNewRow;
+  }
+
+  public void removeElementAt(final int index) {
+    data.remove(index);
+    fireTableStructureChanged();
+  }
 }

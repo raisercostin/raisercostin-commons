@@ -17,202 +17,206 @@ package jsync;
  * unlocked only after execution of correspondent number of unlock requests.
  */
 public class Lock {
-	/**
-	 * Lock resource in shared mode. Several threads can set shared lock, but no
-	 * one can set exclusive lock until all shared locks will be released.
-	 * 
-	 * @param timeout
-	 *            the maximum time to wait in milliseconds.
-	 * @return <code>true</code> if lock is successfully set,
-	 *         <code>false</code> if resource can't be locked before
-	 *         expiration of timeout.
-	 */
-	public synchronized boolean setShared(final long timeout) {
-		final Thread self = Thread.currentThread();
-		if (self == owner) {
-			Assert.that((nested != 0) && (nWriters == 1) && (nReaders <= 1));
-			if (nReaders == 1) {
-				Assert.that(sharedLockChain.owner == self);
-				sharedLockChain.count += 1;
-			} else {
-				nReaders = 1;
-				final LockObject lck = createLock();
-				lck.owner = self;
-				lck.count = 1;
-				lck.next = sharedLockChain;
-				sharedLockChain = lck;
-			}
-			return true;
-		}
-		final long startTime = System.currentTimeMillis();
-		while (nWriters != 0) {
-			final long currentTime = System.currentTimeMillis();
-			if (currentTime - startTime >= timeout) {
-				return false;
-			}
-			waiting = true;
-			try {
-				wait(timeout - currentTime + startTime);
-			} catch (final InterruptedException ex) {
-				throw new InterruptedError();
-			}
-		}
-		Assert.that((owner == null) && (nested == 0));
-		LockObject lck;
-		for (lck = sharedLockChain; lck != null; lck = lck.next) {
-			if (lck.owner == self) {
-				lck.count += 1;
-				return true;
-			}
-		}
-		lck = createLock();
-		lck.owner = self;
-		lck.count = 1;
-		lck.next = sharedLockChain;
-		sharedLockChain = lck;
-		nReaders += 1;
-		return true;
-	}
+  private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Lock.class);
 
-	/**
-	 * Lock resource in shared mode without limitation of waiting time.
-	 */
-	public synchronized void setShared() {
-		setShared(Long.MAX_VALUE);
-	}
+  /**
+   * Lock resource in shared mode. Several threads can set shared lock, but no
+   * one can set exclusive lock until all shared locks will be released.
+   *
+   * @param timeout
+   *            the maximum time to wait in milliseconds.
+   * @return <code>true</code> if lock is successfully set,
+   *         <code>false</code> if resource can't be locked before
+   *         expiration of timeout.
+   */
+  public synchronized boolean setShared(final long timeout) {
+    final Thread self = Thread.currentThread();
+    if (self == owner) {
+      Assert.that((nested != 0) && (nWriters == 1) && (nReaders <= 1));
+      if (nReaders == 1) {
+        Assert.that(sharedLockChain.owner == self);
+        sharedLockChain.count += 1;
+      } else {
+        nReaders = 1;
+        final LockObject lck = createLock();
+        lck.owner = self;
+        lck.count = 1;
+        lck.next = sharedLockChain;
+        sharedLockChain = lck;
+      }
+      return true;
+    }
+    final long startTime = System.currentTimeMillis();
+    while (nWriters != 0) {
+      final long currentTime = System.currentTimeMillis();
+      if (currentTime - startTime >= timeout) {
+        return false;
+      }
+      waiting = true;
+      try {
+        wait(timeout - currentTime + startTime);
+      } catch (final InterruptedException ex) {
+        log.info("ignored", ex);
+        throw new InterruptedError();
+      }
+    }
+    Assert.that((owner == null) && (nested == 0));
+    LockObject lck;
+    for (lck = sharedLockChain; lck != null; lck = lck.next) {
+      if (lck.owner == self) {
+        lck.count += 1;
+        return true;
+      }
+    }
+    lck = createLock();
+    lck.owner = self;
+    lck.count = 1;
+    lck.next = sharedLockChain;
+    sharedLockChain = lck;
+    nReaders += 1;
+    return true;
+  }
 
-	/**
-	 * Lock resource in exclusive mode. Only one thread can lock resource in
-	 * exclusive mode and all other shared and exclusive lock requests will be
-	 * blocked until this lock is released.
-	 * 
-	 * @param timeout
-	 *            the maximum time to wait in milliseconds.
-	 * @return <code>true</code> if lock is successfully set,
-	 *         <code>false</code> if resource can't be locked within specified
-	 *         time.
-	 */
-	public synchronized boolean setExclusive(final long timeout) {
-		final Thread self = Thread.currentThread();
-		if (self == owner) {
-			Assert.that((nested != 0) && (nWriters == 1));
-			nested += 1;
-			return true;
-		}
-		final long startTime = System.currentTimeMillis();
-		while ((nWriters != 0)
-				|| ((nReaders != 0) && ((nReaders != 1) || (sharedLockChain.owner != self)))) {
-			final long currentTime = System.currentTimeMillis();
-			if (currentTime - startTime >= timeout) {
-				return false;
-			}
-			waiting = true;
-			try {
-				wait(timeout - currentTime + startTime);
-			} catch (final InterruptedException ex) {
-				throw new InterruptedError();
-			}
-		}
-		Assert.that((owner == null) && (nested == 0));
-		owner = self;
-		nested = 1;
-		nWriters = 1;
-		return true;
-	}
+  /**
+   * Lock resource in shared mode without limitation of waiting time.
+   */
+  public synchronized void setShared() {
+    setShared(Long.MAX_VALUE);
+  }
 
-	/**
-	 * Lock resource in exclusive mode without limitation of waiting time.
-	 */
-	public synchronized void setExclusive() {
-		setExclusive(Long.MAX_VALUE);
-	}
+  /**
+   * Lock resource in exclusive mode. Only one thread can lock resource in
+   * exclusive mode and all other shared and exclusive lock requests will be
+   * blocked until this lock is released.
+   *
+   * @param timeout
+   *            the maximum time to wait in milliseconds.
+   * @return <code>true</code> if lock is successfully set,
+   *         <code>false</code> if resource can't be locked within specified
+   *         time.
+   */
+  public synchronized boolean setExclusive(final long timeout) {
+    final Thread self = Thread.currentThread();
+    if (self == owner) {
+      Assert.that((nested != 0) && (nWriters == 1));
+      nested += 1;
+      return true;
+    }
+    final long startTime = System.currentTimeMillis();
+    while ((nWriters != 0)
+        || ((nReaders != 0) && ((nReaders != 1) || (sharedLockChain.owner != self)))) {
+      final long currentTime = System.currentTimeMillis();
+      if (currentTime - startTime >= timeout) {
+        return false;
+      }
+      waiting = true;
+      try {
+        wait(timeout - currentTime + startTime);
+      } catch (final InterruptedException ex) {
+        log.info("ignored", ex);
+        throw new InterruptedError();
+      }
+    }
+    Assert.that((owner == null) && (nested == 0));
+    owner = self;
+    nested = 1;
+    nWriters = 1;
+    return true;
+  }
 
-	/**
-	 * Release shared lock. Throws <code>NotOwnerError</code> if shared lock
-	 * was not previously set by this thread.
-	 */
-	public synchronized void unsetShared() {
-		final Thread self = Thread.currentThread();
-		LockObject prev = null;
-		for (LockObject lck = sharedLockChain; lck != null; lck = lck.next) {
-			if (lck.owner == self) {
-				if (--lck.count == 0) {
-					if (prev == null) {
-						sharedLockChain = lck.next;
-					} else {
-						prev.next = lck.next;
-					}
-					freeLock(lck);
-					nReaders -= 1;
-					if (waiting) {
-						waiting = false;
-						notifyAll();
-					}
-				}
-				return;
-			}
-			prev = lck;
-		}
-		throw new NotOwnerError();
-	}
+  /**
+   * Lock resource in exclusive mode without limitation of waiting time.
+   */
+  public synchronized void setExclusive() {
+    setExclusive(Long.MAX_VALUE);
+  }
 
-	/**
-	 * Release exclusive lock. If thread locked resource several time, than lock
-	 * will be taken off only after correspondent number of
-	 * <code>unsetExclusive</code> requests. Throws <code>NotOwnerError</code>
-	 * if exclusive lock was not previously set by this thread.
-	 */
-	public synchronized void unsetExclusive() {
-		final Thread self = Thread.currentThread();
-		if (owner != self) {
-			throw new NotOwnerError();
-		}
-		if (--nested == 0) {
-			owner = null;
-			nWriters = 0;
-			if (waiting) {
-				waiting = false;
-				notifyAll();
-			}
-		}
-	}
+  /**
+   * Release shared lock. Throws <code>NotOwnerError</code> if shared lock
+   * was not previously set by this thread.
+   */
+  public synchronized void unsetShared() {
+    final Thread self = Thread.currentThread();
+    LockObject prev = null;
+    for (LockObject lck = sharedLockChain; lck != null; lck = lck.next) {
+      if (lck.owner == self) {
+        if (--lck.count == 0) {
+          if (prev == null) {
+            sharedLockChain = lck.next;
+          } else {
+            prev.next = lck.next;
+          }
+          freeLock(lck);
+          nReaders -= 1;
+          if (waiting) {
+            waiting = false;
+            notifyAll();
+          }
+        }
+        return;
+      }
+      prev = lck;
+    }
+    throw new NotOwnerError();
+  }
 
-	//
-	// Implementation
-	//
-	protected int nReaders;
+  /**
+   * Release exclusive lock. If thread locked resource several time, than lock
+   * will be taken off only after correspondent number of
+   * <code>unsetExclusive</code> requests. Throws <code>NotOwnerError</code>
+   * if exclusive lock was not previously set by this thread.
+   */
+  public synchronized void unsetExclusive() {
+    final Thread self = Thread.currentThread();
+    if (owner != self) {
+      throw new NotOwnerError();
+    }
+    if (--nested == 0) {
+      owner = null;
+      nWriters = 0;
+      if (waiting) {
+        waiting = false;
+        notifyAll();
+      }
+    }
+  }
 
-	protected int nWriters;
+  //
+  // Implementation
+  //
+  protected int nReaders;
 
-	protected Thread owner;
+  protected int nWriters;
 
-	protected int nested;
+  protected Thread owner;
 
-	protected boolean waiting;
+  protected int nested;
 
-	protected LockObject sharedLockChain;
+  protected boolean waiting;
 
-	protected static LockObject freeLockChain;
+  protected LockObject sharedLockChain;
 
-	protected synchronized final static LockObject createLock() {
-		final LockObject lck = freeLockChain;
-		if (lck != null) {
-			freeLockChain = lck.next;
-			return lck;
-		}
-		return new LockObject();
-	}
+  protected static LockObject freeLockChain;
 
-	protected synchronized final static void freeLock(final LockObject lck) {
-		lck.next = freeLockChain;
-		freeLockChain = lck;
-	}
+  protected synchronized final static LockObject createLock() {
+    final LockObject lck = freeLockChain;
+    if (lck != null) {
+      freeLockChain = lck.next;
+      return lck;
+    }
+    return new LockObject();
+  }
+
+  protected synchronized final static void freeLock(final LockObject lck) {
+    lck.next = freeLockChain;
+    freeLockChain = lck;
+  }
 }
 
 class LockObject {
-	LockObject next;
+  LockObject next;
 
-	Thread owner;
+  Thread owner;
 
-	int count;
+  int count;
 }

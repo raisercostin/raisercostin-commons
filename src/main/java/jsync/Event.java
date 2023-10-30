@@ -17,87 +17,91 @@ package jsync;
  * invoked. Setting event to signaled state will awoke all waiting threads.
  */
 public class Event {
-	/**
-	 * Wait until event is set to signaled state.
-	 */
-	public synchronized void waitEvent() {
-		final int nSignalsBefore = nSignals;
-		while (!signaled && (nSignals == nSignalsBefore)) {
-			try {
-				wait();
-			} catch (final InterruptedException ex) {
-				throw new InterruptedError();
-			}
-		}
-	}
+  private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Event.class);
 
-	/**
-	 * Wait during specified amount of time until event is set to signaled
-	 * state.
-	 * 
-	 * @param timeout
-	 *            the maximum time to wait in milliseconds.
-	 * @return <code>true</code> if event is signaled, <code>false</code> if
-	 *         <code>wait()</code> was terminated due to timeout expiration.
-	 */
-	public synchronized boolean waitEvent(final long timeout) {
-		if (!signaled) {
-			if (timeout == 0) {
-				return false;
-			}
-			final int nSignalsBefore = nSignals;
-			final long startTime = System.currentTimeMillis();
-			do {
-				final long currentTime = System.currentTimeMillis();
-				if (currentTime - startTime >= timeout) {
-					return false;
-				}
-				try {
-					wait(timeout);
-				} catch (final InterruptedException ex) {
-					throw new InterruptedError();
-				}
-			} while (nSignals == nSignalsBefore);
-		}
-		return true;
-	}
+  /**
+   * Wait until event is set to signaled state.
+   */
+  public synchronized void waitEvent() {
+    final int nSignalsBefore = nSignals;
+    while (!signaled && (nSignals == nSignalsBefore)) {
+      try {
+        wait();
+      } catch (final InterruptedException ex) {
+        log.info("ignored", ex);
+        throw new InterruptedError();
+      }
+    }
+  }
 
-	/**
-	 * Set event to signaled state. Awoke all waiting threads.
-	 */
-	public synchronized void signal() {
-		signaled = true;
-		nSignals += 1;
-		notifyAll();
-	}
+  /**
+   * Wait during specified amount of time until event is set to signaled
+   * state.
+   *
+   * @param timeout
+   *            the maximum time to wait in milliseconds.
+   * @return <code>true</code> if event is signaled, <code>false</code> if
+   *         <code>wait()</code> was terminated due to timeout expiration.
+   */
+  public synchronized boolean waitEvent(final long timeout) {
+    if (!signaled) {
+      if (timeout == 0) {
+        return false;
+      }
+      final int nSignalsBefore = nSignals;
+      final long startTime = System.currentTimeMillis();
+      do {
+        final long currentTime = System.currentTimeMillis();
+        if (currentTime - startTime >= timeout) {
+          return false;
+        }
+        try {
+          wait(timeout);
+        } catch (final InterruptedException ex) {
+          log.info("ignored", ex);
+          throw new InterruptedError();
+        }
+      } while (nSignals == nSignalsBefore);
+    }
+    return true;
+  }
 
-	/**
-	 * Reset event to non-signaled state.
-	 */
-	public synchronized void reset() {
-		signaled = false;
-	}
+  /**
+   * Set event to signaled state. Awoke all waiting threads.
+   */
+  public synchronized void signal() {
+    signaled = true;
+    nSignals += 1;
+    notifyAll();
+  }
 
-	/**
-	 * Create event with non-signaled initial state.
-	 */
-	public Event() {
-		signaled = false;
-		nSignals = 0;
-	}
+  /**
+   * Reset event to non-signaled state.
+   */
+  public synchronized void reset() {
+    signaled = false;
+  }
 
-	/**
-	 * Create event with specified initial state.
-	 * 
-	 * @param initState
-	 *            initial state of event
-	 */
-	public Event(final boolean initState) {
-		signaled = initState;
-		nSignals = 0;
-	}
+  /**
+   * Create event with non-signaled initial state.
+   */
+  public Event() {
+    signaled = false;
+    nSignals = 0;
+  }
 
-	protected boolean signaled;
+  /**
+   * Create event with specified initial state.
+   *
+   * @param initState
+   *            initial state of event
+   */
+  public Event(final boolean initState) {
+    signaled = initState;
+    nSignals = 0;
+  }
 
-	protected int nSignals;
+  protected boolean signaled;
+
+  protected int nSignals;
 }

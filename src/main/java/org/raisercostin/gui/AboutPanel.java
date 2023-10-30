@@ -14,247 +14,248 @@ import javax.swing.*;
  * @author org.raisercostin
  */
 public class AboutPanel extends JPanel {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7327986676590769464L;
+  private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(AboutPanel.class);
 
-	/**
-	 * Makes an about panel like this:
-	 * 
-	 * <pre>
-	 * 	 Eclipse Platform
-	 * 	 
-	 * 	 Version: 3.0.0
-	 * 	 Build id: 200403261517
-	 * 	 
-	 * 	 (c) Copyright IBM Corp. and others 2000, 2003.  All rights reserved.
-	 * 	 Visit http://www.eclipse.org/platform
-	 * 	 
-	 * 	 This product includes software developed by the
-	 * 	 Apache Software Foundation http://www.apache.org/
-	 * 	
-	 * </pre>
-	 */
-	String productName;
+  /**
+   *
+   */
+  private static final long serialVersionUID = -7327986676590769464L;
 
-	String productVersion;
+  /**
+   * Makes an about panel like this:
+   *
+   * <pre>
+   * 	 Eclipse Platform
+   *
+   * 	 Version: 3.0.0
+   * 	 Build id: 200403261517
+   *
+   * 	 (c) Copyright IBM Corp. and others 2000, 2003.  All rights reserved.
+   * 	 Visit http://www.eclipse.org/platform
+   *
+   * 	 This product includes software developed by the
+   * 	 Apache Software Foundation http://www.apache.org/
+   *
+   * </pre>
+   */
+  String productName;
 
-	String productBuild;
+  String productVersion;
 
-	String productDate;
+  String productBuild;
 
-	String productWebsite;
+  String productDate;
 
-	String copyright;
+  String productWebsite;
 
-	String copyrightNotice;
+  String copyright;
 
-	String licenceType;
+  String copyrightNotice;
 
-	private javax.swing.JPanel jPanel1 = null;
+  String licenceType;
 
-	/**
-	 * This is the default constructor
-	 */
-	public AboutPanel(final String productName, final String productVersion,
-			final String productBuild, final String productDate,
-			final String productWebsite, final String copyright,
-			final String copyrightNotice, final String licenceType) {
-		super();
-		this.productName = productName;
-		this.productVersion = productVersion;
-		this.productBuild = productBuild;
-		this.productDate = productDate;
-		this.productWebsite = productWebsite;
-		this.copyright = copyright;
-		this.copyrightNotice = copyrightNotice;
-		this.licenceType = licenceType;
-		initialize();
-	}
+  private javax.swing.JPanel jPanel1 = null;
 
-	/**
-	 * This method initializes this
-	 * 
-	 * @return void
-	 */
-	private void initialize() {
-		setLayout(new java.awt.BorderLayout()); // Generated
-		this.setSize(300, 200);
-		this.add(getJPanel(), java.awt.BorderLayout.SOUTH); // Generated
-		this.add(getJPanel1(), java.awt.BorderLayout.CENTER); // Generated
-		this.add(getPictureLabel(), java.awt.BorderLayout.WEST); // Generated
-	}
+  /**
+   * This is the default constructor
+   */
+  public AboutPanel(final String productName, final String productVersion,
+      final String productBuild, final String productDate,
+      final String productWebsite, final String copyright,
+      final String copyrightNotice, final String licenceType)
+  {
+    super();
+    this.productName = productName;
+    this.productVersion = productVersion;
+    this.productBuild = productBuild;
+    this.productDate = productDate;
+    this.productWebsite = productWebsite;
+    this.copyright = copyright;
+    this.copyrightNotice = copyrightNotice;
+    this.licenceType = licenceType;
+    initialize();
+  }
 
-	/**
-	 * 
-	 * This method initializes jPanel1
-	 * 
-	 * 
-	 * 
-	 * @return javax.swing.JPanel
-	 * 
-	 */
-	private javax.swing.JPanel getJPanel1() {
-		if (jPanel1 == null) {
-			try {
-				/*
-				 * Eclipse Platform
-				 * 
-				 * Version: 3.0.0 Build id: 200403261517
-				 * 
-				 * (c) Copyright IBM Corp. and others 2000, 2003. All rights
-				 * reserved. Visit http://www.eclipse.org/platform
-				 * 
-				 * This product includes software developed by the Apache
-				 * Software Foundation http://www.apache.org/
-				 */
+  /**
+   * This method initializes this
+   *
+   * @return void
+   */
+  private void initialize() {
+    setLayout(new java.awt.BorderLayout()); // Generated
+    this.setSize(300, 200);
+    this.add(getJPanel(), java.awt.BorderLayout.SOUTH); // Generated
+    this.add(getJPanel1(), java.awt.BorderLayout.CENTER); // Generated
+    this.add(getPictureLabel(), java.awt.BorderLayout.WEST); // Generated
+  }
 
-				jPanel1 = new javax.swing.JPanel();
-				jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1,
-						javax.swing.BoxLayout.Y_AXIS)); // Generated
-				jPanel1.add(getProductNameLabel(), null); // Generated
-				jPanel1.add(getProductVersionLabel(), null); // Generated
-				jPanel1.add(getProductBuildLabel(), null); // Generated
-				jPanel1.add(getProductDateLabel(), null); // Generated
-			} catch (final java.lang.Throwable e) {
-				// TODO: Something
-			}
-		}
-		return jPanel1;
-	}
+  /**
+   *
+   * This method initializes jPanel1
+   *
+   *
+   *
+   * @return javax.swing.JPanel
+   *
+   */
+  private javax.swing.JPanel getJPanel1() {
+    if (jPanel1 == null) {
+      try {
+        /*
+         * Eclipse Platform
+         * Version: 3.0.0 Build id: 200403261517
+         * (c) Copyright IBM Corp. and others 2000, 2003. All rights
+         * reserved. Visit http://www.eclipse.org/platform
+         * This product includes software developed by the Apache
+         * Software Foundation http://www.apache.org/
+         */
 
-	JLabel productNameLabel;
+        jPanel1 = new javax.swing.JPanel();
+        jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1,
+          javax.swing.BoxLayout.Y_AXIS)); // Generated
+        jPanel1.add(getProductNameLabel(), null); // Generated
+        jPanel1.add(getProductVersionLabel(), null); // Generated
+        jPanel1.add(getProductBuildLabel(), null); // Generated
+        jPanel1.add(getProductDateLabel(), null); // Generated
+      } catch (final java.lang.Throwable e) {
+        log.info("ignored", e);
+        // TODO: Something
+      }
+    }
+    return jPanel1;
+  }
 
-	JLabel productVersionLabel;
+  JLabel productNameLabel;
 
-	JLabel productBuildLabel;
+  JLabel productVersionLabel;
 
-	JLabel productDateLabel;
+  JLabel productBuildLabel;
 
-	JLabel productWebsiteLabel;
+  JLabel productDateLabel;
 
-	JLabel copyrightLabel;
+  JLabel productWebsiteLabel;
 
-	JLabel copyrightNoticeLabel;
+  JLabel copyrightLabel;
 
-	JLabel licenceTypeLabel;
+  JLabel copyrightNoticeLabel;
 
-	private javax.swing.JLabel pictureLabel = null;
+  JLabel licenceTypeLabel;
 
-	private javax.swing.JPanel jPanel = null;
+  private javax.swing.JLabel pictureLabel = null;
 
-	private JLabel getProductNameLabel() {
-		if (productNameLabel == null) {
-			productNameLabel = new JLabel();
-			productNameLabel.setText(productName);
-		}
-		return productNameLabel;
-	}
+  private javax.swing.JPanel jPanel = null;
 
-	private JLabel getProductVersionLabel() {
-		if (productVersionLabel == null) {
-			productVersionLabel = new JLabel();
-			productVersionLabel.setText(productVersion);
-		}
-		return productVersionLabel;
-	}
+  private JLabel getProductNameLabel() {
+    if (productNameLabel == null) {
+      productNameLabel = new JLabel();
+      productNameLabel.setText(productName);
+    }
+    return productNameLabel;
+  }
 
-	private JLabel getProductBuildLabel() {
-		if (productBuildLabel == null) {
-			productBuildLabel = new JLabel();
-			productBuildLabel.setText(productBuild);
-		}
-		return productBuildLabel;
-	}
+  private JLabel getProductVersionLabel() {
+    if (productVersionLabel == null) {
+      productVersionLabel = new JLabel();
+      productVersionLabel.setText(productVersion);
+    }
+    return productVersionLabel;
+  }
 
-	private JLabel getProductDateLabel() {
-		if (productDateLabel == null) {
-			productDateLabel = new JLabel();
-			productDateLabel.setText(productDate);
-		}
-		return productDateLabel;
-	}
+  private JLabel getProductBuildLabel() {
+    if (productBuildLabel == null) {
+      productBuildLabel = new JLabel();
+      productBuildLabel.setText(productBuild);
+    }
+    return productBuildLabel;
+  }
 
-	private JLabel getProductWebsiteLabel() {
-		if (productWebsiteLabel == null) {
-			productWebsiteLabel = new JLabel();
-			productWebsiteLabel.setText(productWebsite);
-		}
-		return productWebsiteLabel;
-	}
+  private JLabel getProductDateLabel() {
+    if (productDateLabel == null) {
+      productDateLabel = new JLabel();
+      productDateLabel.setText(productDate);
+    }
+    return productDateLabel;
+  }
 
-	private JLabel getCopyrightLabel() {
-		if (copyrightLabel == null) {
-			copyrightLabel = new JLabel();
-			copyrightLabel.setText(copyright);
-		}
-		return copyrightLabel;
-	}
+  private JLabel getProductWebsiteLabel() {
+    if (productWebsiteLabel == null) {
+      productWebsiteLabel = new JLabel();
+      productWebsiteLabel.setText(productWebsite);
+    }
+    return productWebsiteLabel;
+  }
 
-	private JLabel getCopyrightNoticeLabel() {
-		if (copyrightNoticeLabel == null) {
-			copyrightNoticeLabel = new JLabel();
-			copyrightNoticeLabel.setText(copyrightNotice);
-		}
-		return copyrightNoticeLabel;
-	}
+  private JLabel getCopyrightLabel() {
+    if (copyrightLabel == null) {
+      copyrightLabel = new JLabel();
+      copyrightLabel.setText(copyright);
+    }
+    return copyrightLabel;
+  }
 
-	private JLabel getLicenceTypeLabel() {
-		if (licenceTypeLabel == null) {
-			licenceTypeLabel = new JLabel();
-			licenceTypeLabel.setText(licenceType);
-		}
-		return licenceTypeLabel;
-	}
+  private JLabel getCopyrightNoticeLabel() {
+    if (copyrightNoticeLabel == null) {
+      copyrightNoticeLabel = new JLabel();
+      copyrightNoticeLabel.setText(copyrightNotice);
+    }
+    return copyrightNoticeLabel;
+  }
 
-	/**
-	 * 
-	 * This method initializes pictureLabel
-	 * 
-	 * 
-	 * 
-	 * @return javax.swing.JLabel
-	 * 
-	 */
-	private javax.swing.JLabel getPictureLabel() {
-		if (pictureLabel == null) {
-			try {
-				pictureLabel = new javax.swing.JLabel();
-				pictureLabel.setText(""); // Generated
-				pictureLabel.setIcon(UIManager
-						.getIcon("OptionPane.warningIcon"));
-			} catch (final java.lang.Throwable e) {
-				// TODO: Something
-			}
-		}
-		return pictureLabel;
-	}
+  private JLabel getLicenceTypeLabel() {
+    if (licenceTypeLabel == null) {
+      licenceTypeLabel = new JLabel();
+      licenceTypeLabel.setText(licenceType);
+    }
+    return licenceTypeLabel;
+  }
 
-	/**
-	 * 
-	 * This method initializes jPanel
-	 * 
-	 * 
-	 * 
-	 * @return javax.swing.JPanel
-	 * 
-	 */
-	private javax.swing.JPanel getJPanel() {
-		if (jPanel == null) {
-			try {
-				jPanel = new javax.swing.JPanel();
-				jPanel.setLayout(new javax.swing.BoxLayout(jPanel,
-						javax.swing.BoxLayout.Y_AXIS)); // Generated
-				jPanel.add(getProductWebsiteLabel(), null); // Generated
-				jPanel.add(getCopyrightNoticeLabel(), null); // Generated
-				jPanel.add(getCopyrightLabel(), null); // Generated
-				jPanel.add(getLicenceTypeLabel(), null); // Generated
-			} catch (final java.lang.Throwable e) {
-				// TODO: Something
-			}
-		}
-		return jPanel;
-	}
+  /**
+   *
+   * This method initializes pictureLabel
+   *
+   *
+   *
+   * @return javax.swing.JLabel
+   *
+   */
+  private javax.swing.JLabel getPictureLabel() {
+    if (pictureLabel == null) {
+      try {
+        pictureLabel = new javax.swing.JLabel();
+        pictureLabel.setText(""); // Generated
+        pictureLabel.setIcon(UIManager
+          .getIcon("OptionPane.warningIcon"));
+      } catch (final java.lang.Throwable e) {
+        log.info("ignored", e);
+      }
+    }
+    return pictureLabel;
+  }
+
+  /**
+   *
+   * This method initializes jPanel
+   *
+   *
+   *
+   * @return javax.swing.JPanel
+   *
+   */
+  private javax.swing.JPanel getJPanel() {
+    if (jPanel == null) {
+      try {
+        jPanel = new javax.swing.JPanel();
+        jPanel.setLayout(new javax.swing.BoxLayout(jPanel,
+          javax.swing.BoxLayout.Y_AXIS)); // Generated
+        jPanel.add(getProductWebsiteLabel(), null); // Generated
+        jPanel.add(getCopyrightNoticeLabel(), null); // Generated
+        jPanel.add(getCopyrightLabel(), null); // Generated
+        jPanel.add(getLicenceTypeLabel(), null); // Generated
+      } catch (final java.lang.Throwable e) {
+        log.info("ignored", e);
+      }
+    }
+    return jPanel;
+  }
 
 }
