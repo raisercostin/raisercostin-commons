@@ -56,12 +56,12 @@
     <github.url>https://github.com/${github.user}/${github.repo}</github.url>
     <github.user>raisercostin</github.user>
     <java.version>${myjava.version}</java.version>
-    <junit.version>4.8.2</junit.version>
+    <junit.version>4.13.2</junit.version>
     <maven.build.timestamp.format>yyyyMMdd'T'HHmmss</maven.build.timestamp.format>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <source.java.version>${myjava.version}</source.java.version>
-    <spring.version>5.3.20</spring.version>
+    <spring.version>6.0.13</spring.version>
     <target.java.version>${myjava.version}</target.java.version>
     <myjava.version>17</myjava.version>
   </properties>
