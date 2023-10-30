@@ -17,7 +17,7 @@ function releasePrepare(): void {
 }
 
 function releasePerformLocal(args?: any): void {
-  const version = args.version || "0.72";
+  const version = args.newVersion || "0.72";
   const repo = args.repo || "d:/home/raiser/work/maven-repo";
   const localMavenRepo =
     args.localMavenRepo || "c:/Users/raiser/.m2/repository";
@@ -85,7 +85,7 @@ const argv = yargs
   .command("releasePrepare", "Prepares the release", {}, releasePrepare)
   .command("releasePerformLocal", "Performs the release locally",
     {
-      version: { type: "string" },
+      newVersion: { type: "string" },
       repo: { type: "string" },
       localMavenRepo: { type: "string" },
       groupPath: { type: "string" },
