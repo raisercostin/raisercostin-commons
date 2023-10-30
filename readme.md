@@ -14,4 +14,4 @@ mvn release:prepare release:perform -DskipTests=true -Prelease -Darguments="-Dsk
 ## release to git https://github.com/raisercostin/maven-repo
 
 npm run release-prepare
-npm run release-perform
+npm run release-perform-local -- --releaseVersion 2.29
