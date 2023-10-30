@@ -4,7 +4,10 @@
     "normalize-pom": "ts-node scripts.ts normalizePom",
     "release-prepare": "ts-node scripts.ts releasePrepare",
     "release-perform-local": "ts-node scripts.ts releasePerformLocal",
-    "mvn-update-lib-versions": "mvn versions:update-properties && mvn versions:use-latest-versions"
+    "mvn-update-lib-versions": "mvn versions:update-properties && mvn versions:use-latest-versions",
+    "reformat": "mvn validate -DskipTests",
+    "reformat-prettier": "npx prettier --write .",
+    "dependency-check": "dependency-check:check"
   },
   "devDependencies": {
     "@types/shelljs": "^0.8.14",
