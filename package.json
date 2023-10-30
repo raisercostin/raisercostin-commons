@@ -1,8 +1,18 @@
 {
-  "name": "revobet-proxy",
+  "name": "raisercostin-commons",
   "scripts": {
-    "normalize-pom": "bash .\\scripts.sh normalizePom",
-    "release-prepare": "bash .\\scripts.sh releasePrepare",
-    "release-perform-local": "bash .\\scripts.sh releasePerformLocal"
+    "normalize-pom": "ts-node scripts.ts normalizePom",
+    "release-prepare": "ts-node scripts.ts releasePrepare",
+    "release-perform-local": "ts-node scripts.ts releasePerformLocal",
+    "release-prepare-old": "bash .\\scripts.sh releasePrepare",
+    "release-perform-local-old": "bash .\\scripts.sh releasePerformLocal",
+    "normalize-pom-old": "bash .\\scripts.sh normalizePom"
+  },
+  "devDependencies": {
+    "@types/shelljs": "^0.8.14",
+    "@types/yargs": "^17.0.29",
+    "shelljs": "^0.8.5",
+    "ts-node": "^10.9.1",
+    "yargs": "^17.7.2"
   }
 }

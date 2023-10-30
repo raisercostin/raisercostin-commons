@@ -15,3 +15,4 @@ target/
 .project
 .DS_Store
 /.factorypath
+/node_modules/*
