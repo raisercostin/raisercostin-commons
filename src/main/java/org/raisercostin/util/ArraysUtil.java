@@ -181,7 +181,12 @@ public class ArraysUtil {
             return false;
           }
         } else {
-          if (!value1.equals(value2)) {
+          if (value1 == null) {
+            if (value2 != null) {
+              return false;
+            }
+          }
+          if (value1 != null && !value1.equals(value2)) {
             return false;
           }
         }

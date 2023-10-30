@@ -150,14 +150,10 @@ public class DefaultBeanProcessor implements BeanProcessor {
           String fixed = initial;
           if (translate) {
             CustomTranslator customTranslatorAnnot = m.getAnnotation(CustomTranslator.class);
-            if (customTranslatorAnnot != null) {
-              String customTranslatorName = customTranslatorAnnot.translator();
-              StringTranslator customTranslator = (StringTranslator) beanFactory
-                .getBean(customTranslatorName);
-              fixed = customTranslator.translateString(initial);
-            } else {
-              fixed = stringTranslator.translateString(initial);
-            }
+            String customTranslatorName = customTranslatorAnnot.translator();
+            StringTranslator customTranslator = (StringTranslator) beanFactory
+              .getBean(customTranslatorName);
+            fixed = customTranslator.translateString(initial);
           }
           String name = m.getName();
           name = name.substring(3, name.length());
@@ -1557,6 +1553,7 @@ public class DefaultBeanProcessor implements BeanProcessor {
     }
     if (actualValue.getClass().isAssignableFrom(DateTime.class)) {
       try {
+        @org.checkerframework.checker.nullness.qual.Nullable
         DateTime dt = createFromString(DateTime.class, expectedValue.toString());
         if (dt == null) {
           return null;

@@ -4,9 +4,7 @@
     "normalize-pom": "ts-node scripts.ts normalizePom",
     "release-prepare": "ts-node scripts.ts releasePrepare",
     "release-perform-local": "ts-node scripts.ts releasePerformLocal",
-    "release-prepare-old": "bash .\\scripts.sh releasePrepare",
-    "release-perform-local-old": "bash .\\scripts.sh releasePerformLocal",
-    "normalize-pom-old": "bash .\\scripts.sh normalizePom"
+    "mvn-update-lib-versions": "mvn versions:update-properties && mvn versions:use-latest-versions"
   },
   "devDependencies": {
     "@types/shelljs": "^0.8.14",
