@@ -1,11 +1,24 @@
 # raisercostin-commons
 
+![raisercostin-commons version](https://img.shields.io/badge/raisercostin--commons-2.29-blue)
 
-<!--
-[![Download](https://api.bintray.com/packages/raisercostin/maven/raisercostin-commons/images/download.svg)](https://bintray.com/raisercostin/maven/raisercostin-commons/_latestVersion)
-[![Build Status](https://travis-ci.org/raisercostin/yanfs.svg?branch=master)](https://travis-ci.org/raisercostin/yanfs)
-[![Codacy Badge](https://www.codacy.com/project/badge/fe1bb28a7735433d89a238ce6f6305c1)](https://www.codacy.com/app/raisercostin/yanfs)
--->
+## Usage
+- See last version at https://github.com/raisercostin/maven-repo/tree/master/org/raisercostin/raisercostin-commons
+  ```
+  <dependency>
+    <groupId>org.raisercostin</groupId>
+    <artifactId>jedio</artifactId>
+    <version>0.1</version>
+  </dependency>
+  ```
+- Repository
+  ```
+  <repository>
+    <id>raisercostin-github</id>
+    <url>https://raw.githubusercontent.com/raisercostin/maven-repo/master/</url>
+    <snapshots><enabled>false</enabled></snapshots>
+  </repository>
+  ```
 
 ## Development
 - Building
