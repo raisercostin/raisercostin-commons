@@ -3,7 +3,7 @@
 ![raisercostin-commons version](https://img.shields.io/badge/raisercostin--commons-2.29-blue)
 
 ## Usage
-- See last version at https://github.com/raisercostin/maven-repo/tree/master/org/raisercostin/raisercostin-commons
+- See last version at [https://github.com/raisercostin/maven-repo > raisercostin-commons](https://github.com/raisercostin/maven-repo/tree/master/org/raisercostin/raisercostin-commons)
   ```
   <dependency>
     <groupId>org.raisercostin</groupId>
@@ -21,10 +21,6 @@
   ```
 
 ## Development
-- Building
-  ```
-  mvn release:prepare release:perform -DskipTests=true -Prelease -Darguments="-DskipTests=true -Prelease"
-  ```
 - To release to git https://github.com/raisercostin/maven-repo
   ```
   npm run release-prepare
