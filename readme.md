@@ -7,11 +7,13 @@
 [![Codacy Badge](https://www.codacy.com/project/badge/fe1bb28a7735433d89a238ce6f6305c1)](https://www.codacy.com/app/raisercostin/yanfs)
 -->
 
-# building
-
-mvn release:prepare release:perform -DskipTests=true -Prelease -Darguments="-DskipTests=true -Prelease"
-
-## release to git https://github.com/raisercostin/maven-repo
-
-npm run release-prepare
-npm run release-perform-local -- --releaseVersion 2.29
+## Development
+- Building
+  ```
+  mvn release:prepare release:perform -DskipTests=true -Prelease -Darguments="-DskipTests=true -Prelease"
+  ```
+- To release to git https://github.com/raisercostin/maven-repo
+  ```
+  npm run release-prepare
+  npm run release-perform-local -- --releaseVersion 2.29
+  ```
